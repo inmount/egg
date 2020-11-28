@@ -10,7 +10,25 @@ public partial class eggs {
     /// 获取当前时间管理器
     /// </summary>
     /// <returns></returns>
-    public static Time GetNowTime() { return Time.Now; }
+    public static Time GetNow() { return Time.Now; }
+
+    /// <summary>
+    /// 获取当前时间字符串
+    /// </summary>
+    /// <returns></returns>
+    public static string GetNowString(string format = "yyyy-MM-dd HH:mm:ss") { return Time.Now.ToString(format); }
+
+    /// <summary>
+    /// 获取当前日期字符串
+    /// </summary>
+    /// <returns></returns>
+    public static string GetNowDate() { return Time.Now.ToDateString(); }
+
+    /// <summary>
+    /// 获取当前日期字符串
+    /// </summary>
+    /// <returns></returns>
+    public static string GetNowTime() { return Time.Now.ToTimeString(); }
 
     /// <summary>
     /// 获取时间管理器
