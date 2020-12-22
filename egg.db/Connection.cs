@@ -452,11 +452,11 @@ namespace egg.db {
                     break;
                 //case DatabaseTypes.Microsoft_Office_Access:
                 //case DatabaseTypes.Microsoft_Office_Access_v12:
-                //case DatabaseTypes.SQLite:
-                //case DatabaseTypes.SQLite_3:
-                //    row = GetOne($"select * from [sqlite_master] where type='table' and name ='{tabName}';");
-                //    res = !row.IsEmpty;
-                //    break;
+                case DatabaseTypes.SQLite:
+                case DatabaseTypes.SQLite_3:
+                    row = GetRow($"select * from [sqlite_master] where type='table' and name ='{tabName}' and (sql like '%[{fidName}]%' or sql like '%,{fidName},%'or sql like '%({fidName},%'or sql like '%,{fidName})%' or sql like '% {fidName} %');");
+                    res = !row.IsEmpty;
+                    break;
                 default: throw new Exception($"连接管理器尚未支持\"{db.Type.ToString()}\"数据库");
             }
 

@@ -9,7 +9,7 @@ public partial class eggs {
     /// <summary>
     /// 根据URL获取超文本内容
     /// </summary>
-    /// <param name="args"></param>
+    /// <param name="url"></param>
     /// <returns></returns>
     public static string GetHttpText(string url) {
         return egg.Net.HttpClient.Get(url);

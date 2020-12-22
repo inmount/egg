@@ -17,7 +17,7 @@ namespace egg.Json {
         /// <summary>
         /// 对象实例化
         /// </summary>
-        public JsonBoolean(JsonUnit parent) : base(UnitType.Number, parent) {
+        public JsonBoolean(JsonUnit parent) : base(UnitType.Boolean, parent) {
             this.Value = false;
         }
 

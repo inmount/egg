@@ -15,7 +15,7 @@ public partial class eggs {
     /// <summary>
     /// 调试输出行
     /// </summary>
-    /// <param name="str"></param>
+    /// <param name="content"></param>
     /// <returns></returns>
     public static void DebugLine(string content) { egg.Debug.Write(content, true, true); }
 

@@ -17,14 +17,14 @@ public partial class eggs {
     /// <summary>
     /// 检车文件夹是否存在
     /// </summary>
-    /// <param name=""></param>
+    /// <param name="path"></param>
     /// <returns></returns>
     public static bool CheckFolderExists(string path) { return System.IO.Directory.Exists(path); }
 
     /// <summary>
     /// 检车文件是否存在
     /// </summary>
-    /// <param name=""></param>
+    /// <param name="path"></param>
     /// <returns></returns>
     public static bool CheckFileExists(string path) { return System.IO.File.Exists(path); }
 

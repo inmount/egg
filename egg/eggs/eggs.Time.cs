@@ -33,7 +33,7 @@ public partial class eggs {
     /// <summary>
     /// 获取时间管理器
     /// </summary>
-    /// <param name="str"></param>
+    /// <param name="dt"></param>
     /// <returns></returns>
     public static Time GetTime(DateTime dt) { return new Time(dt); }
 
@@ -47,7 +47,8 @@ public partial class eggs {
     /// <summary>
     /// 获取时间管理器
     /// </summary>
-    /// <param name="str"></param>
+    /// <param name="tsp"></param>
+    /// <param name="f"></param>
     /// <returns></returns>
     public static Time GetTime(long tsp, bool f = false) { return new Time(tsp, f); }
 

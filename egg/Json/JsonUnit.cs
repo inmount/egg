@@ -10,6 +10,11 @@ namespace egg.Json {
     public enum UnitType {
 
         /// <summary>
+        /// 空
+        /// </summary>
+        None = 0x00,
+
+        /// <summary>
         /// 数值类型
         /// </summary>
         Number = 0x01,
@@ -20,14 +25,19 @@ namespace egg.Json {
         String = 0x02,
 
         /// <summary>
+        /// 字符串类型
+        /// </summary>
+        Boolean = 0x03,
+
+        /// <summary>
         /// 对象类型
         /// </summary>
-        Object = 0x03,
+        Object = 0x11,
 
         /// <summary>
         /// 数组类型
         /// </summary>
-        Array = 0x04
+        Array = 0x21
     }
 
     /// <summary>
@@ -210,6 +220,28 @@ namespace egg.Json {
         #endregion
 
         #region [=====快捷操作入口=====]
+
+        /// <summary>
+        /// 获取子元素类型
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public UnitType GetChildUintType(string key) {
+            var res = OnGetChildItem(key);
+            if (eggs.IsNull(res)) return UnitType.None;
+            return res.UnitType;
+        }
+
+        /// <summary>
+        /// 获取子元素类型
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public UnitType GetChildUintType(int index) {
+            var res = OnGetArrayItem(index);
+            if (eggs.IsNull(res)) return UnitType.None;
+            return res.UnitType;
+        }
 
         /// <summary>
         /// 获取一个对象
