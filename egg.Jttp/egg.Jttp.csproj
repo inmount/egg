@@ -5,7 +5,7 @@
     <Authors>Egg Studio</Authors>
     <Product>Jttp for Egg Development Kit</Product>
     <Description>Jttp for Egg Development Kit</Description>
-    <Version>1.0.2012.2</Version>
+    <Version>1.0.2012.3</Version>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/inmount/egg</PackageProjectUrl>
     <RepositoryType></RepositoryType>

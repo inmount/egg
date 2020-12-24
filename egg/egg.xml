@@ -1526,6 +1526,17 @@
             设置父对象
             </summary>
         </member>
+        <member name="M:egg.JsonBean.IUnit.Clone">
+            <summary>
+            克隆一个全新的对象
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.IUnit.Free">
+            <summary>
+            释放资源
+            </summary>
+        </member>
         <member name="T:egg.JsonBean.JArray">
             <summary>
             Json专用数组类型
@@ -1612,6 +1623,17 @@
             </summary>
             <param name="arr"></param>
         </member>
+        <member name="M:egg.JsonBean.JArray.Clone">
+            <summary>
+            复制一个对象副本
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JArray.Free">
+            <summary>
+            释放资源
+            </summary>
+        </member>
         <member name="T:egg.JsonBean.JBoolean">
             <summary>
             Json专用数字
@@ -1662,6 +1684,17 @@
             获取Json表示形式
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JBoolean.Clone">
+            <summary>
+            创建一个同样内容的副本
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JBoolean.Free">
+            <summary>
+            释放资源
+            </summary>
         </member>
         <member name="M:egg.JsonBean.JBoolean.op_Implicit(System.Boolean)~egg.JsonBean.JBoolean">
             <summary>
@@ -1719,6 +1752,17 @@
             获取Json字符串
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JNull.Clone">
+            <summary>
+            创建一个同样内容的副本
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JNull.Free">
+            <summary>
+            释放资源
+            </summary>
         </member>
         <member name="M:egg.JsonBean.JNull.op_Implicit(egg.JsonBean.JNull)~egg.JsonBean.JString">
             <summary>
@@ -1800,6 +1844,17 @@
             获取Json表示形式
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JNumber.Clone">
+            <summary>
+            创建一个同样内容的副本
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JNumber.Free">
+            <summary>
+            释放资源
+            </summary>
         </member>
         <member name="M:egg.JsonBean.JNumber.op_Implicit(System.Double)~egg.JsonBean.JNumber">
             <summary>
@@ -1990,6 +2045,22 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:egg.JsonBean.JObject.Clone">
+            <summary>
+            创建一个同样内容的副本
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JObject.Free">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="M:egg.JsonBean.JObject.OnDispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
         <member name="T:egg.JsonBean.JsonOptional">
             <summary>
             可选标记
@@ -2039,6 +2110,17 @@
             获取Json表示形式
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JString.Clone">
+            <summary>
+            创建一个同样内容的副本
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JString.Free">
+            <summary>
+            释放资源
+            </summary>
         </member>
         <member name="M:egg.JsonBean.JString.op_Implicit(System.String)~egg.JsonBean.JString">
             <summary>

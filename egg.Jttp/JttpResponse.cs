@@ -74,14 +74,64 @@ namespace egg.Jttp {
         /// </summary>
         public void SetError(int code = 0, string msg = null) {
             this.Result = 0;
-            this.Error = code;
+            this.ErrorCode = code;
             if (!msg.IsEmpty()) this.Message = msg;
+        }
+
+        /// <summary>
+        /// 创建一个成功获取器
+        /// </summary>
+        /// <param name="msg"></param>
+        public static JttpResponse Success(string msg = null) {
+            JttpResponse res = new JttpResponse();
+            res.SetSuccess(msg);
+            return res;
+        }
+
+        /// <summary>
+        /// 创建一个成功获取器
+        /// </summary>
+        /// <param name="msg"></param>
+        public static JttpResponse Success(JObject data, string msg = null) {
+            JttpResponse res = new JttpResponse();
+            res.SetSuccess(data, msg);
+            return res;
+        }
+
+        /// <summary>
+        /// 创建一个成功获取器
+        /// </summary>
+        /// <param name="msg"></param>
+        public static JttpResponse Success(JArray datas, string msg = null) {
+            JttpResponse res = new JttpResponse();
+            res.SetSuccess(datas, msg);
+            return res;
+        }
+
+        /// <summary>
+        /// 创建一个失败获取器
+        /// </summary>
+        /// <param name="msg"></param>
+        public static JttpResponse Fail(string msg = null) {
+            JttpResponse res = new JttpResponse();
+            res.SetFail(msg);
+            return res;
+        }
+
+        /// <summary>
+        /// 创建一个失败获取器
+        /// </summary>
+        /// <param name="msg"></param>
+        public static JttpResponse Error(int code = 0, string msg = null) {
+            JttpResponse res = new JttpResponse();
+            res.SetError(code, msg);
+            return res;
         }
 
         /// <summary>
         /// 获取或设置交互令牌
         /// </summary>
-        public JString Token { get; set; }
+        [JsonOptional] public JString Token { get; set; }
 
         /// <summary>
         /// 获取或设置时间戳
@@ -111,7 +161,7 @@ namespace egg.Jttp {
         /// <summary>
         /// 获取或设置错误号
         /// </summary>
-        [JsonOptional] public JNumber Error { get; set; }
+        [JsonOptional] public JNumber ErrorCode { get; set; }
 
         public JttpResponse() { }
 

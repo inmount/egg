@@ -148,9 +148,9 @@ namespace egg.JsonBean {
                         break;
                     default:
                         if (arr.Count <= i) {
-                            arr.Add(this[i]);
+                            arr.Add(this[i].Clone());
                         } else {
-                            arr[i] = this[i];
+                            arr[i] = this[i].Clone();
                         }
                         break;
                 }
@@ -187,6 +187,27 @@ namespace egg.JsonBean {
                     case Json.UnitType.Boolean: this[i] = JBoolean.Create(arr.Bool(i)); break;
                 }
             }
+        }
+
+        /// <summary>
+        /// 复制一个对象副本
+        /// </summary>
+        /// <returns></returns>
+        public IUnit Clone() {
+            if (_null) return new JArray(true);
+            JArray res = new JArray();
+            this.CloneTo(res);
+            return res;
+        }
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        public void Free() {
+            for(int i = 0; i < this.Count; i++) {
+                this[i].Free();
+            }
+            this.Clear();
         }
     }
 }

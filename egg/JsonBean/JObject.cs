@@ -9,7 +9,7 @@ namespace egg.JsonBean {
     /// <summary>
     /// Json专用对象
     /// </summary>
-    public class JObject : IUnit {
+    public class JObject : Object, IUnit {
 
         // 子对象列表
         private KeyList<IUnit> list;
@@ -172,7 +172,7 @@ namespace egg.JsonBean {
                                 ((JObject)this[name]).CloneTo((JObject)obj[name]);
                             }
                             break;
-                        default: obj[name] = this[name]; break;
+                        default: obj[name] = this[name].Clone(); break;
                     }
                 }
             }
@@ -266,6 +266,43 @@ namespace egg.JsonBean {
             }
             sb.Append('}');
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// 创建一个同样内容的副本
+        /// </summary>
+        /// <returns></returns>
+        public IUnit Clone() {
+            if (_null) return new JObject(_type);
+            if (eggs.IsNull(_type)) {
+                var tp = this.GetType();
+                JObject res = (JObject)tp.Assembly.CreateInstance(tp.FullName);
+                this.CloneTo(res);
+                return res;
+            } else {
+                JObject res = (JObject)_type.Assembly.CreateInstance(_type.FullName);
+                this.CloneTo(res);
+                return res;
+            }
+            
+        }
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        public void Free() {
+            foreach (var item in list) {
+                item.Value.Free();
+            }
+            list.Clear();
+        }
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        protected override void OnDispose() {
+            this.Free();
+            base.OnDispose();
         }
 
     }

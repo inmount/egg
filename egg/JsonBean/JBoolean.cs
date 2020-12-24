@@ -71,7 +71,21 @@ namespace egg.JsonBean {
         /// </summary>
         /// <returns></returns>
         public string ToJson() {
-            return value ? "true" : "false";
+            return _null ? "NULL" : (value ? "true" : "false");
+        }
+
+        /// <summary>
+        /// 创建一个同样内容的副本
+        /// </summary>
+        /// <returns></returns>
+        public IUnit Clone() { return new JBoolean(value); }
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        public void Free() {
+            value = false;
+            _null = true;
         }
 
         #region [=====重载运算符=====]

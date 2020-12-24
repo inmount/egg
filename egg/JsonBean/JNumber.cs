@@ -74,6 +74,20 @@ namespace egg.JsonBean {
             return value.ToString();
         }
 
+        /// <summary>
+        /// 创建一个同样内容的副本
+        /// </summary>
+        /// <returns></returns>
+        public IUnit Clone() { return new JNumber(value); }
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        public void Free() {
+            value = 0;
+            _null = true;
+        }
+
         #region [=====重载运算符=====]
 
         /// <summary>

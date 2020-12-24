@@ -31,5 +31,16 @@ namespace egg.JsonBean {
         /// </summary>
         void SetParent(IUnit p);
 
+        /// <summary>
+        /// 克隆一个全新的对象
+        /// </summary>
+        /// <returns></returns>
+        IUnit Clone();
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        void Free();
+
     }
 }

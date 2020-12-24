@@ -59,6 +59,17 @@ namespace egg.JsonBean {
         }
 
         /// <summary>
+        /// 创建一个同样内容的副本
+        /// </summary>
+        /// <returns></returns>
+        public IUnit Clone() { return new JNull(_type); }
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        public void Free() { }
+
+        /// <summary>
         /// 运算符重载
         /// </summary>
         /// <param name="val"></param>
