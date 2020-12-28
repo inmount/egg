@@ -1862,6 +1862,24 @@
             </summary>
             <param name="num"></param>
         </member>
+        <member name="M:egg.JsonBean.JNumber.op_Implicit(System.Int32)~egg.JsonBean.JNumber">
+            <summary>
+            运算符重载
+            </summary>
+            <param name="num"></param>
+        </member>
+        <member name="M:egg.JsonBean.JNumber.op_Implicit(System.Int64)~egg.JsonBean.JNumber">
+            <summary>
+            运算符重载
+            </summary>
+            <param name="num"></param>
+        </member>
+        <member name="M:egg.JsonBean.JNumber.op_Implicit(System.Single)~egg.JsonBean.JNumber">
+            <summary>
+            运算符重载
+            </summary>
+            <param name="num"></param>
+        </member>
         <member name="M:egg.JsonBean.JNumber.op_Implicit(egg.JsonBean.JNumber)~System.Double">
             <summary>
             运算符重载
@@ -2000,6 +2018,30 @@
             快速查找子对象
             </summary>
             <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JObject.Set(System.String,System.String)">
+            <summary>
+            设置元素
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JObject.Set(System.String,System.Double)">
+            <summary>
+            设置元素
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JObject.Set(System.String,System.Boolean)">
+            <summary>
+            设置元素
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
             <returns></returns>
         </member>
         <member name="M:egg.JsonBean.JObject.GetNames">

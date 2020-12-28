@@ -115,6 +115,39 @@ namespace egg.JsonBean {
         }
 
         /// <summary>
+        /// 设置元素
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public JObject Set(string name, string value) {
+            this[name] = JString.Create(value);
+            return this;
+        }
+
+        /// <summary>
+        /// 设置元素
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public JObject Set(string name, double value) {
+            this[name] = JNumber.Create(value);
+            return this;
+        }
+
+        /// <summary>
+        /// 设置元素
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public JObject Set(string name, bool value) {
+            this[name] = JBoolean.Create(value);
+            return this;
+        }
+
+        /// <summary>
         /// 获取子对象集合
         /// </summary>
         /// <returns></returns>
@@ -284,7 +317,7 @@ namespace egg.JsonBean {
                 this.CloneTo(res);
                 return res;
             }
-            
+
         }
 
         /// <summary>

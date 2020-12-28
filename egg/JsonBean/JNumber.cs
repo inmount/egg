@@ -101,6 +101,30 @@ namespace egg.JsonBean {
         /// <summary>
         /// 运算符重载
         /// </summary>
+        /// <param name="num"></param>
+        public static implicit operator JNumber(int num) {
+            return new JNumber(num);
+        }
+
+        /// <summary>
+        /// 运算符重载
+        /// </summary>
+        /// <param name="num"></param>
+        public static implicit operator JNumber(long num) {
+            return new JNumber(num);
+        }
+
+        /// <summary>
+        /// 运算符重载
+        /// </summary>
+        /// <param name="num"></param>
+        public static implicit operator JNumber(float num) {
+            return new JNumber(num);
+        }
+
+        /// <summary>
+        /// 运算符重载
+        /// </summary>
         /// <param name="str"></param>
         public static implicit operator double(JNumber str) {
             return str.ToDouble();
