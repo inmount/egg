@@ -10,6 +10,11 @@ namespace egg.Mvc {
     /// </summary>
     public abstract class ApiControllerBase : Controller {
 
+        /// <summary>
+        /// 默认数据处理模式
+        /// </summary>
+        public static ApiControllerMode DefaultMode = ApiControllerMode.Native;
+
         // 私有全局变量
         private bool _is_request_json;
         private bool _is_request_form;
@@ -17,12 +22,12 @@ namespace egg.Mvc {
         /// <summary>
         /// 输出对象
         /// </summary>
-        protected egg.Jttp.Object JResponse { get; private set; }
+        protected egg.Jttp.JttpResponse JResponse { get; private set; }
 
         /// <summary>
         /// 获取格式化内容后的对象
         /// </summary>
-        protected egg.Json.JsonObject JRequest { get; private set; }
+        protected egg.Jttp.JttpRequest JRequest { get; private set; }
 
         /// <summary>
         /// 获取表单内容对象
@@ -92,11 +97,11 @@ namespace egg.Mvc {
                 this.JRequestText = content;
 
                 // 解析获取到的数据
-                this.JRequest = (egg.Json.JsonObject)egg.Json.Parser.ParseJson(content);
+                this.JRequest = (egg.Jttp.JttpRequest)eggs.ParseJson(content);
             }
 
             // 表单数据模式
-            if (_is_request_json) {
+            if (_is_request_form) {
                 this.Form = new KeyValues<string>();
                 foreach (string key in Request.Form.Keys) {
                     this.Form[key] = Request.Form[key];
@@ -104,7 +109,7 @@ namespace egg.Mvc {
             }
 
             // 建立Jttp应答器
-            this.JResponse = new Jttp.Object();
+            this.JResponse = new Jttp.JttpResponse();
 
             // 返回初始化重载事件
             return this.OnInit();
@@ -115,29 +120,24 @@ namespace egg.Mvc {
         /// </summary>
         public ApiControllerBase() {
             this.ClearRequestMode();
-        }
-
-        /// <summary>
-        /// 将行数据填充到Json对象中
-        /// </summary>
-        /// <param name="row"></param>
-        /// <param name="obj"></param>
-        protected void RenderData(egg.db.Row row, egg.Json.JsonObject obj = null) {
-            if (eggs.IsNull(obj)) obj = JResponse.Data;
-            foreach (var item in row) {
-                obj.String(item.Key, item.Value);
+            if (DefaultMode == ApiControllerMode.Form) {
+                this.SetRequestFormMode();
+            }
+            if (DefaultMode == ApiControllerMode.Jttp) {
+                this.SetRequestJsonMode();
             }
         }
 
         /// <summary>
-        /// 将行集合填充到Json对象中
+        /// 对象实例化
         /// </summary>
-        /// <param name="rows"></param>
-        /// <param name="array"></param>
-        protected void RenderList(egg.db.Rows rows, egg.Json.JsonArray array = null) {
-            if (eggs.IsNull(array)) array = JResponse.List;
-            foreach (var row in rows) {
-                RenderData(row, array.Object(array.Count));
+        public ApiControllerBase(ApiControllerMode mode) {
+            this.ClearRequestMode();
+            if (mode == ApiControllerMode.Form) {
+                this.SetRequestFormMode();
+            }
+            if (mode == ApiControllerMode.Jttp) {
+                this.SetRequestJsonMode();
             }
         }
 
@@ -150,7 +150,33 @@ namespace egg.Mvc {
             if (!msg.IsNoneOrNull()) JResponse.Message = msg;
             // 重载
             this.OnRender();
-            return JResponse.ToString();
+            return JResponse.ToJson();
+        }
+
+        /// <summary>
+        /// 返回成功数据
+        /// </summary>
+        /// <returns></returns>
+        protected string Success(db.Row row, string msg = null) {
+            JResponse.Result = 1;
+            if (!msg.IsNoneOrNull()) JResponse.Message = msg;
+            JResponse.Data = row.ToJsonObject();
+            // 重载
+            this.OnRender();
+            return JResponse.ToJson();
+        }
+
+        /// <summary>
+        /// 返回成功数据
+        /// </summary>
+        /// <returns></returns>
+        protected string Success(db.Rows rows, string msg = null) {
+            JResponse.Result = 1;
+            if (!msg.IsNoneOrNull()) JResponse.Message = msg;
+            JResponse.Datas = rows.ToJsonArray();
+            // 重载
+            this.OnRender();
+            return JResponse.ToJson();
         }
 
         /// <summary>
@@ -163,7 +189,7 @@ namespace egg.Mvc {
             if (!msg.IsNoneOrNull()) JResponse.Message = msg;
             // 重载
             this.OnRender();
-            return JResponse.ToString();
+            return JResponse.ToJson();
         }
 
         /// <summary>
@@ -173,14 +199,13 @@ namespace egg.Mvc {
         /// <param name="msg"></param>
         /// <param name="info"></param>
         /// <returns></returns>
-        protected string Error(int code = 0, string msg = null, string info = null) {
+        protected string Error(int code = 0, string msg = null) {
             JResponse.Result = -1;
             if (!msg.IsNoneOrNull()) JResponse.Message = msg;
-            JResponse.Error.Code = 0;
-            if (info != null) JResponse.Error.Info = info;
+            JResponse.ErrorCode = 0;
             // 重载
             this.OnRender();
-            return JResponse.ToString();
+            return JResponse.ToJson();
         }
 
     }

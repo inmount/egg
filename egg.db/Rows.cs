@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using egg.JsonBean;
 
 namespace egg.db {
 
@@ -109,6 +110,19 @@ namespace egg.db {
         /// 获取对象内元素是否为空
         /// </summary>
         public bool IsEmpty { get { return list.Count <= 0; } }
+
+        /// <summary>
+        /// 转化为Json对象
+        /// </summary>
+        /// <param name="tp"></param>
+        /// <returns></returns>
+        public egg.JsonBean.JArray ToJsonArray(Type tp = null) {
+            JArray res = new JArray();
+            for (int i = 0; i < this.Count; i++) {
+                res.Add(this[i].ToJsonObject(tp));
+            }
+            return res;
+        }
 
         /// <summary>
         /// 释放内部对象

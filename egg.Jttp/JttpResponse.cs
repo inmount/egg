@@ -146,12 +146,12 @@ namespace egg.Jttp {
         /// <summary>
         /// 获取数据
         /// </summary>
-        [JsonOptional] public JObject Data { get; private set; }
+        [JsonOptional] public JObject Data { get; set; }
 
         /// <summary>
         /// 获取数据集
         /// </summary>
-        [JsonOptional] public JArray Datas { get; private set; }
+        [JsonOptional] public JArray Datas { get; set; }
 
         /// <summary>
         /// 获取或设置消息
