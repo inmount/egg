@@ -9,7 +9,7 @@ namespace egg.JsonBean {
     /// <summary>
     /// Json专用数字
     /// </summary>
-    public class JNumber : IUnit {
+    public class JNumber : Object, IUnit {
 
         #region [=====接口实现====]
 
@@ -127,7 +127,24 @@ namespace egg.JsonBean {
         /// </summary>
         /// <param name="str"></param>
         public static implicit operator double(JNumber str) {
+            if (eggs.IsNull(str)) return 0;
             return str.ToDouble();
+        }
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        protected override void OnDispose() {
+            this.Free();
+            base.OnDispose();
+        }
+
+        /// <summary>
+        /// 获取字符串表示形式
+        /// </summary>
+        /// <returns></returns>
+        protected override string OnParseString() {
+            return value.ToString();
         }
 
         /// <summary>

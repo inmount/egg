@@ -9,7 +9,7 @@ namespace egg.JsonBean {
     /// <summary>
     /// Json专用的空类型
     /// </summary>
-    public class JNull : IUnit {
+    public class JNull : Object, IUnit {
 
         private IUnit _parent;
         private Type _type;
@@ -68,6 +68,22 @@ namespace egg.JsonBean {
         /// 释放资源
         /// </summary>
         public void Free() { }
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        protected override void OnDispose() {
+            this.Free();
+            base.OnDispose();
+        }
+
+        /// <summary>
+        /// 获取字符串表示形式
+        /// </summary>
+        /// <returns></returns>
+        protected override string OnParseString() {
+            return null;
+        }
 
         /// <summary>
         /// 运算符重载

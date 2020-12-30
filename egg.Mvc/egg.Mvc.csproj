@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Version>1.0.2012.2</Version>
+    <Version>1.0.2012.5</Version>
     <Authors>Egg Studio</Authors>
     <Product>Mvc for Egg Development Kit</Product>
     <Description>Mvc for Egg Development Kit</Description>
@@ -14,9 +14,9 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="egg" Version="1.1.2012.6" />
+    <PackageReference Include="egg" Version="1.1.2012.7" />
     <PackageReference Include="egg.db" Version="1.1.2012.6" />
-    <PackageReference Include="egg.Jttp" Version="1.0.2012.5" />
+    <PackageReference Include="egg.Jttp" Version="1.0.2012.6" />
   </ItemGroup>
 
   <ItemGroup>

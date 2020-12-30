@@ -1696,6 +1696,17 @@
             释放资源
             </summary>
         </member>
+        <member name="M:egg.JsonBean.JBoolean.OnDispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="M:egg.JsonBean.JBoolean.OnParseString">
+            <summary>
+            获取字符串表示形式
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:egg.JsonBean.JBoolean.op_Implicit(System.Boolean)~egg.JsonBean.JBoolean">
             <summary>
             运算符重载
@@ -1763,6 +1774,17 @@
             <summary>
             释放资源
             </summary>
+        </member>
+        <member name="M:egg.JsonBean.JNull.OnDispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="M:egg.JsonBean.JNull.OnParseString">
+            <summary>
+            获取字符串表示形式
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:egg.JsonBean.JNull.op_Implicit(egg.JsonBean.JNull)~egg.JsonBean.JString">
             <summary>
@@ -1885,6 +1907,17 @@
             运算符重载
             </summary>
             <param name="str"></param>
+        </member>
+        <member name="M:egg.JsonBean.JNumber.OnDispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="M:egg.JsonBean.JNumber.OnParseString">
+            <summary>
+            获取字符串表示形式
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:egg.JsonBean.JNumber.op_Addition(egg.JsonBean.JNumber,egg.JsonBean.JNumber)">
             <summary>
@@ -2163,6 +2196,17 @@
             <summary>
             释放资源
             </summary>
+        </member>
+        <member name="M:egg.JsonBean.JString.OnDispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="M:egg.JsonBean.JString.OnParseString">
+            <summary>
+            获取字符串表示形式
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:egg.JsonBean.JString.op_Implicit(System.String)~egg.JsonBean.JString">
             <summary>

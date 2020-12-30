@@ -97,7 +97,7 @@ namespace egg.Mvc {
                 this.JRequestText = content;
 
                 // 解析获取到的数据
-                this.JRequest = (egg.Jttp.JttpRequest)eggs.ParseJson(content);
+                this.JRequest = (egg.Jttp.JttpRequest)eggs.ParseJson(content, typeof(egg.Jttp.JttpRequest));
             }
 
             // 表单数据模式
@@ -126,6 +126,7 @@ namespace egg.Mvc {
             if (DefaultMode == ApiControllerMode.Jttp) {
                 this.SetRequestJsonMode();
             }
+            //this.Initialize();
         }
 
         /// <summary>
@@ -139,6 +140,7 @@ namespace egg.Mvc {
             if (mode == ApiControllerMode.Jttp) {
                 this.SetRequestJsonMode();
             }
+            //this.Initialize();
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ namespace egg.JsonBean {
     /// <summary>
     /// Json专用字符串
     /// </summary>
-    public class JString : IUnit {
+    public class JString : Object, IUnit {
 
         private string value;
 
@@ -79,6 +79,22 @@ namespace egg.JsonBean {
         /// </summary>
         public void Free() { value = null; }
 
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        protected override void OnDispose() {
+            this.Free();
+            base.OnDispose();
+        }
+
+        /// <summary>
+        /// 获取字符串表示形式
+        /// </summary>
+        /// <returns></returns>
+        protected override string OnParseString() {
+            return value;
+        }
+
         #region [=====重载运算符=====]
 
         /// <summary>
@@ -94,6 +110,7 @@ namespace egg.JsonBean {
         /// </summary>
         /// <param name="str"></param>
         public static implicit operator string(JString str) {
+            if (eggs.IsNull(str)) return null;
             return str.value;
         }
 

@@ -9,7 +9,7 @@ namespace egg.JsonBean {
     /// <summary>
     /// Json专用数字
     /// </summary>
-    public class JBoolean : IUnit {
+    public class JBoolean : Object, IUnit {
 
         #region [=====接口实现====]
 
@@ -88,6 +88,22 @@ namespace egg.JsonBean {
             _null = true;
         }
 
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        protected override void OnDispose() {
+            this.Free();
+            base.OnDispose();
+        }
+
+        /// <summary>
+        /// 获取字符串表示形式
+        /// </summary>
+        /// <returns></returns>
+        protected override string OnParseString() {
+            return value.ToString();
+        }
+
         #region [=====重载运算符=====]
 
         /// <summary>
@@ -103,6 +119,7 @@ namespace egg.JsonBean {
         /// </summary>
         /// <param name="bol"></param>
         public static implicit operator bool(JBoolean bol) {
+            if (eggs.IsNull(bol)) return false;
             return bol.IsTrue();
         }
 
