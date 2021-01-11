@@ -86,6 +86,18 @@ namespace egg.JsonBean {
         }
 
         /// <summary>
+        /// 获取字符串表现形式
+        /// </summary>
+        /// <returns></returns>
+        public string GetString() { return null; }
+
+        /// <summary>
+        /// 获取数值
+        /// </summary>
+        /// <returns></returns>
+        public double GetNumber() { return 0; }
+
+        /// <summary>
         /// 运算符重载
         /// </summary>
         /// <param name="val"></param>

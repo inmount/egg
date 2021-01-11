@@ -95,6 +95,18 @@ namespace egg.JsonBean {
             return value;
         }
 
+        /// <summary>
+        /// 获取字符串表现形式
+        /// </summary>
+        /// <returns></returns>
+        public string GetString() { return value; }
+
+        /// <summary>
+        /// 获取数值
+        /// </summary>
+        /// <returns></returns>
+        public double GetNumber() { return value.ToDouble(); }
+
         #region [=====重载运算符=====]
 
         /// <summary>

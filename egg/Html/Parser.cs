@@ -97,10 +97,10 @@ namespace egg.Html {
         /// <summary>
         /// 获取节点对象
         /// </summary>
-        /// <param name="xml"></param>
+        /// <param name="html"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        public static HtmlNodeCollection GetNodes(string xml, HtmlElement parent = null) {
+        public static HtmlNodeCollection GetNodes(string html, HtmlElement parent = null) {
 
             // 初始化对象
             HtmlNodeCollection nodes = new HtmlNodeCollection(parent);
@@ -119,9 +119,9 @@ namespace egg.Html {
             int line = 1;
             int site = 0;
 
-            for (int i = 0; i < xml.Length; i++) {
+            for (int i = 0; i < html.Length; i++) {
                 site++;
-                char chr = xml[i];
+                char chr = html[i];
                 switch (chr) {
                     #region [=====左尖括号=====]
                     case '<':
@@ -184,6 +184,10 @@ namespace egg.Html {
                                     var nodeNew = new HtmlDataElement(tagName);
                                     npNormal.Children.Add(nodeNew);
                                     np = nodeNew;
+                                } else if (tagName.ToLower() == "link" || tagName.ToLower() == "meta") {
+                                    var npNormal = (HtmlElement)np;
+                                    var nodeNew = new HtmlElement(tagName);
+                                    npNormal.Children.Add(nodeNew);
                                 } else {
                                     var npNormal = (HtmlElement)np;
                                     var nodeNew = new HtmlElement(tagName);
@@ -389,6 +393,18 @@ namespace egg.Html {
                                         var nodeNew = new HtmlDataElement(tagName);
                                         npNormal.Nodes.Add(nodeNew);
                                         np = nodeNew;
+                                    }
+                                } else if (tagName.ToLower() == "link" || tagName.ToLower() == "meta") {
+                                    // 判断是否存在处理对象
+                                    if (np == null) {
+                                        // 新增主对象
+                                        var node = new HtmlElement(tagName);
+                                        nodes.Add(node);
+                                    } else {
+                                        // 新增子对象
+                                        var npNormal = (HtmlElement)np;
+                                        var nodeNew = new HtmlElement(tagName);
+                                        npNormal.Nodes.Add(nodeNew);
                                     }
                                 } else {
                                     // 判断是否存在处理对象

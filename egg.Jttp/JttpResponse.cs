@@ -21,19 +21,19 @@ namespace egg.Jttp {
         /// 判断是否为成功
         /// </summary>
         /// <returns></returns>
-        public bool IsSuccess() { return this.Result.ToDouble() > 0; }
+        public bool IsSuccess() { return this.Result.GetNumber() > 0; }
 
         /// <summary>
         /// 判断是否为失败，失败包含错误
         /// </summary>
         /// <returns></returns>
-        public bool IsFail() { return this.Result.ToDouble() <= 0; }
+        public bool IsFail() { return this.Result.GetNumber() <= 0; }
 
         /// <summary>
         /// 判断是否为错误
         /// </summary>
         /// <returns></returns>
-        public bool IsError() { return this.Result.ToDouble() < 0; }
+        public bool IsError() { return this.Result.GetNumber() < 0; }
 
         /// <summary>
         /// 设置为成功

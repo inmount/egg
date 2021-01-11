@@ -1277,7 +1277,7 @@
             <summary>
             获取节点对象
             </summary>
-            <param name="xml"></param>
+            <param name="html"></param>
             <param name="parent"></param>
             <returns></returns>
         </member>
@@ -1511,6 +1511,18 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:egg.JsonBean.IUnit.GetString">
+            <summary>
+            获取字符串表示形式
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.IUnit.GetNumber">
+            <summary>
+            获取数值表示形式
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:egg.JsonBean.IUnit.GetUnitType">
             <summary>
             获取单元类型
@@ -1634,6 +1646,18 @@
             释放资源
             </summary>
         </member>
+        <member name="M:egg.JsonBean.JArray.GetString">
+            <summary>
+            获取字符串表现形式
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JArray.GetNumber">
+            <summary>
+            获取数值
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:egg.JsonBean.JBoolean">
             <summary>
             Json专用数字
@@ -1704,6 +1728,18 @@
         <member name="M:egg.JsonBean.JBoolean.OnParseString">
             <summary>
             获取字符串表示形式
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JBoolean.GetString">
+            <summary>
+            获取字符串表现形式
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JBoolean.GetNumber">
+            <summary>
+            获取数值
             </summary>
             <returns></returns>
         </member>
@@ -1786,6 +1822,18 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:egg.JsonBean.JNull.GetString">
+            <summary>
+            获取字符串表现形式
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JNull.GetNumber">
+            <summary>
+            获取数值
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:egg.JsonBean.JNull.op_Implicit(egg.JsonBean.JNull)~egg.JsonBean.JString">
             <summary>
             运算符重载
@@ -1855,9 +1903,9 @@
             <param name="val"></param>
             <returns></returns>
         </member>
-        <member name="M:egg.JsonBean.JNumber.ToDouble">
+        <member name="M:egg.JsonBean.JNumber.GetNumber">
             <summary>
-            转化为双精度数据
+            获取数值
             </summary>
             <returns></returns>
         </member>
@@ -1916,6 +1964,12 @@
         <member name="M:egg.JsonBean.JNumber.OnParseString">
             <summary>
             获取字符串表示形式
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JNumber.GetString">
+            <summary>
+            获取字符串表现形式
             </summary>
             <returns></returns>
         </member>
@@ -2077,6 +2131,26 @@
             <param name="value"></param>
             <returns></returns>
         </member>
+        <member name="M:egg.JsonBean.JObject.GetString">
+            <summary>
+            获取字符串表现形式
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JObject.GetString(System.String)">
+            <summary>
+            获取字符串内容
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JObject.GetNumber(System.String)">
+            <summary>
+            获取字符串内容
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
         <member name="M:egg.JsonBean.JObject.GetNames">
             <summary>
             获取子对象集合
@@ -2135,6 +2209,12 @@
             <summary>
             释放资源
             </summary>
+        </member>
+        <member name="M:egg.JsonBean.JObject.GetNumber">
+            <summary>
+            获取数值
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:egg.JsonBean.JsonOptional">
             <summary>
@@ -2205,6 +2285,18 @@
         <member name="M:egg.JsonBean.JString.OnParseString">
             <summary>
             获取字符串表示形式
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JString.GetString">
+            <summary>
+            获取字符串表现形式
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.JsonBean.JString.GetNumber">
+            <summary>
+            获取数值
             </summary>
             <returns></returns>
         </member>

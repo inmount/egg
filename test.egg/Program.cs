@@ -53,6 +53,20 @@ namespace test {
             cm5.Name = "2-5";
             Console.WriteLine("------------");
             Console.WriteLine(cm5.ToJson());
+            var cm5abc = cm5["abc"];
+            Console.WriteLine("cm5.abc=" + cm5abc.GetNumber());
+
+            string url = "https://www.amazon.com/";
+            string html = eggs.GetHttpText(url);
+            Console.WriteLine(html);
+            string ts = eggs.GetNow().ToString();
+            //egg.File.UTF8File.WriteAllText(it.GetWorkPath($"/html/{ts}.log"), html);
+            using (var doc = egg.Html.Parser.GetDocument(html)) {
+                var lis = doc.Body.GetElementsByClassName("a-spacing-micro");
+                foreach (var li in lis) {
+                    Console.WriteLine(li.InnerHTML);
+                }
+            }
         }
     }
 }

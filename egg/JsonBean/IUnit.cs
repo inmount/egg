@@ -17,6 +17,18 @@ namespace egg.JsonBean {
         string ToJson();
 
         /// <summary>
+        /// 获取字符串表示形式
+        /// </summary>
+        /// <returns></returns>
+        string GetString();
+
+        /// <summary>
+        /// 获取数值表示形式
+        /// </summary>
+        /// <returns></returns>
+        double GetNumber();
+
+        /// <summary>
         /// 获取单元类型
         /// </summary>
         UnitTypes GetUnitType();

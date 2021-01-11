@@ -204,10 +204,24 @@ namespace egg.JsonBean {
         /// 释放资源
         /// </summary>
         public void Free() {
-            for(int i = 0; i < this.Count; i++) {
+            for (int i = 0; i < this.Count; i++) {
                 this[i].Free();
             }
             this.Clear();
+        }
+
+        /// <summary>
+        /// 获取字符串表现形式
+        /// </summary>
+        /// <returns></returns>
+        public string GetString() { return ToJson(); }
+
+        /// <summary>
+        /// 获取数值
+        /// </summary>
+        /// <returns></returns>
+        public double GetNumber() {
+            throw new NotImplementedException();
         }
     }
 }

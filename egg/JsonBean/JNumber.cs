@@ -61,10 +61,10 @@ namespace egg.JsonBean {
         public static JNumber Create(double val) { return new JNumber(val); }
 
         /// <summary>
-        /// 转化为双精度数据
+        /// 获取数值
         /// </summary>
         /// <returns></returns>
-        public double ToDouble() { return value; }
+        public double GetNumber() { return value; }
 
         /// <summary>
         /// 获取Json表示形式
@@ -128,7 +128,7 @@ namespace egg.JsonBean {
         /// <param name="str"></param>
         public static implicit operator double(JNumber str) {
             if (eggs.IsNull(str)) return 0;
-            return str.ToDouble();
+            return str.GetNumber();
         }
 
         /// <summary>
@@ -148,12 +148,10 @@ namespace egg.JsonBean {
         }
 
         /// <summary>
-        /// 运算符重载
+        /// 获取字符串表现形式
         /// </summary>
-        /// <param name="num1"></param>
-        /// <param name="num2"></param>
         /// <returns></returns>
-        public static JNumber operator +(JNumber num1, JNumber num2) { return new JNumber(num1.ToDouble() + num2.ToDouble()); }
+        public string GetString() { return value.ToString(); }
 
         /// <summary>
         /// 运算符重载
@@ -161,7 +159,7 @@ namespace egg.JsonBean {
         /// <param name="num1"></param>
         /// <param name="num2"></param>
         /// <returns></returns>
-        public static JNumber operator +(JNumber num1, double num2) { return new JNumber(num1.ToDouble() + num2); }
+        public static JNumber operator +(JNumber num1, JNumber num2) { return new JNumber(num1.GetNumber() + num2.GetNumber()); }
 
         /// <summary>
         /// 运算符重载
@@ -169,7 +167,7 @@ namespace egg.JsonBean {
         /// <param name="num1"></param>
         /// <param name="num2"></param>
         /// <returns></returns>
-        public static JNumber operator +(double num1, JNumber num2) { return new JNumber(num1 + num2.ToDouble()); }
+        public static JNumber operator +(JNumber num1, double num2) { return new JNumber(num1.GetNumber() + num2); }
 
         /// <summary>
         /// 运算符重载
@@ -177,7 +175,7 @@ namespace egg.JsonBean {
         /// <param name="num1"></param>
         /// <param name="num2"></param>
         /// <returns></returns>
-        public static JNumber operator -(JNumber num1, JNumber num2) { return new JNumber(num1.ToDouble() - num2.ToDouble()); }
+        public static JNumber operator +(double num1, JNumber num2) { return new JNumber(num1 + num2.GetNumber()); }
 
         /// <summary>
         /// 运算符重载
@@ -185,7 +183,7 @@ namespace egg.JsonBean {
         /// <param name="num1"></param>
         /// <param name="num2"></param>
         /// <returns></returns>
-        public static JNumber operator -(JNumber num1, double num2) { return new JNumber(num1.ToDouble() - num2); }
+        public static JNumber operator -(JNumber num1, JNumber num2) { return new JNumber(num1.GetNumber() - num2.GetNumber()); }
 
         /// <summary>
         /// 运算符重载
@@ -193,7 +191,7 @@ namespace egg.JsonBean {
         /// <param name="num1"></param>
         /// <param name="num2"></param>
         /// <returns></returns>
-        public static JNumber operator -(double num1, JNumber num2) { return new JNumber(num1 - num2.ToDouble()); }
+        public static JNumber operator -(JNumber num1, double num2) { return new JNumber(num1.GetNumber() - num2); }
 
         /// <summary>
         /// 运算符重载
@@ -201,7 +199,7 @@ namespace egg.JsonBean {
         /// <param name="num1"></param>
         /// <param name="num2"></param>
         /// <returns></returns>
-        public static JNumber operator *(JNumber num1, JNumber num2) { return new JNumber(num1.ToDouble() * num2.ToDouble()); }
+        public static JNumber operator -(double num1, JNumber num2) { return new JNumber(num1 - num2.GetNumber()); }
 
         /// <summary>
         /// 运算符重载
@@ -209,7 +207,7 @@ namespace egg.JsonBean {
         /// <param name="num1"></param>
         /// <param name="num2"></param>
         /// <returns></returns>
-        public static JNumber operator *(JNumber num1, double num2) { return new JNumber(num1.ToDouble() * num2); }
+        public static JNumber operator *(JNumber num1, JNumber num2) { return new JNumber(num1.GetNumber() * num2.GetNumber()); }
 
         /// <summary>
         /// 运算符重载
@@ -217,7 +215,7 @@ namespace egg.JsonBean {
         /// <param name="num1"></param>
         /// <param name="num2"></param>
         /// <returns></returns>
-        public static JNumber operator *(double num1, JNumber num2) { return new JNumber(num1 * num2.ToDouble()); }
+        public static JNumber operator *(JNumber num1, double num2) { return new JNumber(num1.GetNumber() * num2); }
 
         /// <summary>
         /// 运算符重载
@@ -225,7 +223,7 @@ namespace egg.JsonBean {
         /// <param name="num1"></param>
         /// <param name="num2"></param>
         /// <returns></returns>
-        public static JNumber operator /(JNumber num1, JNumber num2) { return new JNumber(num1.ToDouble() / num2.ToDouble()); }
+        public static JNumber operator *(double num1, JNumber num2) { return new JNumber(num1 * num2.GetNumber()); }
 
         /// <summary>
         /// 运算符重载
@@ -233,7 +231,7 @@ namespace egg.JsonBean {
         /// <param name="num1"></param>
         /// <param name="num2"></param>
         /// <returns></returns>
-        public static JNumber operator /(JNumber num1, double num2) { return new JNumber(num1.ToDouble() / num2); }
+        public static JNumber operator /(JNumber num1, JNumber num2) { return new JNumber(num1.GetNumber() / num2.GetNumber()); }
 
         /// <summary>
         /// 运算符重载
@@ -241,7 +239,15 @@ namespace egg.JsonBean {
         /// <param name="num1"></param>
         /// <param name="num2"></param>
         /// <returns></returns>
-        public static JNumber operator /(double num1, JNumber num2) { return new JNumber(num1 / num2.ToDouble()); }
+        public static JNumber operator /(JNumber num1, double num2) { return new JNumber(num1.GetNumber() / num2); }
+
+        /// <summary>
+        /// 运算符重载
+        /// </summary>
+        /// <param name="num1"></param>
+        /// <param name="num2"></param>
+        /// <returns></returns>
+        public static JNumber operator /(double num1, JNumber num2) { return new JNumber(num1 / num2.GetNumber()); }
 
         #endregion
 

@@ -76,7 +76,7 @@ namespace egg.JsonBean {
                     }
                 }
                 if (list.ContainsKey(name)) return list[name];
-                return null;
+                return JNull.Create(typeof(JObject));
             }
             set {
                 // 填充父对象
@@ -145,6 +145,46 @@ namespace egg.JsonBean {
         public JObject Set(string name, bool value) {
             this[name] = JBoolean.Create(value);
             return this;
+        }
+
+        /// <summary>
+        /// 获取字符串表现形式
+        /// </summary>
+        /// <returns></returns>
+        public string GetString() { return ToJson(); }
+
+        /// <summary>
+        /// 获取字符串内容
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string GetString(string name) {
+            var obj = this[name];
+            var tp = obj.GetUnitType();
+            switch (tp) {
+                case UnitTypes.Boolean: return ((JBoolean)obj).ToString();
+                case UnitTypes.Number: return ((JNumber)obj).ToString();
+                case UnitTypes.String: return ((JString)obj).ToString();
+                case UnitTypes.None: return null;
+                default: throw new Exception($"'{tp}'不支持转化为字符串。");
+            }
+        }
+
+        /// <summary>
+        /// 获取字符串内容
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public double GetNumber(string name) {
+            var obj = this[name];
+            var tp = obj.GetUnitType();
+            switch (tp) {
+                case UnitTypes.Boolean: return ((JBoolean)obj).IsTrue() ? 1 : 0;
+                case UnitTypes.Number: return ((JNumber)obj).GetNumber();
+                case UnitTypes.String: return ((JString)obj).ToString().ToDouble();
+                case UnitTypes.None: return 0;
+                default: throw new Exception($"'{tp}'不支持转化为数值。");
+            }
         }
 
         /// <summary>
@@ -338,5 +378,12 @@ namespace egg.JsonBean {
             base.OnDispose();
         }
 
+        /// <summary>
+        /// 获取数值
+        /// </summary>
+        /// <returns></returns>
+        public double GetNumber() {
+            throw new NotImplementedException();
+        }
     }
 }
