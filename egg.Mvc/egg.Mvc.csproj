@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Version>1.0.2012.5</Version>
+    <Version>2.0.2101.6</Version>
     <Authors>Egg Studio</Authors>
     <Product>Mvc for Egg Development Kit</Product>
     <Description>Mvc for Egg Development Kit</Description>

@@ -144,6 +144,21 @@ namespace egg.Mvc {
         }
 
         /// <summary>
+        /// 返回函数运行结果
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        protected string Func(Action<Jttp.JttpRequest, Jttp.JttpResponse> action) {
+            try {
+                Initialize();
+                action(this.JRequest, this.JResponse);
+                return this.JResponse.ToJson();
+            } catch (Exception ex) {
+                return Error(0, ex.Message);
+            }
+        }
+
+        /// <summary>
         /// 返回成功数据
         /// </summary>
         /// <returns></returns>
