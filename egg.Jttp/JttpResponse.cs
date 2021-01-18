@@ -73,7 +73,7 @@ namespace egg.Jttp {
         /// 设置为失败
         /// </summary>
         public void SetError(int code = 0, string msg = null) {
-            this.Result = 0;
+            this.Result = -1;
             this.ErrorCode = code;
             if (!msg.IsEmpty()) this.Message = msg;
         }
