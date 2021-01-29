@@ -49,29 +49,30 @@ namespace egg.db.SqlStatements {
             string vals = "";
 
             foreach (var key in _row.Keys) {
-                if (cols != "") cols += ",";
-                if (vals != "") vals += ",";
-                using (SqlUnits.TableField field = new SqlUnits.TableField(_table, key)) {
-                    cols += field.ToSqlString(tp);
+                if (!eggs.IsNull(_row[key])) {
+                    if (cols != "") cols += ",";
+                    if (vals != "") vals += ",";
+                    using (SqlUnits.TableField field = new SqlUnits.TableField(_table, key)) {
+                        cols += field.ToSqlString(tp);
+                    }
+                    switch (tp) {
+                        case DatabaseTypes.MySQL:
+                            vals += $"'{_row[key].Replace("'", "\'")}'";
+                            break;
+                        //return $"'{_value.Replace("'", "\'")}'";
+                        case DatabaseTypes.Microsoft_Office_Access:
+                        case DatabaseTypes.Microsoft_Office_Access_v12:
+                        case DatabaseTypes.Microsoft_SQL_Server:
+                        case DatabaseTypes.SQLite:
+                        case DatabaseTypes.SQLite_3:
+                        case DatabaseTypes.PostgreSQL:
+                            vals += $"'{_row[key].Replace("'", "''")}'";
+                            break;
+                        //return $"'{_value.Replace("'", "''")}'";
+                        default:
+                            throw new Exception($"尚未支持数据库 {tp.ToString()} 中的字符串转义。");
+                    }
                 }
-                switch (tp) {
-                    case DatabaseTypes.MySQL:
-                        vals += $"'{_row[key].Replace("'", "\'")}'";
-                        break;
-                    //return $"'{_value.Replace("'", "\'")}'";
-                    case DatabaseTypes.Microsoft_Office_Access:
-                    case DatabaseTypes.Microsoft_Office_Access_v12:
-                    case DatabaseTypes.Microsoft_SQL_Server:
-                    case DatabaseTypes.SQLite:
-                    case DatabaseTypes.SQLite_3:
-                    case DatabaseTypes.PostgreSQL:
-                        vals += $"'{_row[key].Replace("'", "''")}'";
-                        break;
-                    //return $"'{_value.Replace("'", "''")}'";
-                    default:
-                        throw new Exception($"尚未支持数据库 {tp.ToString()} 中的字符串转义。");
-                }
-
             }
 
             res += $"({cols}) VALUES ({vals})";

@@ -72,10 +72,11 @@ namespace egg.Jttp {
         /// <summary>
         /// 设置为失败
         /// </summary>
-        public void SetError(int code = 0, string msg = null) {
+        public void SetError(int code = 0, string msg = null, string info = null) {
             this.Result = -1;
             this.ErrorCode = code;
             if (!msg.IsEmpty()) this.Message = msg;
+            if (!info.IsEmpty()) this.ErrorInfo = info;
         }
 
         /// <summary>
@@ -122,9 +123,9 @@ namespace egg.Jttp {
         /// 创建一个失败获取器
         /// </summary>
         /// <param name="msg"></param>
-        public static JttpResponse Error(int code = 0, string msg = null) {
+        public static JttpResponse Error(int code = 0, string msg = null, string info = null) {
             JttpResponse res = new JttpResponse();
-            res.SetError(code, msg);
+            res.SetError(code, msg, info);
             return res;
         }
 
@@ -162,6 +163,11 @@ namespace egg.Jttp {
         /// 获取或设置错误号
         /// </summary>
         [JsonOptional] public JNumber ErrorCode { get; set; }
+
+        /// <summary>
+        /// 获取或设置错误信息
+        /// </summary>
+        [JsonOptional] public JString ErrorInfo { get; set; }
 
         public JttpResponse() { }
 

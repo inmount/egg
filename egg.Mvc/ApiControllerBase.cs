@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using egg.JsonBean;
 
 namespace egg.Mvc {
 
@@ -36,66 +37,69 @@ namespace egg.Mvc {
 
         #region [=====集中处理字段集合=====]
 
-        private List<ApiControllerFieldSetting> _fields;
+        /// <summary>
+        /// 获取配置信息集合
+        /// </summary>
+        protected List<ApiControllerFieldSetting> Configs { get; private set; }
 
         /// <summary>
         ///  清理字段设定
         /// </summary>
-        protected void FieldsClear() { _fields.Clear(); }
+        protected void ClearConfigs() { this.Configs.Clear(); }
 
         /// <summary>
         /// 添加字段设定
         /// </summary>
         /// <param name="name"></param>
-        protected void AddField(string name) { _fields.Add(new ApiControllerFieldSetting() { Name = name }); }
+        protected void AddConfig(string name, ApiControllerFieldSetting.DataTypes types, bool isMust = false, bool isEnable = true) { this.Configs.Add(new ApiControllerFieldSetting() { Name = name, DataType = types, IsMust = isMust, Enabled = isEnable }); }
 
         /// <summary>
         /// 添加字段设定
         /// </summary>
         /// <param name="name"></param>
-        protected void AddField(string name, bool isMust, bool isEnable = true) { _fields.Add(new ApiControllerFieldSetting() { Name = name, IsMust = isMust, Enabled = isEnable }); }
+        protected void AddConfig(string name) { AddConfig(name, ApiControllerFieldSetting.DataTypes.String, false, true); }
 
         /// <summary>
         /// 添加字段设定
         /// </summary>
         /// <param name="name"></param>
-        protected void AddField(string name, ApiControllerFieldSetting.DataTypes types, bool isMust = false, bool isEnable = true) { _fields.Add(new ApiControllerFieldSetting() { Name = name, DataType = types, IsMust = isMust, Enabled = isEnable }); }
+        protected void AddConfig(string name, bool isMust, bool isEnable = true) { AddConfig(name, ApiControllerFieldSetting.DataTypes.String, isMust, isEnable); }
 
         // 查找字段设定
-        private ApiControllerFieldSetting FindFieldSetting(string name) {
-            for (int i = 0; i < _fields.Count; i++) {
-                if (_fields[i].Name == name) return _fields[i];
+        private ApiControllerFieldSetting FindConfig(string name) {
+            foreach (var cfg in this.Configs) {
+                if (cfg.Name == name) return cfg;
             }
             return null;
         }
 
         // 获取字段设定
-        private ApiControllerFieldSetting GetFieldSetting(string name) {
-            ApiControllerFieldSetting field = FindFieldSetting(name);
-            if (eggs.IsNull(field)) field = FindFieldSetting("*");
-            return null;
+        private ApiControllerFieldSetting GetConfig(string name) {
+            ApiControllerFieldSetting field = FindConfig(name);
+            if (eggs.IsNull(field)) field = FindConfig("*");
+            return field;
         }
 
         /// <summary>
         /// 设置字段设定
         /// </summary>
         /// <param name="name"></param>
-        protected void SetField(string name) {
-            ApiControllerFieldSetting field = FindFieldSetting(name);
-            if (eggs.IsNull(field)) AddField(name);
+        protected void SetConfig(string name) {
+            ApiControllerFieldSetting field = FindConfig(name);
+            if (eggs.IsNull(field)) AddConfig(name);
         }
 
         /// <summary>
         /// 设置字段设定
         /// </summary>
         /// <param name="name"></param>
-        protected void SetField(string name, bool isMust, bool isEnable = true) {
-            ApiControllerFieldSetting field = FindFieldSetting(name);
-            if (eggs.IsNull(field)) {
-                AddField(name, isMust, isEnable);
+        protected void SetConfig(string name, bool isMust, bool isEnable = true) {
+            ApiControllerFieldSetting cfg = FindConfig(name);
+            if (eggs.IsNull(cfg)) {
+                AddConfig(name, isMust, isEnable);
             } else {
-                field.IsMust = isMust;
-                field.Enabled = isEnable;
+                cfg.IsMust = isMust;
+                cfg.Enabled = isEnable;
             }
         }
 
@@ -103,14 +107,14 @@ namespace egg.Mvc {
         /// 设置字段设定
         /// </summary>
         /// <param name="name"></param>
-        protected void SetField(string name, ApiControllerFieldSetting.DataTypes types, bool isMust = false, bool isEnable = true) {
-            ApiControllerFieldSetting field = FindFieldSetting(name);
-            if (eggs.IsNull(field)) {
-                AddField(name, types, isMust, isEnable);
+        protected void SetConfig(string name, ApiControllerFieldSetting.DataTypes types, bool isMust = false, bool isEnable = true) {
+            ApiControllerFieldSetting cfg = FindConfig(name);
+            if (eggs.IsNull(cfg)) {
+                AddConfig(name, types, isMust, isEnable);
             } else {
-                field.DataType = types;
-                field.IsMust = isEnable;
-                field.Enabled = isEnable;
+                cfg.DataType = types;
+                cfg.IsMust = isEnable;
+                cfg.Enabled = isEnable;
             }
         }
 
@@ -185,10 +189,10 @@ namespace egg.Mvc {
                 this.JRequest = (egg.Jttp.JttpRequest)eggs.ParseJson(content, typeof(egg.Jttp.JttpRequest));
 
                 // 检测所有的必要参数
-                foreach (var field in _fields) {
-                    if (field.IsMust) {
-                        if (!JRequest.Form.ContainsKey(field.Name)) {
-                            JResponse.SetFail($"缺少必要的 '{field.Name}' 参数");
+                foreach (var cfg in this.Configs) {
+                    if (cfg.IsMust) {
+                        if (!JRequest.Form.ContainsKey(cfg.Name)) {
+                            JResponse.SetFail($"缺少必要的 '{cfg.Name}' 参数");
                             return JResponse.ToJson();
                         }
                     }
@@ -197,7 +201,7 @@ namespace egg.Mvc {
                 // 填充表单数据
                 this.Form = new KeyValues<string>();
                 foreach (string key in JRequest.Form.GetNames()) {
-                    var field = GetFieldSetting(key);
+                    var field = GetConfig(key);
                     if (!eggs.IsNull(field)) {
                         if (field.Enabled) {
                             switch (field.DataType) {
@@ -214,10 +218,10 @@ namespace egg.Mvc {
             // 表单数据模式
             if (_is_request_form) {
                 // 检测所有的必要参数
-                foreach (var field in _fields) {
-                    if (field.IsMust) {
-                        if (!Request.Form.ContainsKey(field.Name)) {
-                            JResponse.SetFail($"缺少必要的 '{field.Name}' 参数");
+                foreach (var cfg in this.Configs) {
+                    if (cfg.IsMust) {
+                        if (!Request.Form.ContainsKey(cfg.Name)) {
+                            JResponse.SetFail($"缺少必要的 '{cfg.Name}' 参数");
                             return JResponse.ToJson();
                         }
                     }
@@ -225,7 +229,7 @@ namespace egg.Mvc {
                 // 填充表单数据
                 this.Form = new KeyValues<string>();
                 foreach (string key in Request.Form.Keys) {
-                    var field = GetFieldSetting(key);
+                    var field = GetConfig(key);
                     if (!eggs.IsNull(field)) {
                         if (field.Enabled) {
                             switch (field.DataType) {
@@ -254,8 +258,8 @@ namespace egg.Mvc {
             if (DefaultMode == ApiControllerMode.Jttp) {
                 this.SetRequestJsonMode();
             }
-            _fields = new List<ApiControllerFieldSetting>();
-            SetField("*", ApiControllerFieldSetting.DataTypes.String, false, true);
+            this.Configs = new List<ApiControllerFieldSetting>();
+            SetConfig("*", ApiControllerFieldSetting.DataTypes.String, false, true);
             //this.Initialize();
         }
 
@@ -313,7 +317,8 @@ namespace egg.Mvc {
         /// <returns></returns>
         protected string Render(Action<ApiControllerRenderContext> action) {
             try {
-                Initialize();
+                string res = Initialize();
+                if (!res.IsNoneOrNull()) return res;
                 var context = this.OnCreateRenderContext();
                 if (this.OnBeforeRender(context)) {
                     action(context);
@@ -321,7 +326,7 @@ namespace egg.Mvc {
                 this.OnAfterRender(context);
                 return context.Response.ToJson();
             } catch (Exception ex) {
-                return Error(0, ex.Message);
+                return Error(0, ex.Message, ex.ToString());
             }
         }
 
@@ -385,9 +390,10 @@ namespace egg.Mvc {
         /// <param name="msg"></param>
         /// <param name="info"></param>
         /// <returns></returns>
-        protected string Error(int code = 0, string msg = null) {
+        protected string Error(int code = 0, string msg = null, string info = null) {
             JResponse.Result = -1;
             if (!msg.IsNoneOrNull()) JResponse.Message = msg;
+            if (!info.IsNoneOrNull()) JResponse["ErrorInfo"] = JsonBean.JString.Create(info);
             JResponse.ErrorCode = 0;
             // 重载
             this.OnRender();

@@ -29,6 +29,14 @@ namespace egg.Mvc {
         public Jttp.JttpResponse Response { get; private set; }
 
         /// <summary>
+        /// 获取关键字集合
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<string> GetKeys() {
+            return _form.Keys;
+        }
+
+        /// <summary>
         /// 对象实例化
         /// </summary>
         /// <param name="controller"></param>
@@ -96,9 +104,10 @@ namespace egg.Mvc {
         /// <param name="msg"></param>
         /// <param name="info"></param>
         /// <returns></returns>
-        public string Error(int code = 0, string msg = null) {
+        public string Error(int code = 0, string msg = null, string info = null) {
             this.Response.Result = -1;
             if (!msg.IsNoneOrNull()) this.Response.Message = msg;
+            if (!info.IsNoneOrNull()) this.Response["ErrorInfo"] = JsonBean.JString.Create(info);
             this.Response.ErrorCode = code;
             return this.Response.ToJson();
         }

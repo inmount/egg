@@ -63,7 +63,7 @@ namespace egg.JsonBean {
             if (value == null) return "NULL";
             StringBuilder sb = new StringBuilder();
             sb.Append('"');
-            sb.Append(value.Replace("\"", "\\\""));
+            sb.Append(value.Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n"));
             sb.Append('"');
             return sb.ToString();
         }
