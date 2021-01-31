@@ -13,33 +13,36 @@ namespace egg.Console {
         /// 对象实例化
         /// </summary>
         /// <param name="args"></param>
-        public Arguments(string[] args = null) {
+        /// <param name="tags"></param>
+        public Arguments(string[] args = null, string[] tags = null) {
 
             string sign = null;
             string value = null;
+            if (eggs.IsNull(tags)) tags = new string[] { "-", "/" };
 
             // 获取参数
             for (int i = 0; i < args.Length; i++) {
-
                 string argSign = args[i];
-                if (argSign.StartsWith("-") || argSign.StartsWith("/")) {
-
-                    // 判断是否存在未存储的内容
-                    if (!sign.IsNoneOrNull()) {
-                        // 存储之前的参数定义
-                        this[sign] = value;
-                        value = null;
+                // 判断是否满足标签定义
+                bool isTag = false;
+                for (int j = 0; j < tags.Length; j++) {
+                    if (argSign.StartsWith(tags[j])) {
+                        // 判断是否存在未存储的内容
+                        if (!sign.IsNoneOrNull()) {
+                            // 存储之前的参数定义
+                            this[sign] = value;
+                            value = null;
+                        }
+                        // 缓存标志
+                        sign = argSign.Substring(tags[j].Length);
+                        isTag = true;
+                        break;
                     }
-
-                    // 缓存标志
-                    sign = argSign.Substring(1);
-
-                } else {
-
+                }
+                if (!isTag) {
                     // 填充内容
                     if (!value.IsNoneOrNull()) value += " ";
                     value += argSign;
-
                 }
             }
 
