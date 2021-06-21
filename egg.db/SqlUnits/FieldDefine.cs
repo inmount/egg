@@ -126,7 +126,11 @@ namespace egg.db.SqlUnits {
                         case "decimal":
                         case "numeric":
                             //带经度的数字
-                            res = $"REAL";
+                            if (this.Float > 0) {
+                                res = $"REAL";
+                            } else {
+                                res = $"INTEGER";
+                            }
                             break;
                         case "long":
                         case "bigint":

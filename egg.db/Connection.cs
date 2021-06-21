@@ -82,7 +82,7 @@ namespace egg.db {
             try {
                 return dbc.GetRows(sql);
             } catch (Exception ex) {
-                throw new Exception("=>SQL:" + sql, ex);
+                throw new Exception(ex.Message+ " => SQL:" + sql, ex);
             }
         }
 
@@ -96,7 +96,7 @@ namespace egg.db {
             try {
                 return dbc.GetRow(sql);
             } catch (Exception ex) {
-                throw new Exception("=>SQL:" + sql, ex);
+                throw new Exception(ex.Message + " => SQL:" + sql, ex);
             }
         }
 
@@ -109,7 +109,7 @@ namespace egg.db {
             try {
                 return dbc.Exec(sql);
             } catch (Exception ex) {
-                throw new Exception("=>SQL:" + sql, ex);
+                throw new Exception(ex.Message + " => SQL:" + sql, ex);
             }
         }
 

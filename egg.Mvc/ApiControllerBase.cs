@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using egg.JsonBean;
+using Microsoft.AspNetCore.Hosting;
 
 namespace egg.Mvc {
 
