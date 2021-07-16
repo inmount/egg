@@ -9,11 +9,12 @@
             参数集合
             </summary>
         </member>
-        <member name="M:egg.Console.Arguments.#ctor(System.String[])">
+        <member name="M:egg.Console.Arguments.#ctor(System.String[],System.String[])">
             <summary>
             对象实例化
             </summary>
             <param name="args"></param>
+            <param name="tags"></param>
         </member>
         <member name="T:egg.Debug">
             <summary>
@@ -4453,6 +4454,14 @@
             <param name="headers"></param>
             <returns></returns>
         </member>
+        <member name="M:egg.Net.HttpClient.Get(System.String,egg.Net.HttpModules.HttpHeader)">
+            <summary>
+            以Get方式获取数据
+            </summary>
+            <param name="url"></param>
+            <param name="headers"></param>
+            <returns></returns>
+        </member>
         <member name="M:egg.Net.HttpClient.Post(System.String,System.String,System.String)">
             <summary>
             以Post方式获取数据
@@ -4470,6 +4479,15 @@
             <param name="args"></param>
             <param name="headers"></param>
             <param name="contentType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Net.HttpClient.Post(System.String,System.String,egg.Net.HttpModules.HttpHeader)">
+            <summary>
+            以Post方式获取数据
+            </summary>
+            <param name="url"></param>
+            <param name="args"></param>
+            <param name="headers"></param>
             <returns></returns>
         </member>
         <member name="M:egg.Net.HttpClient.UploadFile(System.String,System.String,egg.KeyList{System.String})">
@@ -4524,6 +4542,30 @@
             <summary>
             Http协议头部
             </summary>
+        </member>
+        <member name="F:egg.Net.HttpModules.HttpHeader.x_www_form_urlencoded">
+            <summary>
+            application/x-www-form-urlencoded
+            </summary>
+        </member>
+        <member name="P:egg.Net.HttpModules.HttpHeader.ContentType">
+            <summary>
+            ContentType
+            </summary>
+        </member>
+        <member name="M:egg.Net.HttpModules.HttpHeader.Set(System.String,System.String)">
+            <summary>
+            设置值
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Net.HttpModules.HttpHeader.Create">
+            <summary>
+            创建一个实例化对象
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:egg.Net.HttpModules.HttpHeader.OnParseString">
             <summary>

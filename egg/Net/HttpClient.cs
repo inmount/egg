@@ -70,6 +70,35 @@ namespace egg.Net {
         }
 
         /// <summary>
+        /// 以Get方式获取数据
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="headers"></param>
+        /// <returns></returns>
+        public static string Get(string url, HttpModules.HttpHeader headers) {
+
+            // 新建一个Handler
+            var handler = new HttpClientHandler {
+                AutomaticDecompression = DecompressionMethods.None,
+                AllowAutoRedirect = true,
+                UseProxy = false,
+                Proxy = null,
+                ClientCertificateOptions = ClientCertificateOption.Automatic
+            };
+            // 新建一个HttpClient
+            var webRequest = new System.Net.Http.HttpClient(handler);
+            // 添加头信息
+            foreach (var h in headers) {
+                if (webRequest.DefaultRequestHeaders.Contains(h.Key)) {
+                    webRequest.DefaultRequestHeaders.Remove(h.Key);
+                }
+                webRequest.DefaultRequestHeaders.Add(h.Key, h.Value);
+            }
+            return webRequest.GetStringAsync(url).GetAwaiter().GetResult();
+
+        }
+
+        /// <summary>
         /// 以Post方式获取数据
         /// </summary>
         /// <param name="url"></param>
@@ -128,6 +157,47 @@ namespace egg.Net {
             content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(contentType);
             // 添加头信息
             foreach (var h in headers) {
+                content.Headers.Add(h.Key, h.Value);
+            }
+            HttpResponseMessage response = webRequest.PostAsync(url, content).Result;
+
+            // 判断状态并抛出异常
+            response.EnsureSuccessStatusCode();
+            return response.Content.ReadAsStringAsync().Result;
+
+        }
+
+        /// <summary>
+        /// 以Post方式获取数据
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="args"></param>
+        /// <param name="headers"></param>
+        /// <returns></returns>
+        public static string Post(string url, string args, HttpModules.HttpHeader headers) {
+
+            // 新建一个Handler
+            var handler = new HttpClientHandler {
+                AutomaticDecompression = DecompressionMethods.None,
+                AllowAutoRedirect = true,
+                UseProxy = false,
+                Proxy = null,
+                ClientCertificateOptions = ClientCertificateOption.Automatic
+            };
+
+            // 新建一个HttpClient
+            var webRequest = new System.Net.Http.HttpClient(handler);
+
+            // 设置默认数据传输模式
+            if (headers.ContentType.IsEmpty()) headers.ContentType = HttpModules.HttpHeader.x_www_form_urlencoded;
+
+            // 建立传输内容
+            HttpContent content = new StringContent(args);
+            // 添加头信息
+            foreach (var h in headers) {
+                if (content.Headers.Contains(h.Key)) {
+                    content.Headers.Remove(h.Key);
+                }
                 content.Headers.Add(h.Key, h.Value);
             }
             HttpResponseMessage response = webRequest.PostAsync(url, content).Result;

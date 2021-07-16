@@ -4,7 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <Authors>Egg Studio</Authors>
     <Product>PostgreSql for Egg Development Kit</Product>
-    <Version>1.0.2011.1</Version>
+    <Version>2.0.2106.2</Version>
     <Description>PostgreSql for Egg Development Kit</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>logo.png</PackageIcon>
@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="egg.db" Version="1.0.2011.1" />
+    <PackageReference Include="egg.db" Version="2.1.2106.10" />
     <PackageReference Include="Npgsql" Version="5.0.0" />
   </ItemGroup>
 

@@ -45,8 +45,10 @@ namespace egg.db.SqlUnits {
                     case DatabaseTypes.Microsoft_SQL_Server:
                     case DatabaseTypes.SQLite:
                     case DatabaseTypes.SQLite_3:
-                    case DatabaseTypes.PostgreSQL:
                         res += $"'{_value[i].Replace("'", "''")}'";
+                        break;
+                    case DatabaseTypes.PostgreSQL:
+                        res += $"'{_value[i].Replace("'", "''").Replace("\"", "\\\"")}'";
                         break;
                     default:
                         throw new Exception($"尚未支持数据库 {tp.ToString()} 中的字符串转义。");
