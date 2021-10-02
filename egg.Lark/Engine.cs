@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace egg.Lark {
 
@@ -7,9 +8,12 @@ namespace egg.Lark {
     /// </summary>
     public class Engine : IDisposable {
 
+        public delegate MemeryUnits.Unit Function(List<MemeryUnits.Unit> args);
+
         // 主函数
         private MemeryUnits.Function main;
         private egg.KeyValues<MemeryUnits.Unit> vars;
+        private egg.KeyValues<Function> funs;
 
         /// <summary>
         /// 实例化对象
@@ -17,6 +21,8 @@ namespace egg.Lark {
         public Engine() {
             main = new MemeryUnits.Function(this, null, "step");
             vars = new KeyValues<MemeryUnits.Unit>();
+            funs = new KeyValues<Function>();
+            Functions.Reg(this);
         }
 
         /// <summary>
@@ -48,9 +54,39 @@ namespace egg.Lark {
         }
 
         /// <summary>
+        /// 注册函数
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public void RegFunction(string name, Function fun) {
+            funs[name] = fun;
+        }
+
+        // 获取函数
+        internal Function GetFunction(string name) {
+            return funs[name];
+        }
+
+        /// <summary>
         /// 执行代码
         /// </summary>
         public void Execute() {
+            main.Execute(vars);
+        }
+
+        /// <summary>
+        /// 执行代码
+        /// </summary>
+        public void Execute(string script) {
+            Parser.Parse(this, script);
+            main.Execute(vars);
+        }
+
+        /// <summary>
+        /// 执行文件
+        /// </summary>
+        public void ExecuteFile(string path) {
+            Parser.Parse(this, egg.File.UTF8File.ReadAllText(path));
             main.Execute(vars);
         }
 

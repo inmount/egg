@@ -1,0 +1,177 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace egg.Lark {
+    /// <summary>
+    /// 解析器
+    /// </summary>
+    public static class Parser {
+
+        // 检查名称
+        private static bool CheckName(string name) {
+            if (name == "+" || name == "-" || name == "*" || name == "/" || name == "#") return true;
+            for (int i = 0; i < name.Length; i++) {
+                char chr = name[i];
+                if (i == 0 && chr >= '0' && chr <= '9') return false;
+                if (chr != '$' && chr != '_' && !(chr >= '0' && chr <= '9') && !(chr >= 'a' && chr <= 'z') && !(chr >= 'A' && chr <= 'Z')) return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 执行解析
+        /// </summary>
+        /// <param name="engine"></param>
+        /// <param name="script"></param>
+        public static void Parse(Engine engine, string script) {
+            MemeryUnits.Function fn = null;
+            StringBuilder sb = new StringBuilder();
+            bool inString = false;
+            bool isEscape = false;
+            for (int i = 0; i < script.Length; i++) {
+                char chr = script[i];
+                switch (chr) {
+                    case '"':
+                        #region [=====引号=====]
+                        if (inString) {
+                            if (isEscape) {
+                                sb.Append(chr);
+                            } else {
+                                sb.Append(chr);
+                                inString = false;
+                            }
+                        } else {
+                            if (sb.Length > 0) throw new Exception("规则外的引号");
+                            sb.Append(chr);
+                            inString = true;
+                        }
+                        #endregion
+                        break;
+                    case '\\':
+                        #region [=====反斜杠=====]
+                        if (!inString) throw new Exception($"规则外的'{chr}'字符");
+                        if (isEscape) {
+                            sb.Append(chr);
+                            isEscape = false;
+                        } else {
+                            isEscape = true;
+                        }
+                        #endregion
+                        break;
+                    case '(':
+                        #region [=====左括号=====]
+                        if (inString) {
+                            sb.Append(chr);
+                        } else {
+                            // 增加函数
+                            string name = sb.ToString();
+                            if (!CheckName(name)) throw new Exception("名称不合法");
+                            if (eggs.IsNull(fn)) {
+                                fn = engine.AddFunction(name);
+                            } else {
+                                fn = (MemeryUnits.Function)fn.Params.AddFunction(name).GetMemeryUnit();
+                            }
+                            sb.Clear();
+                        }
+                        #endregion
+                        break;
+                    case ')':
+                        #region [=====右括号=====]
+                        if (inString) {
+                            sb.Append(chr);
+                        } else {
+                            if (eggs.IsNull(fn)) throw new Exception($"多余的'{chr}'字符");
+                            // 添加参数
+                            if (sb.Length > 0) {
+                                string name = sb.ToString();
+                                if (name.StartsWith("\"")) {
+                                    fn.Params.AddString(name.Substring(1, name.Length - 2));
+                                } else if (eggs.IsNumber(name)) {
+                                    fn.Params.AddNumber(name.ToDouble());
+                                } else {
+                                    if (!CheckName(name)) throw new Exception("名称不合法");
+                                    fn.Params.AddDefine(name);
+                                }
+                                sb.Clear();
+                            }
+                            fn = fn.Parent;
+                        }
+                        #endregion
+                        break;
+                    case ',':
+                        #region [=====逗号=====]
+                        if (inString) {
+                            sb.Append(chr);
+                        } else {
+                            if (sb.Length > 0) {
+                                if (eggs.IsNull(fn)) throw new Exception($"语法错误，顶层代码只允许函数");
+                                string name = sb.ToString();
+                                if (name.StartsWith("\"")) {
+                                    fn.Params.AddString(name.Substring(1, name.Length - 2));
+                                } else if (eggs.IsNumber(name)) {
+                                    fn.Params.AddNumber(name.ToDouble());
+                                } else {
+                                    if (!CheckName(name)) throw new Exception("名称不合法");
+                                    fn.Params.AddDefine(name);
+                                }
+                                sb.Clear();
+                            } else {
+                                if (fn.Params.Count == 0) throw new Exception($"多余的'{chr}'字符");
+                                if (fn.Params[fn.Params.Count - 1].GetMemeryUnit().UnitType != MemeryUnits.UnitTypes.Function) throw new Exception($"多余的'{chr}'字符");
+                            }
+                        }
+                        #endregion
+                        break;
+                    case 'r':
+                        #region [=====字母R=====]
+                        if (isEscape) {
+                            sb.Append('\r');
+                        } else {
+                            sb.Append(chr);
+                        }
+                        #endregion
+                        break;
+                    case 'n':
+                        #region [=====字母R=====]
+                        if (isEscape) {
+                            sb.Append('\n');
+                        } else {
+                            sb.Append(chr);
+                        }
+                        #endregion
+                        break;
+                    case '\r':
+                    case '\n':
+                        #region [=====换行回车=====]
+                        if (inString) throw new Exception("字符串不可换行");
+                        #endregion
+                        break;
+                    case ' ':
+                        #region [=====空格=====]
+                        if (inString) sb.Append(chr);
+                        #endregion
+                        break;
+                    default:
+                        if (isEscape) throw new Exception($"不支持的'\\{chr}'转义");
+                        if (inString) {
+                            sb.Append(chr);
+                        } else {
+                            if (sb.Length <= 0) {
+                                sb.Append(chr);
+                            } else if (sb[0] != '"') {
+                                sb.Append(chr);
+                            } else {
+                                throw new Exception("字符串已结束");
+                            }
+                        }
+                        break;
+                }
+            }
+            if (sb.Length > 0) throw new Exception("脚本尚未结束");
+        }
+
+    }
+}
