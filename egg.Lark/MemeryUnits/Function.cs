@@ -89,7 +89,7 @@ namespace egg.Lark.MemeryUnits {
         internal void SetReturn() {
             isReturn = true;
             if (this.Parent == null) return;
-            if (this.Name != "func") this.Parent.SetReturn();
+            if (this.Name != "func" && this.Name != "function") this.Parent.SetReturn();
         }
 
         // 设置变量值
@@ -167,8 +167,27 @@ namespace egg.Lark.MemeryUnits {
                     }
                     #endregion
                     return new MemeryUnits.None();
+                case "import": // 导入操作
+                    #region [====导入操作====]
+                    if (this.Params.Count != 1) throw new Exception("import函数只允许1个参数");
+                    MemeryUnits.Unit path = this.Params[0].GetMemeryUnit();
+                    if (path.UnitType == MemeryUnits.UnitTypes.Function) path = ((MemeryUnits.Function)path).Execute();
+                    if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception("import函数第一个参数只接受字符串");
+                    this.Engine.Include(((MemeryUnits.String)path).Value);
+                    #endregion
+                    return new MemeryUnits.None();
+                case "path": // 导入操作
+                    #region [====导入操作====]
+                    if (this.Params.Count != 1) throw new Exception("path函数只允许1个参数");
+                    path = this.Params[0].GetMemeryUnit();
+                    if (path.UnitType == MemeryUnits.UnitTypes.Function) path = ((MemeryUnits.Function)path).Execute();
+                    if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception("path函数第一个参数只接受字符串");
+                    this.Engine.AddPath(((MemeryUnits.String)path).Value);
+                    #endregion
+                    return new MemeryUnits.None();
                 case "func": // 函数定义操作
                     #region [====函数定义操作====]
+                    if (this.Params.Count < 1) throw new Exception("func函数必须包含一个参数");
                     Params args = new Params();
                     for (int i = 0; i < this.Params.Count - 1; i++) {
                         if (this.Params[i].UnitType != ProcessUnits.UnitTypes.Define) throw new Exception("func函数除最后一个参数，其他参数只接受变量");
@@ -178,6 +197,22 @@ namespace egg.Lark.MemeryUnits {
                     args.Add(this.Params[this.Params.Count - 1]);
                     #endregion
                     return new MemeryUnits.Function(this.Engine, this, "", args);
+                case "function": // 全局函数定义操作
+                    #region [====全局函数定义操作====]
+                    if (this.Params.Count < 2) throw new Exception("function函数必须包含两个参数");
+                    var funName = this.Params[0].GetMemeryUnit();
+                    if (funName.UnitType == MemeryUnits.UnitTypes.Function) funName = ((MemeryUnits.Function)funName).Execute();
+                    if (funName.UnitType != MemeryUnits.UnitTypes.String) throw new Exception("function函数第一个参数只接受字符串");
+                    args = new Params();
+                    for (int i = 1; i < this.Params.Count - 1; i++) {
+                        if (this.Params[i].UnitType != ProcessUnits.UnitTypes.Define) throw new Exception("function函数除最后一个参数，其他参数只接受变量");
+                        args.Add(this.Params[i]);
+                    }
+                    if (this.Params[this.Params.Count - 1].GetMemeryUnit().UnitType != UnitTypes.Function) throw new Exception("function函数最后一个参数只接受函数");
+                    args.Add(this.Params[this.Params.Count - 1]);
+                    this.Engine.SetVariable(((MemeryUnits.String)funName).Value, new MemeryUnits.Function(this.Engine, null, "", args));
+                    #endregion
+                    return new MemeryUnits.None();
                 case "if": // 分支定义操作
                     #region [====分支定义操作====]
                     if (this.Params.Count < 2) throw new Exception("if函数最少包含两个参数");
@@ -299,7 +334,7 @@ namespace egg.Lark.MemeryUnits {
                 case "return": // 执行返回数据
                     this.Parent.SetReturn();
                     if (this.Params.Count > 0) {
-                        var returnVar= this.Params[0].GetMemeryUnit();
+                        var returnVar = this.Params[0].GetMemeryUnit();
                         if (returnVar.UnitType == MemeryUnits.UnitTypes.Function) returnVar = ((MemeryUnits.Function)returnVar).Execute();
                         return returnVar;
                     } else {
@@ -312,6 +347,7 @@ namespace egg.Lark.MemeryUnits {
                     // 查询自定义函数
                     MemeryUnits.Unit fun = new MemeryUnits.None();
                     if (this.CheckVar(this.Name)) fun = this.GetVarValue(this.Name);
+                    if (fun.UnitType == UnitTypes.None) fun = this.Engine.GetVariable(this.Name);
                     if (fun.UnitType == UnitTypes.Function) {
                         MemeryUnits.Function func = (MemeryUnits.Function)fun;
                         if (this.Params.Count >= func.Params.Count) throw new Exception($"函数'{this.Name}'只允许{func.Params.Count - 1}个参数");

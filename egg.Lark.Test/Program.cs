@@ -14,6 +14,14 @@ namespace egg.Lark.Test {
                 engine.RegFunction("print", (List<MemeryUnits.Unit> args) => {
                     //double r = System.Console.ReadLine().ToDouble();
                     if (args[0].UnitType == MemeryUnits.UnitTypes.Number)
+                        System.Console.Write(((MemeryUnits.Number)args[0]).Value);
+                    if (args[0].UnitType == MemeryUnits.UnitTypes.String)
+                        System.Console.Write(((MemeryUnits.String)args[0]).Value);
+                    return new MemeryUnits.None();
+                });
+                engine.RegFunction("println", (List<MemeryUnits.Unit> args) => {
+                    //double r = System.Console.ReadLine().ToDouble();
+                    if (args[0].UnitType == MemeryUnits.UnitTypes.Number)
                         System.Console.WriteLine(((MemeryUnits.Number)args[0]).Value);
                     if (args[0].UnitType == MemeryUnits.UnitTypes.String)
                         System.Console.WriteLine(((MemeryUnits.String)args[0]).Value);

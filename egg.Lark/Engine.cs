@@ -14,15 +14,21 @@ namespace egg.Lark {
         private MemeryUnits.Function main;
         private egg.KeyValues<MemeryUnits.Unit> vars;
         private egg.KeyValues<Function> funs;
+        private List<string> pathes;
+        private List<Engine> libs;
 
         /// <summary>
         /// 实例化对象
         /// </summary>
-        public Engine() {
+        public Engine(bool isLibrary = false) {
             main = new MemeryUnits.Function(this, null, "step");
             vars = new KeyValues<MemeryUnits.Unit>();
             funs = new KeyValues<Function>();
-            Functions.Reg(this);
+            pathes = new List<string>();
+            if (!isLibrary) {
+                libs = new List<Engine>();
+                Functions.Reg(this);
+            }
         }
 
         /// <summary>
@@ -32,7 +38,9 @@ namespace egg.Lark {
         /// <param name="args"></param>
         /// <returns></returns>
         public MemeryUnits.Function AddFunction(string name, Params args = null) {
-            return (MemeryUnits.Function)main.Params.AddFunction(name, args).GetMemeryUnit();
+            ProcessUnits.Pointer res = main.Params.AddFunction(name, args);
+            MemeryUnits.Function fn = (MemeryUnits.Function)res.GetMemeryUnit();
+            return fn;
         }
 
         /// <summary>
@@ -48,9 +56,26 @@ namespace egg.Lark {
         /// 获取变量值
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="value"></param>
         public MemeryUnits.Unit GetVariable(string name) {
-            return main.GetVarValue(name);
+            if (vars.ContainsKey(name)) return vars[name];
+            if (eggs.IsNull(this.libs)) return new MemeryUnits.None();
+            for (int i = 0; i < libs.Count; i++) {
+                if (libs[i].CheckVariable(name)) return libs[i].GetVariable(name);
+            }
+            return new MemeryUnits.None();
+        }
+
+        /// <summary>
+        /// 检测变量值
+        /// </summary>
+        /// <param name="name"></param>
+        public bool CheckVariable(string name) {
+            if (vars.ContainsKey(name)) return true;
+            if (eggs.IsNull(this.libs)) return false;
+            for (int i = 0; i < libs.Count; i++) {
+                if (libs[i].CheckVariable(name)) return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -62,9 +87,41 @@ namespace egg.Lark {
             funs[name] = fun;
         }
 
+        /// <summary>
+        /// 添加路径
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public void AddPath(string path) {
+            path = path.Replace("\\", "/");
+            if (!path.EndsWith("/")) path += "/";
+            pathes.Add(path);
+        }
+
+        // 引入文件
+        internal void Include(string name) {
+            for (int i = 0; i < pathes.Count; i++) {
+                string path = $"{pathes[i]}{name}.lark";
+                if (eggs.CheckFileExists(path)) {
+                    Engine lib = new Engine(true);
+                    lib.ExecuteFile(path);
+                    this.libs.Add(lib);
+                    return;
+                }
+            }
+            throw new Exception($"未找到'{name}'库文件");
+        }
+
+        // 获取函数
+        internal bool CheckFunction(string name) {
+            if (funs.ContainsKey(name)) return true;
+            return false;
+        }
+
         // 获取函数
         internal Function GetFunction(string name) {
-            return funs[name];
+            if (funs.ContainsKey(name)) return funs[name];
+            return null;
         }
 
         /// <summary>
@@ -86,7 +143,8 @@ namespace egg.Lark {
         /// 执行文件
         /// </summary>
         public void ExecuteFile(string path) {
-            Parser.Parse(this, egg.File.UTF8File.ReadAllText(path));
+            string script = egg.File.UTF8File.ReadAllText(path);
+            Parser.Parse(this, script);
             main.Execute(vars);
         }
 
