@@ -1,0 +1,40 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace egg.Lark.MemeryUnits {
+    /// <summary>
+    /// 数值对象
+    /// </summary>
+    public class NativeFunction : Unit {
+
+        /// <summary>
+        /// 获取值
+        /// </summary>
+        public Engine.Function Function { get; private set; }
+
+        /// <summary>
+        /// 获取关键字
+        /// </summary>
+        public egg.Strings Keys { get; private set; }
+
+        /// <summary>
+        /// 实例化对象
+        /// </summary>
+        /// <param name="fn"></param>
+        /// <param name="keys"></param>
+        public NativeFunction(Engine.Function fn, egg.Strings keys = null) : base(UnitTypes.NativeFunction) {
+            this.Function = fn;
+            this.Keys = keys;
+        }
+
+        /// <summary>
+        /// 执行函数
+        /// </summary>
+        public MemeryUnits.Unit Execute(egg.KeyValues<MemeryUnits.Unit> args = null) {
+            return this.Function(args);
+        }
+    }
+}

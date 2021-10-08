@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Version>1.0.2110.1</Version>
+    <Version>1.0.2110.2</Version>
     <Authors>Egg Studio</Authors>
     <Description>Lark Script Engine</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="egg" Version="2.1.2107.19" />
+    <PackageReference Include="egg" Version="2.2.2110.21" />
   </ItemGroup>
 
   <ItemGroup>

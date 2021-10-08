@@ -30,9 +30,29 @@ namespace egg.Lark.ProcessUnits {
         }
 
         protected override MemeryUnits.Unit OnGetMemeryUnit() {
-            // 处理空指针
-            if (eggs.IsNull(this.Function.Memery)) return new MemeryUnits.None();
-            return this.Function.GetVarValue(this.Name);
+            int idx = this.Name.IndexOf('.');
+            if (idx > 0) {
+                string name = this.Name.Substring(0, idx);
+                string cName = this.Name.Substring(idx + 1);
+                if (cName.IsEmpty()) throw new Exception($"不支持空名称属性");
+                // 处理空指针
+                if (!eggs.IsNull(this.Function.Memery)) {
+                    if (this.Function.CheckVar(name)) {
+                        MemeryUnits.Unit obj = this.Function.GetVarValue(name);
+                        if (obj.UnitType != MemeryUnits.UnitTypes.Object) throw new Exception($"变量'{name}'并非对象");
+                        return ((MemeryUnits.Object)obj)[cName];
+                    }
+                }
+                //if (this.Function.Engine.CheckVariable(this.Name)) return this.Function.Engine.GetVariable(this.Name);
+                throw new Exception($"变量'{name}'尚未赋值");
+            } else {
+                // 处理空指针
+                if (!eggs.IsNull(this.Function.Memery)) {
+                    if (this.Function.CheckVar(this.Name)) return this.Function.GetVarValue(this.Name);
+                }
+                //if (this.Function.Engine.CheckVariable(this.Name)) return this.Function.Engine.GetVariable(this.Name);
+                throw new Exception($"变量'{this.Name}'尚未赋值");
+            }
         }
     }
 }

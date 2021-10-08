@@ -15,8 +15,8 @@ namespace egg.Lark {
             if (name == "+" || name == "-" || name == "*" || name == "/" || name == "#") return true;
             for (int i = 0; i < name.Length; i++) {
                 char chr = name[i];
-                if (i == 0 && chr >= '0' && chr <= '9') return false;
-                if (chr != '$' && chr != '_' && !(chr >= '0' && chr <= '9') && !(chr >= 'a' && chr <= 'z') && !(chr >= 'A' && chr <= 'Z')) return false;
+                if (i == 0 && ((chr >= '0' && chr <= '9') || (chr == '.'))) return false;
+                if (chr != '$' && chr != '_' && chr != '.' && !(chr >= '0' && chr <= '9') && !(chr >= 'a' && chr <= 'z') && !(chr >= 'A' && chr <= 'Z')) return false;
             }
             return true;
         }

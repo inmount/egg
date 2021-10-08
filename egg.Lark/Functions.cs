@@ -15,17 +15,17 @@ namespace egg.Lark {
         /// <param name="engine"></param>
         public static void Reg(Engine engine) {
             // 转化为数值
-            engine.RegFunction("num", (List<MemeryUnits.Unit> args) => {
-                if (args.Count != 1) throw new Exception("num函数只支持一个参数");
-                if (args[0].UnitType != MemeryUnits.UnitTypes.String) throw new Exception("num函数的参数只支持字符串");
-                return new MemeryUnits.Number(((MemeryUnits.String)args[0]).Value.ToDouble());
-            });
+            engine.RegFunction("num", (egg.KeyValues<MemeryUnits.Unit> args) => {
+                var n = args["n"];
+                if (n.UnitType != MemeryUnits.UnitTypes.String) throw new Exception("num函数的参数'n'只支持字符串");
+                return new MemeryUnits.Number(((MemeryUnits.String)n).Value.ToDouble());
+            }, egg.Strings.Create("n"));
             // 转化为数值
-            engine.RegFunction("str", (List<MemeryUnits.Unit> args) => {
-                if (args.Count != 1) throw new Exception("str函数只支持一个参数");
-                if (args[0].UnitType != MemeryUnits.UnitTypes.Number) throw new Exception("str函数的参数只支持数值");
-                return new MemeryUnits.Number(((MemeryUnits.String)args[0]).Value.ToDouble());
-            });
+            engine.RegFunction("str", (egg.KeyValues<MemeryUnits.Unit> args) => {
+                var s = args["s"];
+                if (s.UnitType != MemeryUnits.UnitTypes.Number) throw new Exception("str函数的参数's'只支持数值");
+                return new MemeryUnits.Number(((MemeryUnits.String)s).Value.ToDouble());
+            }, egg.Strings.Create("s"));
         }
     }
 }

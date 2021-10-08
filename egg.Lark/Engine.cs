@@ -8,12 +8,58 @@ namespace egg.Lark {
     /// </summary>
     public class Engine : IDisposable {
 
-        public delegate MemeryUnits.Unit Function(List<MemeryUnits.Unit> args);
+        #region [=====静态功能=====]
+
+        /// <summary>
+        /// 获取是否为可执行函数
+        /// </summary>
+        /// <param name="unit"></param>
+        /// <returns></returns>
+        public static bool IsFunction(MemeryUnits.Unit unit) { return (unit.UnitType == MemeryUnits.UnitTypes.Function || unit.UnitType == MemeryUnits.UnitTypes.NativeFunction); }
+
+        /// <summary>
+        /// 执行函数并返回结果
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="fn"></param>
+        /// <returns></returns>
+        public static MemeryUnits.Unit ExecuteFunction(MemeryUnits.Function parent, MemeryUnits.Unit fn) {
+            if (!IsFunction(fn)) throw new Exception("执行对象并非函数");
+            if (fn.UnitType == MemeryUnits.UnitTypes.NativeFunction) {
+                // 外部函数
+                MemeryUnits.NativeFunction func = (MemeryUnits.NativeFunction)fn;
+                egg.KeyValues<MemeryUnits.Unit> args = new KeyValues<MemeryUnits.Unit>();
+                if (!eggs.IsNull(func.Keys)) {
+                    if (parent.Params.Count > func.Keys.Count) throw new Exception($"函数'{parent.Name}'只允许{func.Keys.Count}个参数");
+                    for (int i = 0; i < func.Keys.Count; i++) {
+                        var valSource = parent.Params[i].GetMemeryUnit();
+                        if (valSource.UnitType == MemeryUnits.UnitTypes.Function) valSource = ((MemeryUnits.Function)valSource).Execute();
+                        args[func.Keys[i]] = valSource;
+                    }
+                }
+                return ((MemeryUnits.NativeFunction)fn).Execute(args);
+            } else {
+                // 自定义函数
+                MemeryUnits.Function func = (MemeryUnits.Function)fn;
+                if (parent.Params.Count >= func.Params.Count) throw new Exception($"函数'{parent.Name}'只允许{func.Params.Count - 1}个参数");
+                egg.KeyValues<MemeryUnits.Unit> args = new KeyValues<MemeryUnits.Unit>();
+                for (int i = 0; i < func.Params.Count - 1; i++) {
+                    var valSource = parent.Params[i].GetMemeryUnit();
+                    if (valSource.UnitType == MemeryUnits.UnitTypes.Function) valSource = ((MemeryUnits.Function)valSource).Execute();
+                    args[((ProcessUnits.Define)func.Params[i]).Name] = valSource;
+                }
+                return ((MemeryUnits.Function)func.Params[func.Params.Count - 1].GetMemeryUnit()).Execute(args);
+            }
+        }
+
+        #endregion
+
+        public delegate MemeryUnits.Unit Function(egg.KeyValues<MemeryUnits.Unit> args);
 
         // 主函数
         private MemeryUnits.Function main;
         private egg.KeyValues<MemeryUnits.Unit> vars;
-        private egg.KeyValues<Function> funs;
+        //private egg.KeyValues<Function> funs;
         private List<string> pathes;
         private List<Engine> libs;
 
@@ -23,7 +69,7 @@ namespace egg.Lark {
         public Engine(bool isLibrary = false) {
             main = new MemeryUnits.Function(this, null, "step");
             vars = new KeyValues<MemeryUnits.Unit>();
-            funs = new KeyValues<Function>();
+            //funs = new KeyValues<Function>();
             pathes = new List<string>();
             if (!isLibrary) {
                 libs = new List<Engine>();
@@ -53,14 +99,23 @@ namespace egg.Lark {
         }
 
         /// <summary>
+        /// 设置初始化变量
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public void SetProcessVariable(string name, MemeryUnits.Unit value) {
+            main.SetVarValue(name, value, true);
+        }
+
+        /// <summary>
         /// 获取变量值
         /// </summary>
         /// <param name="name"></param>
-        public MemeryUnits.Unit GetVariable(string name) {
-            if (vars.ContainsKey(name)) return vars[name];
+        public MemeryUnits.Unit GetProcessVariable(string name) {
+            if (main.CheckVar(name)) return main.GetVarValue(name);
             if (eggs.IsNull(this.libs)) return new MemeryUnits.None();
             for (int i = 0; i < libs.Count; i++) {
-                if (libs[i].CheckVariable(name)) return libs[i].GetVariable(name);
+                if (libs[i].CheckProcessVariable(name)) return libs[i].GetProcessVariable(name);
             }
             return new MemeryUnits.None();
         }
@@ -69,11 +124,11 @@ namespace egg.Lark {
         /// 检测变量值
         /// </summary>
         /// <param name="name"></param>
-        public bool CheckVariable(string name) {
-            if (vars.ContainsKey(name)) return true;
+        public bool CheckProcessVariable(string name) {
+            if (main.CheckVar(name)) return true;
             if (eggs.IsNull(this.libs)) return false;
             for (int i = 0; i < libs.Count; i++) {
-                if (libs[i].CheckVariable(name)) return true;
+                if (libs[i].CheckProcessVariable(name)) return true;
             }
             return false;
         }
@@ -82,9 +137,11 @@ namespace egg.Lark {
         /// 注册函数
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="value"></param>
-        public void RegFunction(string name, Function fun) {
-            funs[name] = fun;
+        /// <param name="keys"></param>
+        /// <param name="fun"></param>
+        public void RegFunction(string name, Function fun, egg.Strings keys = null) {
+            //funs[name] = fun;
+            this.SetVariable(name, new MemeryUnits.NativeFunction(fun, keys));
         }
 
         /// <summary>
@@ -112,17 +169,17 @@ namespace egg.Lark {
             throw new Exception($"未找到'{name}'库文件");
         }
 
-        // 获取函数
-        internal bool CheckFunction(string name) {
-            if (funs.ContainsKey(name)) return true;
-            return false;
-        }
+        //// 获取函数
+        //internal bool CheckFunction(string name) {
+        //    if (funs.ContainsKey(name)) return true;
+        //    return false;
+        //}
 
-        // 获取函数
-        internal Function GetFunction(string name) {
-            if (funs.ContainsKey(name)) return funs[name];
-            return null;
-        }
+        //// 获取函数
+        //internal Function GetFunction(string name) {
+        //    if (funs.ContainsKey(name)) return funs[name];
+        //    return null;
+        //}
 
         /// <summary>
         /// 执行代码

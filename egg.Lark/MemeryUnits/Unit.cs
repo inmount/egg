@@ -33,7 +33,11 @@ namespace egg.Lark.MemeryUnits {
         /// <summary>
         /// 函数
         /// </summary>
-        Function = 0x05
+        Function = 0x05,
+        /// <summary>
+        /// 原生函数
+        /// </summary>
+        NativeFunction = 0x06,
     }
 
     /// <summary>
