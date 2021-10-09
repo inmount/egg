@@ -32,7 +32,7 @@ namespace egg.Lark.MemeryUnits {
         /// <summary>
         /// 获取关联引擎
         /// </summary>
-        public Engine Engine { get; private set; }
+        public ScriptEngine Engine { get; private set; }
 
         /// <summary>
         /// 获取值
@@ -50,7 +50,7 @@ namespace egg.Lark.MemeryUnits {
         /// <param name="name"></param>
         /// <param name="args"></param>
         /// <param name="parent"></param>
-        public Function(Engine engine, Function parent, string name, Params args = null) : base(UnitTypes.Function) {
+        public Function(ScriptEngine engine, Function parent, string name, Params args = null) : base(UnitTypes.Function) {
             this.Name = name;
             if (eggs.IsNull(args)) {
                 this.Params = new Params();
@@ -451,14 +451,14 @@ namespace egg.Lark.MemeryUnits {
                         MemeryUnits.Unit obj = this.GetVarValue(objNameParent);
                         if (obj.UnitType != MemeryUnits.UnitTypes.Object) throw new Exception($"变量'{objNameParent}'并非对象");
                         MemeryUnits.Unit fun = ((MemeryUnits.Object)obj)[objNameChild];
-                        if (!Lark.Engine.IsFunction(fun)) throw new Exception($"函数'{this.Name}'未定义");
-                        return Lark.Engine.ExecuteFunction(this, fun);
+                        if (!Lark.ScriptEngine.IsFunction(fun)) throw new Exception($"函数'{this.Name}'未定义");
+                        return Lark.ScriptEngine.ExecuteFunction(this, fun);
                     } else {
                         MemeryUnits.Unit fun = new MemeryUnits.None();
                         if (this.CheckVar(this.Name)) fun = this.GetVarValue(this.Name);
                         if (fun.UnitType == UnitTypes.None) fun = this.Engine.GetProcessVariable(this.Name);
-                        if (!Lark.Engine.IsFunction(fun)) throw new Exception($"函数'{this.Name}'未定义");
-                        return Lark.Engine.ExecuteFunction(this, fun);
+                        if (!Lark.ScriptEngine.IsFunction(fun)) throw new Exception($"函数'{this.Name}'未定义");
+                        return Lark.ScriptEngine.ExecuteFunction(this, fun);
                     }
                     //if (fun.UnitType == UnitTypes.Function) {
 

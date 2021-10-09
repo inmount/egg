@@ -20,6 +20,19 @@ namespace egg.Lark.MemeryUnits {
         }
 
         /// <summary>
+        /// 获取键名称集合
+        /// </summary>
+        public egg.Strings Keys {
+            get {
+                egg.Strings strs = new Strings();
+                foreach (var item in ls.Keys) {
+                    strs.Add(item);
+                }
+                return strs;
+            }
+        }
+
+        /// <summary>
         /// 获取或设置存储单元
         /// </summary>
         /// <param name="key"></param>

@@ -6,7 +6,7 @@ namespace egg.Lark.Test {
         static void Main(string[] args) {
             System.Console.WriteLine("Hello World!");
             //double r = System.Console.ReadLine().ToDouble();
-            using (egg.Lark.Engine engine = new Engine()) {
+            using (egg.Lark.ScriptEngine engine = new ScriptEngine()) {
                 var sys = new MemeryUnits.Object();
                 sys["readNumber"] = new MemeryUnits.NativeFunction((egg.KeyValues<MemeryUnits.Unit> args) => {
                     double r = System.Console.ReadLine().ToDouble();

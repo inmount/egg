@@ -26,7 +26,7 @@ namespace egg.Lark {
         /// </summary>
         /// <param name="engine"></param>
         /// <param name="script"></param>
-        public static void Parse(Engine engine, string script) {
+        public static void Parse(ScriptEngine engine, string script) {
             MemeryUnits.Function fn = null;
             StringBuilder sb = new StringBuilder();
             bool inString = false;

@@ -13,7 +13,7 @@ namespace egg.Lark {
         /// 注册器
         /// </summary>
         /// <param name="engine"></param>
-        public static void Reg(Engine engine) {
+        public static void Reg(ScriptEngine engine) {
             // 转化为数值
             engine.RegFunction("num", (egg.KeyValues<MemeryUnits.Unit> args) => {
                 var n = args["n"];

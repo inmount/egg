@@ -13,7 +13,7 @@ namespace egg.Lark.MemeryUnits {
         /// <summary>
         /// 获取值
         /// </summary>
-        public Engine.Function Function { get; private set; }
+        public ScriptEngine.Function Function { get; private set; }
 
         /// <summary>
         /// 获取关键字
@@ -25,7 +25,7 @@ namespace egg.Lark.MemeryUnits {
         /// </summary>
         /// <param name="fn"></param>
         /// <param name="keys"></param>
-        public NativeFunction(Engine.Function fn, egg.Strings keys = null) : base(UnitTypes.NativeFunction) {
+        public NativeFunction(ScriptEngine.Function fn, egg.Strings keys = null) : base(UnitTypes.NativeFunction) {
             this.Function = fn;
             this.Keys = keys;
         }

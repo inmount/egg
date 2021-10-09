@@ -20,6 +20,11 @@ namespace egg.Lark.MemeryUnits {
         }
 
         /// <summary>
+        /// 获取列表数量
+        /// </summary>
+        public int Count { get { return ls.Count; } }
+
+        /// <summary>
         /// 获取或设置存储单元
         /// </summary>
         /// <param name="index"></param>

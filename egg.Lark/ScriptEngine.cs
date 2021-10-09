@@ -6,7 +6,7 @@ namespace egg.Lark {
     /// <summary>
     /// 百灵鸟脚本引擎
     /// </summary>
-    public class Engine : IDisposable {
+    public class ScriptEngine : IDisposable {
 
         #region [=====静态功能=====]
 
@@ -61,18 +61,18 @@ namespace egg.Lark {
         private egg.KeyValues<MemeryUnits.Unit> vars;
         //private egg.KeyValues<Function> funs;
         private List<string> pathes;
-        private List<Engine> libs;
+        private List<ScriptEngine> libs;
 
         /// <summary>
         /// 实例化对象
         /// </summary>
-        public Engine(bool isLibrary = false) {
+        public ScriptEngine(bool isLibrary = false) {
             main = new MemeryUnits.Function(this, null, "step");
             vars = new KeyValues<MemeryUnits.Unit>();
             //funs = new KeyValues<Function>();
             pathes = new List<string>();
             if (!isLibrary) {
-                libs = new List<Engine>();
+                libs = new List<ScriptEngine>();
                 Functions.Reg(this);
             }
         }
@@ -160,7 +160,7 @@ namespace egg.Lark {
             for (int i = 0; i < pathes.Count; i++) {
                 string path = $"{pathes[i]}{name}.lark";
                 if (eggs.CheckFileExists(path)) {
-                    Engine lib = new Engine(true);
+                    ScriptEngine lib = new ScriptEngine(true);
                     lib.ExecuteFile(path);
                     this.libs.Add(lib);
                     return;
