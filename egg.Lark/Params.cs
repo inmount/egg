@@ -19,7 +19,6 @@ namespace egg.Lark {
         /// <summary>
         /// 实例化对象
         /// </summary>
-        /// <param name="fn"></param>
         public Params() { }
 
         /// <summary>

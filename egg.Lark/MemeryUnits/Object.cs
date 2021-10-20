@@ -20,6 +20,12 @@ namespace egg.Lark.MemeryUnits {
         }
 
         /// <summary>
+        /// 实例化对象
+        /// </summary>
+        /// <returns></returns>
+        public static Object Create() { return new Object(); }
+
+        /// <summary>
         /// 获取键名称集合
         /// </summary>
         public egg.Strings Keys {
@@ -30,6 +36,15 @@ namespace egg.Lark.MemeryUnits {
                 }
                 return strs;
             }
+        }
+
+        /// <summary>
+        /// 获取是否包含键名称
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public bool ContainsKey(string key) {
+            return ls.ContainsKey(key);
         }
 
         /// <summary>
@@ -63,12 +78,128 @@ namespace egg.Lark.MemeryUnits {
                     MemeryUnits.Unit obj = ls[name];
                     if (obj.UnitType != MemeryUnits.UnitTypes.Object) throw new Exception($"变量'{name}'并非对象");
                     ((MemeryUnits.Object)obj)[cName] = value;
+                    value.Parent = this;
                 } else {
                     ls[key] = value;
+                    value.Parent = this;
                 }
             }
         }
 
+        #region [=====便捷操作=====]
+
+        /// <summary>
+        /// 获取子对象
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public Object Obj(string key) {
+            return (MemeryUnits.Object)this[key];
+        }
+
+        /// <summary>
+        /// 设置子对象
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public Object Obj(string key, Object val) {
+            this[key] = val;
+            return this;
+        }
+
+        /// <summary>
+        /// 获取数组子对象
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public List Array(string key) {
+            return (MemeryUnits.List)this[key];
+        }
+
+        /// <summary>
+        /// 设置数组子对象
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public Object Array(string key, List val) {
+            this[key] = val;
+            return this;
+        }
+
+        /// <summary>
+        /// 获取数值子元素
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public Number Num(string key) {
+            return (MemeryUnits.Number)this[key];
+        }
+
+        /// <summary>
+        /// 设置数值子元素
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public Object Num(string key, Number val) {
+            this[key] = val;
+            return this;
+        }
+
+        /// <summary>
+        /// 获取数值子元素
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public String Str(string key) {
+            return (MemeryUnits.String)this[key];
+        }
+
+        /// <summary>
+        /// 设置数值子元素
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public Object Str(string key, String val) {
+            this[key] = val;
+            return this;
+        }
+
+        /// <summary>
+        /// 获取数值子元素
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public Boolean Bool(string key) {
+            return (MemeryUnits.Boolean)this[key];
+        }
+
+        /// <summary>
+        /// 设置数值子元素
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public Object Bool(string key, Boolean val) {
+            this[key] = val;
+            return this;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 清空元素
+        /// </summary>
+        public void Clear() {
+            ls.Clear();
+        }
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
         protected override void OnDispose() {
             base.OnDispose();
             foreach (var item in ls) {

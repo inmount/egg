@@ -97,7 +97,7 @@ namespace egg.Lark {
                                 }
                                 sb.Clear();
                             }
-                            fn = fn.Parent;
+                            fn = fn.ParentFunction;
                         }
                         #endregion
                         break;

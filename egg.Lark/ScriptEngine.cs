@@ -54,6 +54,11 @@ namespace egg.Lark {
 
         #endregion
 
+        /// <summary>
+        /// 函数定义接口
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public delegate MemeryUnits.Unit Function(egg.KeyValues<MemeryUnits.Unit> args);
 
         // 主函数
@@ -147,12 +152,21 @@ namespace egg.Lark {
         /// <summary>
         /// 添加路径
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
+        /// <param name="path"></param>
         public void AddPath(string path) {
             path = path.Replace("\\", "/");
             if (!path.EndsWith("/")) path += "/";
             pathes.Add(path);
+        }
+
+        /// <summary>
+        /// 添加路径集合
+        /// </summary>
+        /// <param name="pathes"></param>
+        public void AddPath(string[] pathes) {
+            for (int i = 0; i < pathes.Length; i++) {
+                AddPath(pathes[i]);
+            }
         }
 
         // 引入文件
@@ -205,6 +219,9 @@ namespace egg.Lark {
             main.Execute(vars);
         }
 
+        /// <summary>
+        /// 释放资源
+        /// </summary>
         public void Dispose() {
             main.Dispose();
         }

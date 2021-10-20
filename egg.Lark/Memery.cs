@@ -103,6 +103,9 @@ namespace egg.Lark {
             return list.Count - 1;
         }
 
+        /// <summary>
+        /// 释放资源
+        /// </summary>
         public void Dispose() {
             this.Clear();
             //throw new NotImplementedException();

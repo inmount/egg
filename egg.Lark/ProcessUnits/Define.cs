@@ -23,12 +23,17 @@ namespace egg.Lark.ProcessUnits {
         /// <summary>
         /// 实例化对象
         /// </summary>
+        /// <param name="fn"></param>
         /// <param name="name"></param>
         public Define(MemeryUnits.Function fn, string name) : base(UnitTypes.Define) {
             this.Function = fn;
             this.Name = name;
         }
 
+        /// <summary>
+        /// 获取存储单元
+        /// </summary>
+        /// <returns></returns>
         protected override MemeryUnits.Unit OnGetMemeryUnit() {
             int idx = this.Name.IndexOf('.');
             if (idx > 0) {

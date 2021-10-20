@@ -13,5 +13,11 @@ namespace egg.Lark.MemeryUnits {
         /// 实例化对象
         /// </summary>
         public None() : base(UnitTypes.None) { }
+
+        /// <summary>
+        /// 创建一个新的空对象
+        /// </summary>
+        /// <returns></returns>
+        public static None Create() { return new None(); }
     }
 }

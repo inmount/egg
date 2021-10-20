@@ -37,16 +37,17 @@ namespace egg.Lark.MemeryUnits {
         /// <summary>
         /// 获取值
         /// </summary>
-        public Function Parent { get; private set; }
+        public Memery Memery { get; private set; }
 
         /// <summary>
-        /// 获取值
+        /// 单元类型
         /// </summary>
-        public Memery Memery { get; private set; }
+        public Function ParentFunction { get; internal set; }
 
         /// <summary>
         /// 实例化对象
         /// </summary>
+        /// <param name="engine"></param>
         /// <param name="name"></param>
         /// <param name="args"></param>
         /// <param name="parent"></param>
@@ -58,7 +59,7 @@ namespace egg.Lark.MemeryUnits {
                 this.Params = args;
             }
             this.Params.Function = this;
-            this.Parent = parent;
+            this.ParentFunction = parent;
             this.Engine = engine;
             this.Memery = new Memery(this);
             vars = new KeyValues<Unit>();
@@ -66,6 +67,9 @@ namespace egg.Lark.MemeryUnits {
             isReturn = false;
         }
 
+        /// <summary>
+        /// 释放资源
+        /// </summary>
         protected override void OnDispose() {
             base.OnDispose();
             this.Memery.Dispose();
@@ -82,14 +86,14 @@ namespace egg.Lark.MemeryUnits {
         internal void SetBreak() {
             isBreak = true;
             if (this.Parent == null) return;
-            if (this.Name != "for" && this.Name != "while") this.Parent.SetBreak();
+            if (this.Name != "for" && this.Name != "while") this.ParentFunction.SetBreak();
         }
 
         // 设置中断
         internal void SetReturn() {
             isReturn = true;
             if (this.Parent == null) return;
-            if (this.Name != "func" && this.Name != "function") this.Parent.SetReturn();
+            if (this.Name != "func" && this.Name != "function") this.ParentFunction.SetReturn();
         }
 
         // 设置变量值
@@ -104,8 +108,8 @@ namespace egg.Lark.MemeryUnits {
                 vars[name] = value;
                 return true;
             } else {
-                if (this.Parent == null) return false;
-                return this.Parent.SetVarValue(name, value);
+                if (this.ParentFunction == null) return false;
+                return this.ParentFunction.SetVarValue(name, value);
             }
         }
 
@@ -115,7 +119,7 @@ namespace egg.Lark.MemeryUnits {
                 return vars[name];
             } else {
                 if (this.Parent == null) throw new Exception($"变量'{name}'尚未赋值");
-                return this.Parent.GetVarValue(name);
+                return this.ParentFunction.GetVarValue(name);
             }
         }
 
@@ -125,7 +129,7 @@ namespace egg.Lark.MemeryUnits {
                 return true;
             } else {
                 if (this.Parent == null) return false;
-                return this.Parent.CheckVar(name);
+                return this.ParentFunction.CheckVar(name);
             }
         }
 
@@ -170,8 +174,8 @@ namespace egg.Lark.MemeryUnits {
                         if (obj.UnitType != MemeryUnits.UnitTypes.Object) throw new Exception($"变量'{objNameParent}'路径并非对象");
                         ((MemeryUnits.Object)obj)[objNameChild] = value;
                     } else {
-                        if (!this.Parent.SetVarValue(name, value)) {
-                            this.Parent.SetVarValue(name, value, true);
+                        if (!this.ParentFunction.SetVarValue(name, value)) {
+                            this.ParentFunction.SetVarValue(name, value, true);
                         }
                     }
                     #endregion
@@ -286,8 +290,8 @@ namespace egg.Lark.MemeryUnits {
                         ((MemeryUnits.Object)obj)[objNameChild] = new MemeryUnits.Object();
                     } else {
                         var obj = new MemeryUnits.Object();
-                        if (!this.Parent.SetVarValue(objName, obj)) {
-                            this.Parent.SetVarValue(objName, obj, true);
+                        if (!this.ParentFunction.SetVarValue(objName, obj)) {
+                            this.ParentFunction.SetVarValue(objName, obj, true);
                         }
                     }
                     #endregion
@@ -306,8 +310,8 @@ namespace egg.Lark.MemeryUnits {
                         ((MemeryUnits.Object)obj)[objNameChild] = new MemeryUnits.List();
                     } else {
                         var ls = new MemeryUnits.List();
-                        if (!this.Parent.SetVarValue(lsName, ls)) {
-                            this.Parent.SetVarValue(lsName, ls, true);
+                        if (!this.ParentFunction.SetVarValue(lsName, ls)) {
+                            this.ParentFunction.SetVarValue(lsName, ls, true);
                         }
                     }
                     #endregion
@@ -318,7 +322,8 @@ namespace egg.Lark.MemeryUnits {
                     if (this.Params.Count > 3) throw new Exception("if函数最多包含三个参数");
                     value = this.Params[0].GetMemeryUnit();
                     if (value.UnitType == MemeryUnits.UnitTypes.Function) value = ((MemeryUnits.Function)value).Execute();
-                    if (value.UnitType != UnitTypes.Number) throw new Exception("if函数条件参数需要定义为数值");
+                    if (value.UnitType == UnitTypes.Number) value = new MemeryUnits.Boolean(((MemeryUnits.Number)value).Value > 0);
+                    if (value.UnitType != UnitTypes.Boolean) throw new Exception("if函数条件参数需要定义为布尔值");
                     if (((MemeryUnits.Number)value).Value > 0) {
                         var funcIf = this.Params[1].GetMemeryUnit();
                         if (funcIf.UnitType != MemeryUnits.UnitTypes.Function) throw new Exception("if函数执行参数需要定义为函数");
@@ -338,8 +343,9 @@ namespace egg.Lark.MemeryUnits {
                     if (this.Params.Count != 2) throw new Exception("while函数必须要两个参数");
                     value = this.Params[0].GetMemeryUnit();
                     if (value.UnitType == MemeryUnits.UnitTypes.Function) value = ((MemeryUnits.Function)value).Execute();
-                    if (value.UnitType != UnitTypes.Number) throw new Exception("while函数条件参数需要定义为数值");
-                    while (((MemeryUnits.Number)value).Value > 0) {
+                    if (value.UnitType == UnitTypes.Number) value = new MemeryUnits.Boolean(((MemeryUnits.Number)value).Value > 0);
+                    if (value.UnitType != UnitTypes.Boolean) throw new Exception("while函数条件参数需要定义为布尔值");
+                    while (((MemeryUnits.Boolean)value).Value) {
                         var funcWhile = this.Params[1].GetMemeryUnit();
                         if (funcWhile.UnitType != MemeryUnits.UnitTypes.Function) throw new Exception("while函数执行参数需要定义为函数");
                         var res = ((MemeryUnits.Function)funcWhile).Execute();
@@ -381,6 +387,7 @@ namespace egg.Lark.MemeryUnits {
                     return new MemeryUnits.None();
                 #endregion
                 case "+": // 加法操作
+                case "add": // 加法操作
                     #region [====加法操作====]
                     if (this.Params.Count != 2) throw new Exception("加法函数只允许两个参数");
                     MemeryUnits.Unit value1 = this.Params[0].GetMemeryUnit();
@@ -393,6 +400,7 @@ namespace egg.Lark.MemeryUnits {
                     return new MemeryUnits.Number(((MemeryUnits.Number)value1).Value + ((MemeryUnits.Number)value2).Value);
                 #endregion
                 case "-": // 减法操作
+                case "minus": // 减法操作
                     #region [====减法操作====]
                     if (this.Params.Count != 2) throw new Exception("加法函数只允许两个参数");
                     value1 = this.Params[0].GetMemeryUnit();
@@ -405,6 +413,7 @@ namespace egg.Lark.MemeryUnits {
                     return new MemeryUnits.Number(((MemeryUnits.Number)value1).Value - ((MemeryUnits.Number)value2).Value);
                 #endregion
                 case "*": // 乘法操作
+                case "mul": // 乘法操作
                     #region [====乘法操作====]
                     if (this.Params.Count != 2) throw new Exception("加法函数只允许两个参数");
                     value1 = this.Params[0].GetMemeryUnit();
@@ -417,6 +426,7 @@ namespace egg.Lark.MemeryUnits {
                     return new MemeryUnits.Number(((MemeryUnits.Number)value1).Value * ((MemeryUnits.Number)value2).Value);
                 #endregion
                 case "/": // 除法操作
+                case "div": // 除法操作
                     #region [====除法操作====]
                     if (this.Params.Count != 2) throw new Exception("加法函数只允许两个参数");
                     value1 = this.Params[0].GetMemeryUnit();
@@ -428,10 +438,189 @@ namespace egg.Lark.MemeryUnits {
                     if (value2.UnitType != MemeryUnits.UnitTypes.Number) throw new Exception("乘法函数参数必须为数值，请使用num()函数转换");
                     return new MemeryUnits.Number(((MemeryUnits.Number)value1).Value / ((MemeryUnits.Number)value2).Value);
                 #endregion
+                case "rem": // 取余操作
+                    #region [====取余操作====]
+                    if (this.Params.Count != 2) throw new Exception("加法函数只允许两个参数");
+                    value1 = this.Params[0].GetMemeryUnit();
+                    value2 = this.Params[1].GetMemeryUnit();
+                    // 兼容函数执行
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
+                    if (value2.UnitType == MemeryUnits.UnitTypes.Function) value2 = ((MemeryUnits.Function)value2).Execute();
+                    if (value1.UnitType != MemeryUnits.UnitTypes.Number) throw new Exception("取余函数参数必须为数值，请使用num()函数转换");
+                    if (value2.UnitType != MemeryUnits.UnitTypes.Number) throw new Exception("取余函数参数必须为数值，请使用num()函数转换");
+                    return new MemeryUnits.Number((long)(value1.ToNumber()) % (long)(value2.ToNumber()));
+                #endregion
+                case "divi": // 整除操作
+                    #region [====整除操作====]
+                    if (this.Params.Count != 2) throw new Exception("加法函数只允许两个参数");
+                    value1 = this.Params[0].GetMemeryUnit();
+                    value2 = this.Params[1].GetMemeryUnit();
+                    // 兼容函数执行
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
+                    if (value2.UnitType == MemeryUnits.UnitTypes.Function) value2 = ((MemeryUnits.Function)value2).Execute();
+                    if (value1.UnitType != MemeryUnits.UnitTypes.Number) throw new Exception("整除函数参数必须为数值，请使用num()函数转换");
+                    if (value2.UnitType != MemeryUnits.UnitTypes.Number) throw new Exception("整除函数参数必须为数值，请使用num()函数转换");
+                    return new MemeryUnits.Number(((long)((MemeryUnits.Number)value1).Value) / (long)((MemeryUnits.Number)value2).Value);
+                #endregion
+                case "equal": // 判断相等操作
+                    #region [====判断相等操作====]
+                    if (this.Params.Count != 2) throw new Exception($"{this.Name}函数只允许两个参数");
+                    value1 = this.Params[0].GetMemeryUnit();
+                    value2 = this.Params[1].GetMemeryUnit();
+                    // 兼容函数执行
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
+                    if (value2.UnitType == MemeryUnits.UnitTypes.Function) value2 = ((MemeryUnits.Function)value2).Execute();
+                    if (value1.UnitType != value2.UnitType) throw new Exception("等于函数的两个参数必须类型相同");
+                    switch (value1.UnitType) {
+                        case UnitTypes.None: return new MemeryUnits.Boolean(true);
+                        case UnitTypes.Boolean: return new MemeryUnits.Boolean(((MemeryUnits.Boolean)value1).Value == ((MemeryUnits.Boolean)value2).Value);
+                        case UnitTypes.Number: return new MemeryUnits.Boolean(((MemeryUnits.Number)value1).Value == ((MemeryUnits.Number)value2).Value);
+                        case UnitTypes.String: return new MemeryUnits.Boolean(((MemeryUnits.String)value1).Value == ((MemeryUnits.String)value2).Value);
+                        default: throw new Exception($"{this.Name}函数不知道'{value1.UnitType.ToString()}'类型参数");
+                    }
+                #endregion
+                case "small": // 判断相等操作
+                    #region [====判断相等操作====]
+                    if (this.Params.Count != 2) throw new Exception($"{this.Name}函数只允许两个参数");
+                    value1 = this.Params[0].GetMemeryUnit();
+                    value2 = this.Params[1].GetMemeryUnit();
+                    // 兼容函数执行
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
+                    if (value2.UnitType == MemeryUnits.UnitTypes.Function) value2 = ((MemeryUnits.Function)value2).Execute();
+                    if (value1.UnitType != value2.UnitType) throw new Exception("等于函数的两个参数必须类型相同");
+                    switch (value1.UnitType) {
+                        case UnitTypes.None: return new MemeryUnits.Boolean(false);
+                        case UnitTypes.Number: return new MemeryUnits.Boolean(((MemeryUnits.Number)value1).Value < ((MemeryUnits.Number)value2).Value);
+                        default: throw new Exception($"{this.Name}函数不知道'{value1.UnitType.ToString()}'类型参数");
+                    }
+                #endregion
+                case "large": // 判断相等操作
+                    #region [====判断相等操作====]
+                    if (this.Params.Count != 2) throw new Exception($"{this.Name}函数只允许两个参数");
+                    value1 = this.Params[0].GetMemeryUnit();
+                    value2 = this.Params[1].GetMemeryUnit();
+                    // 兼容函数执行
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
+                    if (value2.UnitType == MemeryUnits.UnitTypes.Function) value2 = ((MemeryUnits.Function)value2).Execute();
+                    if (value1.UnitType != value2.UnitType) throw new Exception("等于函数的两个参数必须类型相同");
+                    switch (value1.UnitType) {
+                        case UnitTypes.None: return new MemeryUnits.Boolean(false);
+                        case UnitTypes.Number: return new MemeryUnits.Boolean(((MemeryUnits.Number)value1).Value > ((MemeryUnits.Number)value2).Value);
+                        default: throw new Exception($"{this.Name}函数不知道'{value1.UnitType.ToString()}'类型参数");
+                    }
+                #endregion
+                case "small_equal": // 判断相等操作
+                    #region [====判断相等操作====]
+                    if (this.Params.Count != 2) throw new Exception($"{this.Name}函数只允许两个参数");
+                    value1 = this.Params[0].GetMemeryUnit();
+                    value2 = this.Params[1].GetMemeryUnit();
+                    // 兼容函数执行
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
+                    if (value2.UnitType == MemeryUnits.UnitTypes.Function) value2 = ((MemeryUnits.Function)value2).Execute();
+                    if (value1.UnitType != value2.UnitType) throw new Exception("等于函数的两个参数必须类型相同");
+                    switch (value1.UnitType) {
+                        case UnitTypes.None: return new MemeryUnits.Boolean(false);
+                        case UnitTypes.Number: return new MemeryUnits.Boolean(((MemeryUnits.Number)value1).Value <= ((MemeryUnits.Number)value2).Value);
+                        default: throw new Exception($"{this.Name}函数不知道'{value1.UnitType.ToString()}'类型参数");
+                    }
+                #endregion
+                case "large_equal": // 判断相等操作
+                    #region [====判断相等操作====]
+                    if (this.Params.Count != 2) throw new Exception($"{this.Name}函数只允许两个参数");
+                    value1 = this.Params[0].GetMemeryUnit();
+                    value2 = this.Params[1].GetMemeryUnit();
+                    // 兼容函数执行
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
+                    if (value2.UnitType == MemeryUnits.UnitTypes.Function) value2 = ((MemeryUnits.Function)value2).Execute();
+                    if (value1.UnitType != value2.UnitType) throw new Exception("等于函数的两个参数必须类型相同");
+                    switch (value1.UnitType) {
+                        case UnitTypes.None: return new MemeryUnits.Boolean(false);
+                        case UnitTypes.Number: return new MemeryUnits.Boolean(((MemeryUnits.Number)value1).Value >= ((MemeryUnits.Number)value2).Value);
+                        default: throw new Exception($"{this.Name}函数不知道'{value1.UnitType.ToString()}'类型参数");
+                    }
+                #endregion
+                case "and": // 与操作
+                    #region [====与操作====]
+                    if (this.Params.Count != 2) throw new Exception("and函数只允许两个参数");
+                    value1 = this.Params[0].GetMemeryUnit();
+                    value2 = this.Params[1].GetMemeryUnit();
+                    // 兼容函数执行
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
+                    if (value2.UnitType == MemeryUnits.UnitTypes.Function) value2 = ((MemeryUnits.Function)value2).Execute();
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Number) value1 = new MemeryUnits.Boolean(((MemeryUnits.Number)value1).Value > 0);
+                    if (value1.UnitType != MemeryUnits.UnitTypes.Boolean) throw new Exception("加法函数参数必须为布尔值，请使用num()函数转换");
+                    if (value2.UnitType == MemeryUnits.UnitTypes.Number) value2 = new MemeryUnits.Boolean(((MemeryUnits.Number)value2).Value > 0);
+                    if (value2.UnitType != MemeryUnits.UnitTypes.Boolean) throw new Exception("加法函数参数必须为布尔值，请使用num()函数转换");
+                    return new MemeryUnits.Boolean(((MemeryUnits.Boolean)value1).Value && ((MemeryUnits.Boolean)value2).Value);
+                #endregion
+                case "or": // 或操作
+                    #region [====或操作====]
+                    if (this.Params.Count != 2) throw new Exception("and函数只允许两个参数");
+                    value1 = this.Params[0].GetMemeryUnit();
+                    value2 = this.Params[1].GetMemeryUnit();
+                    // 兼容函数执行
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
+                    if (value2.UnitType == MemeryUnits.UnitTypes.Function) value2 = ((MemeryUnits.Function)value2).Execute();
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Number) value1 = new MemeryUnits.Boolean(((MemeryUnits.Number)value1).Value > 0);
+                    if (value1.UnitType != MemeryUnits.UnitTypes.Boolean) throw new Exception("加法函数参数必须为布尔值，请使用num()函数转换");
+                    if (value2.UnitType == MemeryUnits.UnitTypes.Number) value2 = new MemeryUnits.Boolean(((MemeryUnits.Number)value2).Value > 0);
+                    if (value2.UnitType != MemeryUnits.UnitTypes.Boolean) throw new Exception("加法函数参数必须为布尔值，请使用num()函数转换");
+                    return new MemeryUnits.Boolean(((MemeryUnits.Boolean)value1).Value || ((MemeryUnits.Boolean)value2).Value);
+                #endregion
+                case "not": // 与或操作
+                    #region [====与或操作====]
+                    if (this.Params.Count != 1) throw new Exception("and函数只允许1个参数");
+                    value1 = this.Params[0].GetMemeryUnit();
+                    // 兼容函数执行
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Number) value1 = new MemeryUnits.Boolean(((MemeryUnits.Number)value1).Value > 0);
+                    if (value1.UnitType != MemeryUnits.UnitTypes.Boolean) throw new Exception("加法函数参数必须为布尔值，请使用num()函数转换");
+                    return new MemeryUnits.Boolean(!((MemeryUnits.Boolean)value1).Value);
+                #endregion
+                case "join": // 字符串连接
+                    #region [====字符串连接操作====]
+                    if (this.Params.Count < 2) throw new Exception("字符串连接函数至少需要两个参数");
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < this.Params.Count; i++) {
+                        MemeryUnits.Unit val = this.Params[i].GetMemeryUnit();
+                        // 兼容函数执行
+                        if (val.UnitType == MemeryUnits.UnitTypes.Function) val = ((MemeryUnits.Function)val).Execute();
+                        switch (val.UnitType) {
+                            case UnitTypes.Boolean:
+                                sb.Append(((MemeryUnits.Boolean)val).Value.ToString());
+                                break;
+                            case UnitTypes.String:
+                                sb.Append(((MemeryUnits.String)val).Value);
+                                break;
+                            case UnitTypes.Number:
+                                sb.Append(((MemeryUnits.Number)val).Value);
+                                break;
+                            case UnitTypes.None: break;
+                            default: throw new Exception($"join函数不知道'{val.UnitType.ToString()}'类型参数");
+                        }
+                    }
+                    return new MemeryUnits.String(sb.ToString());
+                #endregion
+                case "num": // 转化为数值
+                    #region [====转化为数值====]
+                    if (this.Params.Count != 1) throw new Exception("转化为数值函数仅支持一个参数");
+                    value1 = this.Params[0].GetMemeryUnit();
+                    if (value1.UnitType == MemeryUnits.UnitTypes.String) return new MemeryUnits.Number(((MemeryUnits.String)value1).Value.ToDouble());
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Boolean) return new MemeryUnits.Number(((MemeryUnits.Boolean)value1).Value ? 1 : 0);
+                    throw new Exception($"num函数的参数不支持类型{value1.UnitType.ToString()}");
+                #endregion
+                case "str": // 转化为字符串
+                    #region [====转化为字符串====]
+                    if (this.Params.Count != 1) throw new Exception("转化为数值函数仅支持一个参数");
+                    value1 = this.Params[0].GetMemeryUnit();
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Number) return new MemeryUnits.String(((MemeryUnits.Number)value1).Value.ToString());
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Boolean) return new MemeryUnits.String(((MemeryUnits.Boolean)value1).Value ? "true" : "false");
+                    throw new Exception($"str函数的参数不支持类型{value1.UnitType.ToString()}");
+                #endregion
                 case "#": // 注释
                     return new MemeryUnits.None();
                 case "return": // 执行返回数据
-                    this.Parent.SetReturn();
+                    this.ParentFunction.SetReturn();
                     if (this.Params.Count > 0) {
                         var returnVar = this.Params[0].GetMemeryUnit();
                         if (returnVar.UnitType == MemeryUnits.UnitTypes.Function) returnVar = ((MemeryUnits.Function)returnVar).Execute();
@@ -440,7 +629,7 @@ namespace egg.Lark.MemeryUnits {
                         return new MemeryUnits.None();
                     }
                 case "break": // 执行中断
-                    this.Parent.SetBreak();
+                    this.ParentFunction.SetBreak();
                     return new MemeryUnits.None();
                 default:
                     // 查询自定义函数

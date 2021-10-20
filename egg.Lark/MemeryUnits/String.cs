@@ -22,5 +22,29 @@ namespace egg.Lark.MemeryUnits {
         public String(string val) : base(UnitTypes.String) {
             this.Value = val;
         }
+
+        /// <summary>
+        /// 实例化对象
+        /// </summary>
+        /// <returns></returns>
+        public static String Create(string val) { return new String(val); }
+
+        /// <summary>
+        /// 获取布尔值
+        /// </summary>
+        /// <returns></returns>
+        protected override bool OnGetBoolean() { return this.Value.ToLower() == "true"; }
+
+        /// <summary>
+        /// 获取数值
+        /// </summary>
+        /// <returns></returns>
+        protected override double OnGetNumber() { return double.Parse(this.Value); }
+
+        /// <summary>
+        /// 获取字符串
+        /// </summary>
+        /// <returns></returns>
+        protected override string OnGetString() { return this.Value; }
     }
 }

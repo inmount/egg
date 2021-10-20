@@ -34,6 +34,10 @@ namespace egg.Lark.ProcessUnits {
         /// </summary>
         public static Pointer None { get { return new Pointer(null, 0); } }
 
+        /// <summary>
+        /// 获取存储单元
+        /// </summary>
+        /// <returns></returns>
         protected override MemeryUnits.Unit OnGetMemeryUnit() {
             // 处理空指针
             if (eggs.IsNull(this.Function.Memery)) return new MemeryUnits.None();
