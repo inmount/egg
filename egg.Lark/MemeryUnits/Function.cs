@@ -85,14 +85,14 @@ namespace egg.Lark.MemeryUnits {
         // 设置中断
         internal void SetBreak() {
             isBreak = true;
-            if (this.Parent == null) return;
+            if (this.ParentFunction == null) return;
             if (this.Name != "for" && this.Name != "while") this.ParentFunction.SetBreak();
         }
 
         // 设置中断
         internal void SetReturn() {
             isReturn = true;
-            if (this.Parent == null) return;
+            if (this.ParentFunction == null) return;
             if (this.Name != "func" && this.Name != "function") this.ParentFunction.SetReturn();
         }
 
@@ -118,7 +118,7 @@ namespace egg.Lark.MemeryUnits {
             if (vars.ContainsKey(name)) {
                 return vars[name];
             } else {
-                if (this.Parent == null) throw new Exception($"变量'{name}'尚未赋值");
+                if (this.ParentFunction == null) throw new Exception($"变量'{name}'尚未赋值");
                 return this.ParentFunction.GetVarValue(name);
             }
         }
@@ -128,7 +128,7 @@ namespace egg.Lark.MemeryUnits {
             if (vars.ContainsKey(name)) {
                 return true;
             } else {
-                if (this.Parent == null) return false;
+                if (this.ParentFunction == null) return false;
                 return this.ParentFunction.CheckVar(name);
             }
         }
@@ -165,7 +165,7 @@ namespace egg.Lark.MemeryUnits {
                     string name = ((ProcessUnits.Define)this.Params[0]).Name;
                     MemeryUnits.Unit value = this.Params[1].GetMemeryUnit();
                     if (value.UnitType == MemeryUnits.UnitTypes.Function) value = ((MemeryUnits.Function)value).Execute();
-                    if (eggs.IsNull(this.Parent)) throw new Exception("let函数未找到父函数");
+                    if (eggs.IsNull(this.ParentFunction)) throw new Exception("let函数未找到父函数");
                     int idx = name.IndexOf('.');
                     if (idx >= 0) {
                         string objNameParent = name.Substring(0, idx);
@@ -190,7 +190,7 @@ namespace egg.Lark.MemeryUnits {
                     if (index.UnitType != MemeryUnits.UnitTypes.Number) throw new Exception($"set函数第二个参数只接受数值");
                     value = this.Params[2].GetMemeryUnit();
                     if (value.UnitType == MemeryUnits.UnitTypes.Function) value = ((MemeryUnits.Function)value).Execute();
-                    if (eggs.IsNull(this.Parent)) throw new Exception("set函数未找到父函数");
+                    if (eggs.IsNull(this.ParentFunction)) throw new Exception("set函数未找到父函数");
                     idx = name.IndexOf('.');
                     if (idx >= 0) {
                         string objNameParent = name.Substring(0, idx);
@@ -214,7 +214,7 @@ namespace egg.Lark.MemeryUnits {
                     name = ((ProcessUnits.Define)this.Params[0]).Name;
                     index = this.Params[1].GetMemeryUnit();
                     if (index.UnitType == MemeryUnits.UnitTypes.Function) index = ((MemeryUnits.Function)index).Execute();
-                    if (eggs.IsNull(this.Parent)) throw new Exception("set函数未找到父函数");
+                    if (eggs.IsNull(this.ParentFunction)) throw new Exception("set函数未找到父函数");
                     idx = name.IndexOf('.');
                     if (idx >= 0) {
                         string objNameParent = name.Substring(0, idx);
