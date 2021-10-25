@@ -61,7 +61,7 @@ namespace egg.Lark.Test {
                 //engine.Execute();
                 //engine.Execute("let(area,circleArea(r))");
                 //System.Console.WriteLine(((MemeryUnits.Number)engine.GetVariable("area")).Value);
-                engine.ExecuteFile(@"X:\temp\lark\test3.lark");
+                engine.ExecuteFile(@"X:\temp\lark\test2.lark");
             }
             System.Console.ReadKey();
         }

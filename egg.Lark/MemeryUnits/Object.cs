@@ -149,6 +149,17 @@ namespace egg.Lark.MemeryUnits {
         }
 
         /// <summary>
+        /// 设置数值子元素
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public Object Num(string key, double val) {
+            this[key] = MemeryUnits.Number.Create(val);
+            return this;
+        }
+
+        /// <summary>
         /// 获取数值子元素
         /// </summary>
         /// <param name="key"></param>
@@ -169,6 +180,17 @@ namespace egg.Lark.MemeryUnits {
         }
 
         /// <summary>
+        /// 设置数值子元素
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public Object Str(string key, string val) {
+            this[key] = MemeryUnits.String.Create(val);
+            return this;
+        }
+
+        /// <summary>
         /// 获取数值子元素
         /// </summary>
         /// <param name="key"></param>
@@ -185,6 +207,17 @@ namespace egg.Lark.MemeryUnits {
         /// <returns></returns>
         public Object Bool(string key, Boolean val) {
             this[key] = val;
+            return this;
+        }
+
+        /// <summary>
+        /// 设置数值子元素
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public Object Bool(string key, bool val) {
+            this[key] = MemeryUnits.Boolean.Create(val);
             return this;
         }
 

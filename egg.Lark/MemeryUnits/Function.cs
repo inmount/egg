@@ -360,7 +360,7 @@ namespace egg.Lark.MemeryUnits {
                 #endregion
                 case "for": // for循环定义操作
                     #region [====循环定义操作====]
-                    if (this.Params.Count < 2) throw new Exception("for函数必须要五个参数");
+                    if (this.Params.Count < 5) throw new Exception("for函数必须要五个参数");
                     KeyValues<Unit> lsArgs = new KeyValues<Unit>();
                     if (this.Params[0].UnitType != ProcessUnits.UnitTypes.Define) throw new Exception("for函数第一个参数只接受变量");
                     string forVar = ((ProcessUnits.Define)this.Params[0]).Name;
@@ -631,6 +631,47 @@ namespace egg.Lark.MemeryUnits {
                 case "break": // 执行中断
                     this.ParentFunction.SetBreak();
                     return new MemeryUnits.None();
+                case "try": // 安全模式运行
+                    #region [====安全模式运行====]
+                    if (this.Params.Count < 1) throw new Exception($"{this.Name}函数至少包含一个参数");
+                    value1 = this.Params[0].GetMemeryUnit();
+                    if (value1.UnitType != UnitTypes.Function) throw new Exception($"{this.Name}函数的第一个参数不支持'{value1.UnitType.ToString()}'类型");
+                    try {
+                        return ((MemeryUnits.Function)value1).Execute();
+                    } catch (Exception ex) {
+                        var err = MemeryUnits.Object.Create();
+                        err.Str("detail", ex.ToString());
+                        this.SetVarValue("ex", err, true);
+                        if (this.Params.Count > 1) {
+                            value2 = this.Params[1].GetMemeryUnit();
+                            if (value2.UnitType != UnitTypes.Function) throw new Exception($"{this.Name}函数的第二个参数不支持'{value2.UnitType.ToString()}'类型");
+                            return ((MemeryUnits.Function)value2).Execute();
+                        }
+                    }
+                    // this.ParentFunction.SetBreak();
+                    return new MemeryUnits.None();
+                #endregion
+                case "foreach": // foreach循环定义操作
+                    #region [====循环定义操作====]
+                    if (this.Params.Count < 3) throw new Exception($"{this.Name}函数必须要3个参数");
+                    if (this.Params[0].UnitType != ProcessUnits.UnitTypes.Define) throw new Exception($"{this.Name}函数第一个参数只接受变量");
+                    forVar = ((ProcessUnits.Define)this.Params[0]).Name;
+                    lsArgs = new KeyValues<Unit>();
+                    // 获取起始值
+                    var forList = this.Params[1].GetMemeryUnit();
+                    if (forList.UnitType == MemeryUnits.UnitTypes.Function) forList = ((MemeryUnits.Function)forList).Execute();
+                    if (forList.UnitType != UnitTypes.List) throw new Exception($"{this.Name}函数第二参数需要定义为列表");
+                    var forListUnit = (MemeryUnits.List)forList;
+                    for (int i = 0; i < forListUnit.Count; i++) {
+                        var funcFor = this.Params[2].GetMemeryUnit();
+                        if (funcFor.UnitType != MemeryUnits.UnitTypes.Function) throw new Exception("if函数执行参数需要定义为函数");
+                        lsArgs[forVar] = forListUnit[i];
+                        var res = ((MemeryUnits.Function)funcFor).Execute(lsArgs);
+                        if (isReturn) return res;
+                        if (isBreak) break;
+                    }
+                    return new MemeryUnits.None();
+                #endregion
                 default:
                     // 查询自定义函数
                     idx = this.Name.IndexOf('.');
@@ -649,20 +690,6 @@ namespace egg.Lark.MemeryUnits {
                         if (!Lark.ScriptEngine.IsFunction(fun)) throw new Exception($"函数'{this.Name}'未定义");
                         return Lark.ScriptEngine.ExecuteFunction(this, fun);
                     }
-                    //if (fun.UnitType == UnitTypes.Function) {
-
-                    //} else {
-                    //    var func = this.Engine.GetFunction(this.Name);
-                    //    if (eggs.IsNull(func)) throw new Exception($"函数'{this.Name}'未定义");
-                    //    List<Unit> ls = new List<Unit>();
-                    //    for (int i = 0; i < this.Params.Count; i++) {
-                    //        var valSource = this.Params[i].GetMemeryUnit();
-                    //        if (valSource.UnitType == UnitTypes.Function) valSource = ((MemeryUnits.Function)valSource).Execute();
-                    //        ls.Add(valSource);
-                    //    }
-                    //    return func(ls);
-                    //}
-                    //return new MemeryUnits.None();
             }
         }
     }

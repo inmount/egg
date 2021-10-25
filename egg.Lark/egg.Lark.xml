@@ -9,9 +9,27 @@
             内置函数集合
             </summary>
         </member>
-        <member name="M:egg.Lark.Functions.Reg(egg.Lark.ScriptEngine)">
+        <member name="M:egg.Lark.Functions.RegLark(egg.Lark.ScriptEngine)">
             <summary>
-            注册器
+            注册lark对象
+            </summary>
+            <param name="engine"></param>
+        </member>
+        <member name="M:egg.Lark.Functions.RegJson(egg.Lark.ScriptEngine)">
+            <summary>
+            注册json对象
+            </summary>
+            <param name="engine"></param>
+        </member>
+        <member name="M:egg.Lark.Functions.RegFile(egg.Lark.ScriptEngine)">
+            <summary>
+            注册file对象
+            </summary>
+            <param name="engine"></param>
+        </member>
+        <member name="M:egg.Lark.Functions.RegTime(egg.Lark.ScriptEngine)">
+            <summary>
+            注册time对象
             </summary>
             <param name="engine"></param>
         </member>
@@ -515,6 +533,14 @@
             <param name="val"></param>
             <returns></returns>
         </member>
+        <member name="M:egg.Lark.MemeryUnits.Object.Num(System.String,System.Double)">
+            <summary>
+            设置数值子元素
+            </summary>
+            <param name="key"></param>
+            <param name="val"></param>
+            <returns></returns>
+        </member>
         <member name="M:egg.Lark.MemeryUnits.Object.Str(System.String)">
             <summary>
             获取数值子元素
@@ -530,6 +556,14 @@
             <param name="val"></param>
             <returns></returns>
         </member>
+        <member name="M:egg.Lark.MemeryUnits.Object.Str(System.String,System.String)">
+            <summary>
+            设置数值子元素
+            </summary>
+            <param name="key"></param>
+            <param name="val"></param>
+            <returns></returns>
+        </member>
         <member name="M:egg.Lark.MemeryUnits.Object.Bool(System.String)">
             <summary>
             获取数值子元素
@@ -538,6 +572,14 @@
             <returns></returns>
         </member>
         <member name="M:egg.Lark.MemeryUnits.Object.Bool(System.String,egg.Lark.MemeryUnits.Boolean)">
+            <summary>
+            设置数值子元素
+            </summary>
+            <param name="key"></param>
+            <param name="val"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.MemeryUnits.Object.Bool(System.String,System.Boolean)">
             <summary>
             设置数值子元素
             </summary>

@@ -65,7 +65,7 @@ namespace egg.Lark {
         private MemeryUnits.Function main;
         private egg.KeyValues<MemeryUnits.Unit> vars;
         //private egg.KeyValues<Function> funs;
-        private List<string> pathes;
+        internal List<string> Pathes { get; private set; }
         private List<ScriptEngine> libs;
 
         /// <summary>
@@ -75,11 +75,11 @@ namespace egg.Lark {
             main = new MemeryUnits.Function(this, null, "step");
             vars = new KeyValues<MemeryUnits.Unit>();
             //funs = new KeyValues<Function>();
-            pathes = new List<string>();
+            this.Pathes = new List<string>();
             if (!isLibrary) {
                 libs = new List<ScriptEngine>();
-                Functions.Reg(this);
             }
+            Functions.RegLark(this);
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace egg.Lark {
         public void AddPath(string path) {
             path = path.Replace("\\", "/");
             if (!path.EndsWith("/")) path += "/";
-            pathes.Add(path);
+            this.Pathes.Add(path);
         }
 
         /// <summary>
@@ -171,16 +171,28 @@ namespace egg.Lark {
 
         // 引入文件
         internal void Include(string name) {
-            for (int i = 0; i < pathes.Count; i++) {
-                string path = $"{pathes[i]}{name}.lark";
-                if (eggs.CheckFileExists(path)) {
-                    ScriptEngine lib = new ScriptEngine(true);
-                    lib.ExecuteFile(path);
-                    this.libs.Add(lib);
-                    return;
-                }
+            switch (name) {
+                case "json":
+                    Functions.RegJson(this);
+                    break;
+                case "file":
+                    Functions.RegFile(this);
+                    break;
+                case "time":
+                    Functions.RegTime(this);
+                    break;
+                default:
+                    for (int i = 0; i < this.Pathes.Count; i++) {
+                        string path = $"{this.Pathes[i]}{name}.lark";
+                        if (eggs.CheckFileExists(path)) {
+                            ScriptEngine lib = new ScriptEngine(true);
+                            lib.ExecuteFile(path);
+                            this.libs.Add(lib);
+                            return;
+                        }
+                    }
+                    throw new Exception($"未找到'{name}'库文件");
             }
-            throw new Exception($"未找到'{name}'库文件");
         }
 
         //// 获取函数
