@@ -178,12 +178,6 @@ namespace egg.Lark {
                     case '\n':
                         #region [=====换行回车=====]
                         if (inString) throw new Exception("字符串不可换行");
-                        // 处理注释
-                        if (inNote) {
-                            sb.Clear();
-                            inNote = false;
-                            break;
-                        }
                         #endregion
                         break;
                     case ' ':
