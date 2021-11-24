@@ -31,14 +31,21 @@ namespace egg.Lark {
             StringBuilder sb = new StringBuilder();
             bool inString = false;
             bool isEscape = false;
+            bool inNote = false;
             for (int i = 0; i < script.Length; i++) {
                 char chr = script[i];
                 switch (chr) {
                     case '"':
                         #region [=====引号=====]
+                        // 处理注释
+                        if (inNote) {
+                            sb.Append(chr);
+                            break;
+                        }
                         if (inString) {
                             if (isEscape) {
                                 sb.Append(chr);
+                                isEscape = false;
                             } else {
                                 sb.Append(chr);
                                 inString = false;
@@ -53,6 +60,11 @@ namespace egg.Lark {
                     case '\\':
                         #region [=====反斜杠=====]
                         if (!inString) throw new Exception($"规则外的'{chr}'字符");
+                        // 处理注释
+                        if (inNote) {
+                            sb.Append(chr);
+                            break;
+                        }
                         if (isEscape) {
                             sb.Append(chr);
                             isEscape = false;
@@ -63,7 +75,7 @@ namespace egg.Lark {
                         break;
                     case '(':
                         #region [=====左括号=====]
-                        if (inString) {
+                        if (inString || inNote) {
                             sb.Append(chr);
                         } else {
                             // 增加函数
@@ -80,7 +92,7 @@ namespace egg.Lark {
                         break;
                     case ')':
                         #region [=====右括号=====]
-                        if (inString) {
+                        if (inString || inNote) {
                             sb.Append(chr);
                         } else {
                             if (eggs.IsNull(fn)) throw new Exception($"多余的'{chr}'字符");
@@ -103,7 +115,7 @@ namespace egg.Lark {
                         break;
                     case ',':
                         #region [=====逗号=====]
-                        if (inString) {
+                        if (inString || inNote) {
                             sb.Append(chr);
                         } else {
                             if (sb.Length > 0) {
@@ -129,6 +141,7 @@ namespace egg.Lark {
                         #region [=====字母R=====]
                         if (isEscape) {
                             sb.Append('\r');
+                            isEscape = false;
                         } else {
                             sb.Append(chr);
                         }
@@ -138,8 +151,26 @@ namespace egg.Lark {
                         #region [=====字母R=====]
                         if (isEscape) {
                             sb.Append('\n');
+                            isEscape = false;
                         } else {
                             sb.Append(chr);
+                        }
+                        #endregion
+                        break;
+                    case '#':
+                        #region [=====注释=====]
+                        if (inString) {
+                            sb.Append(chr);
+                        } else {
+                            // 处理头尾闭合的注释
+                            if (inNote) {
+                                sb.Clear();
+                                inNote = false;
+                                break;
+                            } else {
+                                if (sb.Length > 0) throw new Exception($"意外的'\\{chr}'操作符");
+                                inNote = true;
+                            }
                         }
                         #endregion
                         break;
@@ -147,6 +178,12 @@ namespace egg.Lark {
                     case '\n':
                         #region [=====换行回车=====]
                         if (inString) throw new Exception("字符串不可换行");
+                        // 处理注释
+                        if (inNote) {
+                            sb.Clear();
+                            inNote = false;
+                            break;
+                        }
                         #endregion
                         break;
                     case ' ':
@@ -156,7 +193,7 @@ namespace egg.Lark {
                         break;
                     default:
                         if (isEscape) throw new Exception($"不支持的'\\{chr}'转义");
-                        if (inString) {
+                        if (inString || inNote) {
                             sb.Append(chr);
                         } else {
                             if (sb.Length <= 0) {
