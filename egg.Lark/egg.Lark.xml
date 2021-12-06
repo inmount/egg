@@ -4,35 +4,6 @@
         <name>egg.Lark</name>
     </assembly>
     <members>
-        <member name="T:egg.Lark.Functions">
-            <summary>
-            内置函数集合
-            </summary>
-        </member>
-        <member name="M:egg.Lark.Functions.RegLark(egg.Lark.ScriptEngine)">
-            <summary>
-            注册lark对象
-            </summary>
-            <param name="engine"></param>
-        </member>
-        <member name="M:egg.Lark.Functions.RegJson(egg.Lark.ScriptEngine)">
-            <summary>
-            注册json对象
-            </summary>
-            <param name="engine"></param>
-        </member>
-        <member name="M:egg.Lark.Functions.RegFile(egg.Lark.ScriptEngine)">
-            <summary>
-            注册file对象
-            </summary>
-            <param name="engine"></param>
-        </member>
-        <member name="M:egg.Lark.Functions.RegTime(egg.Lark.ScriptEngine)">
-            <summary>
-            注册time对象
-            </summary>
-            <param name="engine"></param>
-        </member>
         <member name="T:egg.Lark.Json.Parser">
             <summary>
             Json解析器

@@ -79,7 +79,7 @@ namespace egg.Lark {
             if (!isLibrary) {
                 libs = new List<ScriptEngine>();
             }
-            Functions.RegLark(this);
+            Imports.Lark.Reg(this);
         }
 
         /// <summary>
@@ -171,26 +171,28 @@ namespace egg.Lark {
 
         // 引入文件
         internal void Include(string name) {
+            // 优先加载自定义文件
+            for (int i = 0; i < this.Pathes.Count; i++) {
+                string path = $"{this.Pathes[i]}{name}.lark";
+                if (eggs.CheckFileExists(path)) {
+                    ScriptEngine lib = new ScriptEngine(true);
+                    lib.ExecuteFile(path);
+                    this.libs.Add(lib);
+                    return;
+                }
+            }
+            // 加载内置类
             switch (name) {
                 case "json":
-                    Functions.RegJson(this);
+                    Imports.Json.Reg(this);
                     break;
-                case "file":
-                    Functions.RegFile(this);
+                case "io":
+                    Imports.IO.Reg(this);
                     break;
                 case "time":
-                    Functions.RegTime(this);
+                    Imports.Time.Reg(this);
                     break;
                 default:
-                    for (int i = 0; i < this.Pathes.Count; i++) {
-                        string path = $"{this.Pathes[i]}{name}.lark";
-                        if (eggs.CheckFileExists(path)) {
-                            ScriptEngine lib = new ScriptEngine(true);
-                            lib.ExecuteFile(path);
-                            this.libs.Add(lib);
-                            return;
-                        }
-                    }
                     throw new Exception($"未找到'{name}'库文件");
             }
         }
