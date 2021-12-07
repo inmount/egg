@@ -109,6 +109,76 @@ namespace egg.Lark.Imports {
                 }
                 return MemeryUnits.None.Create();
             }, egg.Strings.Create("path", "content", "encoding"));
+            // 获取子目录
+            io["getFolders"] = new MemeryUnits.NativeFunction((egg.KeyValues<MemeryUnits.Unit> args) => {
+                string fnName = "io.getFolders";
+                var path = args["path"];
+                if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{path.UnitType.ToString()}");
+                var pattern = args["pattern"];
+                string[] pathes;
+                switch (pattern.UnitType) {
+                    case MemeryUnits.UnitTypes.None:
+                        pathes = System.IO.Directory.GetDirectories(path.ToString());
+                        break;
+                    case MemeryUnits.UnitTypes.String:
+                        pathes = System.IO.Directory.GetDirectories(path.ToString(), pattern.ToString());
+                        break;
+                    default:
+                        throw new Exception($"{fnName}函数的参数'pattern'不支持类型{pattern.UnitType.ToString()}");
+                }
+                var list = MemeryUnits.List.Create();
+                for (int i = 0; i < pathes.Length; i++) {
+                    list.Add(MemeryUnits.String.Create(pathes[i]));
+                }
+                return list;
+            }, egg.Strings.Create("path", "pattern"));
+            // 获取文件
+            io["getFiles"] = new MemeryUnits.NativeFunction((egg.KeyValues<MemeryUnits.Unit> args) => {
+                string fnName = "io.getFiles";
+                var path = args["path"];
+                if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{path.UnitType.ToString()}");
+                var pattern = args["pattern"];
+                string[] pathes;
+                switch (pattern.UnitType) {
+                    case MemeryUnits.UnitTypes.None:
+                        pathes = System.IO.Directory.GetFiles(path.ToString());
+                        break;
+                    case MemeryUnits.UnitTypes.String:
+                        pathes = System.IO.Directory.GetFiles(path.ToString(), pattern.ToString());
+                        break;
+                    default:
+                        throw new Exception($"{fnName}函数的参数'pattern'不支持类型{pattern.UnitType.ToString()}");
+                }
+                var list = MemeryUnits.List.Create();
+                for (int i = 0; i < pathes.Length; i++) {
+                    list.Add(MemeryUnits.String.Create(pathes[i]));
+                }
+                return list;
+            }, egg.Strings.Create("path", "pattern"));
+            // 获取文件名
+            io["getFileName"] = new MemeryUnits.NativeFunction((egg.KeyValues<MemeryUnits.Unit> args) => {
+                string fnName = "io.getFileName";
+                var path = args["path"];
+                if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{path.UnitType.ToString()}");
+                return MemeryUnits.String.Create(System.IO.Path.GetFileName(path.ToString()));
+            }, egg.Strings.Create("path"));
+            // 获取父目录
+            io["getParentFolder"] = new MemeryUnits.NativeFunction((egg.KeyValues<MemeryUnits.Unit> args) => {
+                string fnName = "io.getParentFolder";
+                var path = args["path"];
+                if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{path.UnitType.ToString()}");
+                return MemeryUnits.String.Create(System.IO.Path.GetDirectoryName(path.ToString()));
+            }, egg.Strings.Create("path"));
+            // 获取驱动器列表
+            io["getDrives"] = new MemeryUnits.NativeFunction((egg.KeyValues<MemeryUnits.Unit> args) => {
+                //string fnName = "io.getDrives";
+                string[] drives= System.IO.Directory.GetLogicalDrives();
+                var list = MemeryUnits.List.Create();
+                for (int i = 0; i < drives.Length; i++) {
+                    list.Add(MemeryUnits.String.Create(drives[i]));
+                }
+                return list;
+            }, egg.Strings.Create());
         }
     }
 }

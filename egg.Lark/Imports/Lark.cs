@@ -84,6 +84,17 @@ namespace egg.Lark.Imports {
                 }
                 return list;
             });
+            // 查找字符串
+            lark["indexOf"] = new MemeryUnits.NativeFunction((egg.KeyValues<MemeryUnits.Unit> args) => {
+                string fnName = "lark.indexOf";
+                var str = args["str"];
+                var start = args["start"];
+                var key = args["key"];
+                if (str.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'str'不支持类型{str.UnitType.ToString()}");
+                if (start.UnitType != MemeryUnits.UnitTypes.Number) throw new Exception($"{fnName}函数的参数'start'不支持类型{start.UnitType.ToString()}");
+                if (key.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'key'不支持类型{key.UnitType.ToString()}");
+                return MemeryUnits.Number.Create(str.ToString().IndexOf(key.ToString(), (int)start.ToNumber()));
+            }, egg.Strings.Create("str", "start", "key"));
         }
     }
 }
