@@ -32,9 +32,13 @@ namespace egg.Lark {
                 if (!eggs.IsNull(func.Keys)) {
                     if (parent.Params.Count > func.Keys.Count) throw new Exception($"函数'{parent.Name}'只允许{func.Keys.Count}个参数");
                     for (int i = 0; i < func.Keys.Count; i++) {
-                        var valSource = parent.Params[i].GetMemeryUnit();
-                        if (valSource.UnitType == MemeryUnits.UnitTypes.Function) valSource = ((MemeryUnits.Function)valSource).Execute();
-                        args[func.Keys[i]] = valSource;
+                        if (parent.Params.Count > i) {
+                            var valSource = parent.Params[i].GetMemeryUnit();
+                            if (valSource.UnitType == MemeryUnits.UnitTypes.Function) valSource = ((MemeryUnits.Function)valSource).Execute();
+                            args[func.Keys[i]] = valSource;
+                        } else {
+                            args[func.Keys[i]] = MemeryUnits.None.Create();
+                        }
                     }
                 }
                 return ((MemeryUnits.NativeFunction)fn).Execute(args);
@@ -44,9 +48,13 @@ namespace egg.Lark {
                 if (parent.Params.Count >= func.Params.Count) throw new Exception($"函数'{parent.Name}'只允许{func.Params.Count - 1}个参数");
                 egg.KeyValues<MemeryUnits.Unit> args = new KeyValues<MemeryUnits.Unit>();
                 for (int i = 0; i < func.Params.Count - 1; i++) {
-                    var valSource = parent.Params[i].GetMemeryUnit();
-                    if (valSource.UnitType == MemeryUnits.UnitTypes.Function) valSource = ((MemeryUnits.Function)valSource).Execute();
-                    args[((ProcessUnits.Define)func.Params[i]).Name] = valSource;
+                    if (parent.Params.Count > i) {
+                        var valSource = parent.Params[i].GetMemeryUnit();
+                        if (valSource.UnitType == MemeryUnits.UnitTypes.Function) valSource = ((MemeryUnits.Function)valSource).Execute();
+                        args[((ProcessUnits.Define)func.Params[i]).Name] = valSource;
+                    } else {
+                        args[((ProcessUnits.Define)func.Params[i]).Name] = MemeryUnits.None.Create();
+                    }
                 }
                 return ((MemeryUnits.Function)func.Params[func.Params.Count - 1].GetMemeryUnit()).Execute(args);
             }
