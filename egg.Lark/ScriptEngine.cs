@@ -80,6 +80,7 @@ namespace egg.Lark {
                 libs = new List<ScriptEngine>();
             }
             Imports.Lark.Reg(this);
+            Imports.String.Reg(this);
         }
 
         /// <summary>
@@ -198,6 +199,12 @@ namespace egg.Lark {
                     break;
                 case "time":
                     Imports.Time.Reg(this);
+                    break;
+                case "math":
+                    Imports.Math.Reg(this);
+                    break;
+                case "http":
+                    Imports.Http.Reg(this);
                     break;
                 default:
                     throw new Exception($"未找到'{name}'库文件");

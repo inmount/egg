@@ -217,6 +217,36 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:egg.Lark.MemeryUnits.List.Create(System.String[])">
+            <summary>
+            实例化对象
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.MemeryUnits.List.Create(System.Int32[])">
+            <summary>
+            实例化对象
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.MemeryUnits.List.Create(System.Int64[])">
+            <summary>
+            实例化对象
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.MemeryUnits.List.Create(System.Single[])">
+            <summary>
+            实例化对象
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.MemeryUnits.List.Create(System.Double[])">
+            <summary>
+            实例化对象
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:egg.Lark.MemeryUnits.List.Count">
             <summary>
             获取列表数量
@@ -957,6 +987,11 @@
             获取变量值
             </summary>
             <param name="name"></param>
+        </member>
+        <member name="M:egg.Lark.ScriptEngine.GetProcessVariables">
+            <summary>
+            获取变量列表
+            </summary>
         </member>
         <member name="M:egg.Lark.ScriptEngine.CheckProcessVariable(System.String)">
             <summary>

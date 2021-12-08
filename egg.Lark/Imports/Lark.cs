@@ -41,26 +41,6 @@ namespace egg.Lark.Imports {
                 if (list.UnitType != MemeryUnits.UnitTypes.List) throw new Exception($"{fnName}函数的参数'list'不支持类型{list.UnitType.ToString()}");
                 return MemeryUnits.Number.Create(((MemeryUnits.List)list).Count);
             }, egg.Strings.Create("list"));
-            // 获取字符串长度
-            lark["getStringLength"] = new MemeryUnits.NativeFunction((egg.KeyValues<MemeryUnits.Unit> args) => {
-                string fnName = "lark.getStringLength";
-                var str = args["str"];
-                if (str.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'str'不支持类型{str.UnitType.ToString()}");
-                return MemeryUnits.Number.Create(str.ToString().Length);
-            }, egg.Strings.Create("str"));
-            // 截取字符串
-            lark["substring"] = new MemeryUnits.NativeFunction((egg.KeyValues<MemeryUnits.Unit> args) => {
-                string fnName = "lark.substring";
-                var str = args["str"];
-                var start = args["start"];
-                var len = args["len"];
-                if (str.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'str'不支持类型{str.UnitType.ToString()}");
-                if (start.UnitType != MemeryUnits.UnitTypes.Number) throw new Exception($"{fnName}函数的参数'start'不支持类型{start.UnitType.ToString()}");
-                // 无长度则直接返回剩下的所有字符串
-                if (len.UnitType == MemeryUnits.UnitTypes.None) return MemeryUnits.String.Create(str.ToString().Substring((int)start.ToNumber()));
-                if (len.UnitType != MemeryUnits.UnitTypes.Number) throw new Exception($"{fnName}函数的参数'len'不支持类型{len.UnitType.ToString()}");
-                return MemeryUnits.String.Create(str.ToString().Substring((int)start.ToNumber(), (int)len.ToNumber()));
-            }, egg.Strings.Create("str", "start", "len"));
             // 截取字符的码
             lark["getCode"] = new MemeryUnits.NativeFunction((egg.KeyValues<MemeryUnits.Unit> args) => {
                 string fnName = "lark.getCode";
@@ -84,17 +64,6 @@ namespace egg.Lark.Imports {
                 }
                 return list;
             });
-            // 查找字符串
-            lark["indexOf"] = new MemeryUnits.NativeFunction((egg.KeyValues<MemeryUnits.Unit> args) => {
-                string fnName = "lark.indexOf";
-                var str = args["str"];
-                var start = args["start"];
-                var key = args["key"];
-                if (str.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'str'不支持类型{str.UnitType.ToString()}");
-                if (start.UnitType != MemeryUnits.UnitTypes.Number) throw new Exception($"{fnName}函数的参数'start'不支持类型{start.UnitType.ToString()}");
-                if (key.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'key'不支持类型{key.UnitType.ToString()}");
-                return MemeryUnits.Number.Create(str.ToString().IndexOf(key.ToString(), (int)start.ToNumber()));
-            }, egg.Strings.Create("str", "start", "key"));
             // 获取环境路径的集合
             lark["getVarNames"] = new MemeryUnits.NativeFunction((egg.KeyValues<MemeryUnits.Unit> args) => {
                 return engine.GetProcessVariables();

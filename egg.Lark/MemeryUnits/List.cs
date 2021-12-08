@@ -26,6 +26,66 @@ namespace egg.Lark.MemeryUnits {
         public static List Create() { return new List(); }
 
         /// <summary>
+        /// 实例化对象
+        /// </summary>
+        /// <returns></returns>
+        public static List Create(string[] arr) {
+            var list = new List();
+            for (int i = 0; i < arr.Length; i++) {
+                list.Add(MemeryUnits.String.Create(arr[i]));
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// 实例化对象
+        /// </summary>
+        /// <returns></returns>
+        public static List Create(int[] arr) {
+            var list = new List();
+            for (int i = 0; i < arr.Length; i++) {
+                list.Add(MemeryUnits.Number.Create(arr[i]));
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// 实例化对象
+        /// </summary>
+        /// <returns></returns>
+        public static List Create(long[] arr) {
+            var list = new List();
+            for (int i = 0; i < arr.Length; i++) {
+                list.Add(MemeryUnits.Number.Create(arr[i]));
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// 实例化对象
+        /// </summary>
+        /// <returns></returns>
+        public static List Create(float[] arr) {
+            var list = new List();
+            for (int i = 0; i < arr.Length; i++) {
+                list.Add(MemeryUnits.Number.Create(arr[i]));
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// 实例化对象
+        /// </summary>
+        /// <returns></returns>
+        public static List Create(double[] arr) {
+            var list = new List();
+            for (int i = 0; i < arr.Length; i++) {
+                list.Add(MemeryUnits.Number.Create(arr[i]));
+            }
+            return list;
+        }
+
+        /// <summary>
         /// 获取列表数量
         /// </summary>
         public int Count { get { return ls.Count; } }

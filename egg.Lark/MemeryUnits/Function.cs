@@ -610,7 +610,7 @@ namespace egg.Lark.MemeryUnits {
                     }
                     return new MemeryUnits.String(sb.ToString());
                 #endregion
-                case "num": // 转化为数值
+                case "number": // 转化为数值
                     #region [====转化为数值====]
                     if (this.Params.Count != 1) throw new Exception("转化为数值函数仅支持一个参数");
                     value1 = this.Params[0].GetMemeryUnit();
@@ -618,7 +618,7 @@ namespace egg.Lark.MemeryUnits {
                     if (value1.UnitType == MemeryUnits.UnitTypes.Boolean) return new MemeryUnits.Number(((MemeryUnits.Boolean)value1).Value ? 1 : 0);
                     throw new Exception($"num函数的参数不支持类型{value1.UnitType.ToString()}");
                 #endregion
-                case "str": // 转化为字符串
+                case "string": // 转化为字符串
                     #region [====转化为字符串====]
                     if (this.Params.Count != 1) throw new Exception("转化为数值函数仅支持一个参数");
                     value1 = this.Params[0].GetMemeryUnit();
