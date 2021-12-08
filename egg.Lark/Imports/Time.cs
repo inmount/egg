@@ -11,7 +11,7 @@ namespace egg.Lark.Imports {
         internal static void Reg(ScriptEngine engine) {
             // 设置file内置对象
             MemeryUnits.Object time = new MemeryUnits.Object();
-            engine.SetVariable("time", time);
+            engine.SetProcessVariable("time", time);
             time["now"] = new MemeryUnits.NativeFunction((egg.KeyValues<MemeryUnits.Unit> args) => {
                 return MemeryUnits.Number.Create(egg.Time.Now.ToMillisecondsTimeStamp());
             }, egg.Strings.Create());

@@ -11,7 +11,7 @@ namespace egg.Lark.Imports {
         internal static void Reg(ScriptEngine engine) {
             // 设置json内置对象
             MemeryUnits.Object json = new MemeryUnits.Object();
-            engine.SetVariable("json", json);
+            engine.SetProcessVariable("json", json);
             json["getObject"] = new MemeryUnits.NativeFunction((egg.KeyValues<MemeryUnits.Unit> args) => {
                 var s = args["s"];
                 if (s.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"json.getObject函数的参数's'不支持类型{s.UnitType.ToString()}");

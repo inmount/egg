@@ -126,6 +126,13 @@ namespace egg.Lark {
         }
 
         /// <summary>
+        /// 获取变量列表
+        /// </summary>
+        public MemeryUnits.List GetProcessVariables() {
+            return main.GetVars();
+        }
+
+        /// <summary>
         /// 检测变量值
         /// </summary>
         /// <param name="name"></param>

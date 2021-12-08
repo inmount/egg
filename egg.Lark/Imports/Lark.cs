@@ -95,6 +95,10 @@ namespace egg.Lark.Imports {
                 if (key.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'key'不支持类型{key.UnitType.ToString()}");
                 return MemeryUnits.Number.Create(str.ToString().IndexOf(key.ToString(), (int)start.ToNumber()));
             }, egg.Strings.Create("str", "start", "key"));
+            // 获取环境路径的集合
+            lark["getVarNames"] = new MemeryUnits.NativeFunction((egg.KeyValues<MemeryUnits.Unit> args) => {
+                return engine.GetProcessVariables();
+            });
         }
     }
 }

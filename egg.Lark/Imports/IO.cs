@@ -11,7 +11,7 @@ namespace egg.Lark.Imports {
         internal static void Reg(ScriptEngine engine) {
             // 设置file内置对象
             MemeryUnits.Object io = new MemeryUnits.Object();
-            engine.SetVariable("io", io);
+            engine.SetProcessVariable("io", io);
             // 目录存在性判断
             io["folderExists"] = new MemeryUnits.NativeFunction((egg.KeyValues<MemeryUnits.Unit> args) => {
                 string fnName = "io.folderExists";

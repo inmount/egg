@@ -123,6 +123,15 @@ namespace egg.Lark.MemeryUnits {
             }
         }
 
+        // 获取变量值
+        internal MemeryUnits.List GetVars() {
+            MemeryUnits.List list = MemeryUnits.List.Create();
+            foreach(var key in vars.Keys) {
+                list.Add(MemeryUnits.String.Create(key));
+            }
+            return list;
+        }
+
         // 检查变量
         internal bool CheckVar(string name) {
             if (vars.ContainsKey(name)) {
