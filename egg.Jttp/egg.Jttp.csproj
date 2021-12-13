@@ -1,20 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>Egg Studio</Authors>
     <Product>Jttp for Egg Development Kit</Product>
     <Description>Jttp for Egg Development Kit</Description>
-    <Version>2.0.2101.10</Version>
+    <Version>6.0.2112.13</Version>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/inmount/egg</PackageProjectUrl>
     <RepositoryType></RepositoryType>
     <RepositoryUrl>https://github.com/inmount/egg</RepositoryUrl>
     <PackageIcon>logo.png</PackageIcon>
+    <GenerateDocumentationFile>False</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="egg" Version="2.0.2101.16" />
+    <PackageReference Include="egg" Version="6.0.2111.22" />
   </ItemGroup>
 
   <ItemGroup>

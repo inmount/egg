@@ -41,7 +41,7 @@ namespace egg.Jttp {
         /// <returns></returns>
         public static JttpResponse Post(string url, string args) {
             string json = egg.Net.HttpClient.Post(url, args);
-            return (JttpResponse)eggs.ParseJson(json, typeof(JttpResponse));
+            return new JttpResponse(json);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace egg.Jttp {
         /// <returns></returns>
         public static JttpResponse Post(string url, JttpRequest request = null) {
             string reqJson = "";
-            if (!eggs.IsNull(request)) reqJson = request.ToJson();
+            if (!eggs.IsNull(request)) reqJson = request.ToJsonString();
             return Post(url, reqJson);
         }
 

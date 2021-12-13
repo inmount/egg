@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using egg.JsonBean;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace egg.db {
 
@@ -116,10 +117,10 @@ namespace egg.db {
         /// </summary>
         /// <param name="tp"></param>
         /// <returns></returns>
-        public egg.JsonBean.JArray ToJsonArray(Type tp = null) {
-            JArray res = new JArray();
+        public JsonArray ToJsonArray(Type tp = null) {
+            JsonArray res = new JsonArray();
             for (int i = 0; i < this.Count; i++) {
-                res.Add(this[i].ToJsonObject(tp));
+                res.Add(this[i].ToJsonObject());
             }
             return res;
         }

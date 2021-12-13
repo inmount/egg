@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq.Expressions;
 using System.Text;
-using egg.JsonBean;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace egg.db {
     internal class RowDynamicMetaObject : System.Dynamic.DynamicMetaObject {
@@ -128,11 +129,10 @@ namespace egg.db {
         /// </summary>
         /// <param name="tp"></param>
         /// <returns></returns>
-        public egg.JsonBean.JObject ToJsonObject(Type tp = null) {
-            if (tp == null) tp = typeof(egg.JsonBean.JObject);
-            JObject obj = (JObject)tp.Assembly.CreateInstance(tp.FullName);
+        public JsonObject ToJsonObject() {
+            JsonObject obj = new JsonObject();
             foreach (var item in this) {
-                obj[item.Key] = JString.Create(item.Value);
+                obj[item.Key] = item.Value;
             }
             return obj;
         }

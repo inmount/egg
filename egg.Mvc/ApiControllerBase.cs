@@ -173,43 +173,35 @@ namespace egg.Mvc {
 
             // Json数据模式
             if (_is_request_json) {
-                byte[] buffer = new byte[4096];
-                List<byte> ls = new List<byte>();
-                int res = 0;
-                do {
-                    res = base.Request.Body.Read(buffer, 0, buffer.Length);
-                    if (res > 0) {
-                        ls.AddRange(new ArraySegment<byte>(buffer, 0, res));
-                    }
-                } while (res > 0);
-                //var reader = new System.IO.StreamReader(Request.Body);
-                string content = System.Text.Encoding.UTF8.GetString(ls.ToArray());
+                // 获取提交的数据
+                string content = Utilities.GetRequestData(base.Request);
                 this.JRequestText = content;
 
                 // 解析获取到的数据
-                this.JRequest = (egg.Jttp.JttpRequest)eggs.ParseJson(content, typeof(egg.Jttp.JttpRequest));
+                this.JRequest = new egg.Jttp.JttpRequest(content);
 
                 // 检测所有的必要参数
                 foreach (var cfg in this.Configs) {
                     if (cfg.IsMust) {
                         if (!JRequest.Form.ContainsKey(cfg.Name)) {
                             JResponse.SetFail($"缺少必要的 '{cfg.Name}' 参数");
-                            return JResponse.ToJson();
+                            return JResponse.ToJsonString();
                         }
                     }
                 }
 
                 // 填充表单数据
                 this.Form = new KeyValues<string>();
-                foreach (string key in JRequest.Form.GetNames()) {
+                foreach (var item in JRequest.Form) {
+                    string key = item.Key;
                     var field = GetConfig(key);
                     if (!eggs.IsNull(field)) {
                         if (field.Enabled) {
                             switch (field.DataType) {
-                                case ApiControllerFieldSetting.DataTypes.Decimal: this.Form[key] = JRequest.Form[key].GetNumber().ToString(); break;
-                                case ApiControllerFieldSetting.DataTypes.Long: this.Form[key] = ((long)JRequest.Form[key].GetNumber()).ToString(); break;
-                                case ApiControllerFieldSetting.DataTypes.Integer: this.Form[key] = ((int)JRequest.Form[key].GetNumber()).ToString(); break;
-                                default: this.Form[key] = "" + JRequest.Form[key].GetString(); break;
+                                case ApiControllerFieldSetting.DataTypes.Decimal: this.Form[key] = ((double)JRequest.Form[key]).ToString(); break;
+                                case ApiControllerFieldSetting.DataTypes.Long: this.Form[key] = ((long)JRequest.Form[key]).ToString(); break;
+                                case ApiControllerFieldSetting.DataTypes.Integer: this.Form[key] = ((int)JRequest.Form[key]).ToString(); break;
+                                default: this.Form[key] = (string)JRequest.Form[key]; break;
                             }
                         }
                     }
@@ -223,7 +215,7 @@ namespace egg.Mvc {
                     if (cfg.IsMust) {
                         if (!Request.Form.ContainsKey(cfg.Name)) {
                             JResponse.SetFail($"缺少必要的 '{cfg.Name}' 参数");
-                            return JResponse.ToJson();
+                            return JResponse.ToJsonString();
                         }
                     }
                 }
@@ -287,7 +279,7 @@ namespace egg.Mvc {
             try {
                 Initialize();
                 action(this.JRequest, this.JResponse);
-                return this.JResponse.ToJson();
+                return this.JResponse.ToJsonString();
             } catch (Exception ex) {
                 return Error(0, ex.Message);
             }
@@ -325,7 +317,7 @@ namespace egg.Mvc {
                     action(context);
                 }
                 this.OnAfterRender(context);
-                return context.Response.ToJson();
+                return context.Response.ToJsonString();
             } catch (Exception ex) {
                 return Error(0, ex.Message, ex.ToString());
             }
@@ -342,7 +334,7 @@ namespace egg.Mvc {
             if (!msg.IsNoneOrNull()) JResponse.Message = msg;
             // 重载
             this.OnRender();
-            return JResponse.ToJson();
+            return JResponse.ToJsonString();
         }
 
         /// <summary>
@@ -355,7 +347,7 @@ namespace egg.Mvc {
             JResponse.Data = row.ToJsonObject();
             // 重载
             this.OnRender();
-            return JResponse.ToJson();
+            return JResponse.ToJsonString();
         }
 
         /// <summary>
@@ -368,7 +360,7 @@ namespace egg.Mvc {
             JResponse.Datas = rows.ToJsonArray();
             // 重载
             this.OnRender();
-            return JResponse.ToJson();
+            return JResponse.ToJsonString();
         }
 
         /// <summary>
@@ -381,7 +373,7 @@ namespace egg.Mvc {
             if (!msg.IsNoneOrNull()) JResponse.Message = msg;
             // 重载
             this.OnRender();
-            return JResponse.ToJson();
+            return JResponse.ToJsonString();
         }
 
         /// <summary>
@@ -394,11 +386,11 @@ namespace egg.Mvc {
         protected string Error(int code = 0, string msg = null, string info = null) {
             JResponse.Result = -1;
             if (!msg.IsNoneOrNull()) JResponse.Message = msg;
-            if (!info.IsNoneOrNull()) JResponse["ErrorInfo"] = JsonBean.JString.Create(info);
+            if (!info.IsNoneOrNull()) JResponse.ErrorInfo = info;
             JResponse.ErrorCode = 0;
             // 重载
             this.OnRender();
-            return JResponse.ToJson();
+            return JResponse.ToJsonString();
         }
 
         #endregion

@@ -2,38 +2,48 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using egg.JsonBean;
 
 namespace egg.Jttp {
 
     /// <summary>
     /// Jttp获取器
     /// </summary>
-    public class JttpResponse : egg.JsonBean.JObject {
+    public class JttpResponse : egg.Object {
+
+        private JsonNode _node;
 
         /// <summary>
         /// 获取或设置结果
         /// </summary>
-        public JNumber Result { get; set; }
+        public int Result {
+            get {
+                if (eggs.IsNull(_node)) return 0;
+                return (int)_node["Result"];
+            }
+            set {
+                _node["Result"] = value;
+            }
+        }
 
         /// <summary>
         /// 判断是否为成功
         /// </summary>
         /// <returns></returns>
-        public bool IsSuccess() { return this.Result.GetNumber() > 0; }
+        public bool IsSuccess() { return this.Result > 0; }
 
         /// <summary>
         /// 判断是否为失败，失败包含错误
         /// </summary>
         /// <returns></returns>
-        public bool IsFail() { return this.Result.GetNumber() <= 0; }
+        public bool IsFail() { return this.Result <= 0; }
 
         /// <summary>
         /// 判断是否为错误
         /// </summary>
         /// <returns></returns>
-        public bool IsError() { return this.Result.GetNumber() < 0; }
+        public bool IsError() { return this.Result < 0; }
 
         /// <summary>
         /// 设置为成功
@@ -46,7 +56,7 @@ namespace egg.Jttp {
         /// <summary>
         /// 设置为成功
         /// </summary>
-        public void SetSuccess(JObject data, string msg = null) {
+        public void SetSuccess(JsonObject data, string msg = null) {
             this.Result = 1;
             this.Data = data;
             if (!msg.IsEmpty()) this.Message = msg;
@@ -55,7 +65,7 @@ namespace egg.Jttp {
         /// <summary>
         /// 设置为成功
         /// </summary>
-        public void SetSuccess(JArray datas, string msg = null) {
+        public void SetSuccess(JsonArray datas, string msg = null) {
             this.Result = 1;
             this.Datas = datas;
             if (!msg.IsEmpty()) this.Message = msg;
@@ -93,7 +103,7 @@ namespace egg.Jttp {
         /// 创建一个成功获取器
         /// </summary>
         /// <param name="msg"></param>
-        public static JttpResponse Success(JObject data, string msg = null) {
+        public static JttpResponse Success(JsonObject data, string msg = null) {
             JttpResponse res = new JttpResponse();
             res.SetSuccess(data, msg);
             return res;
@@ -103,7 +113,7 @@ namespace egg.Jttp {
         /// 创建一个成功获取器
         /// </summary>
         /// <param name="msg"></param>
-        public static JttpResponse Success(JArray datas, string msg = null) {
+        public static JttpResponse Success(JsonArray datas, string msg = null) {
             JttpResponse res = new JttpResponse();
             res.SetSuccess(datas, msg);
             return res;
@@ -132,44 +142,114 @@ namespace egg.Jttp {
         /// <summary>
         /// 获取或设置交互令牌
         /// </summary>
-        [JsonOptional] public JString Token { get; set; }
+        public string Token {
+            get {
+                if (eggs.IsNull(_node)) return null;
+                return (string)_node["Token"];
+            }
+            set {
+                _node["Token"] = value;
+            }
+        }
 
         /// <summary>
         /// 获取或设置时间戳
         /// </summary>
-        [JsonOptional] public JString Timestamp { get; set; }
+        public string Timestamp {
+            get {
+                if (eggs.IsNull(_node)) return null;
+                return (string)_node["Timestamp"];
+            }
+            set {
+                _node["Timestamp"] = value;
+            }
+        }
 
         /// <summary>
         /// 获取或设置验证签名
         /// </summary>
-        [JsonOptional] public JString Signature { get; set; }
+        public string Signature {
+            get {
+                if (eggs.IsNull(_node)) return null;
+                return (string)_node["Signature"];
+            }
+            set {
+                _node["Signature"] = value;
+            }
+        }
 
         /// <summary>
         /// 获取数据
         /// </summary>
-        [JsonOptional] public JObject Data { get; set; }
+        public JsonObject Data {
+            get {
+                if (eggs.IsNull(_node)) return null;
+                return (JsonObject)_node["Data"];
+            }
+            set {
+                _node["Data"] = value;
+            }
+        }
 
         /// <summary>
         /// 获取数据集
         /// </summary>
-        [JsonOptional] public JArray Datas { get; set; }
+        public JsonArray Datas {
+            get {
+                if (eggs.IsNull(_node)) return null;
+                return (JsonArray)_node["Datas"];
+            }
+            set {
+                _node["Datas"] = value;
+            }
+        }
 
         /// <summary>
         /// 获取或设置消息
         /// </summary>
-        [JsonOptional] public JString Message { get; set; }
+        public string Message {
+            get {
+                if (eggs.IsNull(_node)) return null;
+                return (string)_node["Message"];
+            }
+            set {
+                _node["Message"] = value;
+            }
+        }
 
         /// <summary>
         /// 获取或设置错误号
         /// </summary>
-        [JsonOptional] public JNumber ErrorCode { get; set; }
+        public int ErrorCode {
+            get {
+                if (eggs.IsNull(_node)) return 0;
+                return (int)_node["ErrorCode"];
+            }
+            set {
+                _node["ErrorCode"] = value;
+            }
+        }
 
         /// <summary>
         /// 获取或设置错误信息
         /// </summary>
-        [JsonOptional] public JString ErrorInfo { get; set; }
+        public string ErrorInfo {
+            get {
+                if (eggs.IsNull(_node)) return null;
+                return (string)_node["ErrorInfo"];
+            }
+            set {
+                _node["ErrorInfo"] = value;
+            }
+        }
 
-        public JttpResponse() { }
+        public JttpResponse() {
+            _node = new JsonObject();
+        }
+
+        public JttpResponse(string json) {
+            _node = JsonNode.Parse(json);
+        }
 
         /// <summary>
         /// 从Json字符串中创建对象
@@ -177,7 +257,15 @@ namespace egg.Jttp {
         /// <param name="json"></param>
         /// <returns></returns>
         public static JttpResponse Create(string json) {
-            return (JttpResponse)eggs.ParseJson(json, typeof(JttpResponse));
+            return new JttpResponse(json);
+        }
+
+        /// <summary>
+        /// 获取Json字符串
+        /// </summary>
+        /// <returns></returns>
+        public string ToJsonString() {
+            return _node.ToJsonString();
         }
 
     }

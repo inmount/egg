@@ -61,7 +61,7 @@ namespace egg.Mvc {
         public string Success(string msg = null) {
             this.Response.Result = 1;
             if (!msg.IsNoneOrNull()) this.Response.Message = msg;
-            return this.Response.ToJson();
+            return this.Response.ToJsonString();
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace egg.Mvc {
             this.Response.Result = 1;
             if (!msg.IsNoneOrNull()) this.Response.Message = msg;
             this.Response.Data = row.ToJsonObject();
-            return this.Response.ToJson();
+            return this.Response.ToJsonString();
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace egg.Mvc {
             this.Response.Result = 1;
             if (!msg.IsNoneOrNull()) this.Response.Message = msg;
             this.Response.Datas = rows.ToJsonArray();
-            return this.Response.ToJson();
+            return this.Response.ToJsonString();
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace egg.Mvc {
         public string Fail(string msg = null) {
             this.Response.Result = 0;
             if (!msg.IsNoneOrNull()) this.Response.Message = msg;
-            return this.Response.ToJson();
+            return this.Response.ToJsonString();
         }
 
         /// <summary>
@@ -107,9 +107,9 @@ namespace egg.Mvc {
         public string Error(int code = 0, string msg = null, string info = null) {
             this.Response.Result = -1;
             if (!msg.IsNoneOrNull()) this.Response.Message = msg;
-            if (!info.IsNoneOrNull()) this.Response["ErrorInfo"] = JsonBean.JString.Create(info);
+            if (!info.IsNoneOrNull()) this.Response.ErrorInfo = info;
             this.Response.ErrorCode = code;
-            return this.Response.ToJson();
+            return this.Response.ToJsonString();
         }
     }
 }
