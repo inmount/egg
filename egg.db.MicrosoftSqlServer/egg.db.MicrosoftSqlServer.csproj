@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>Egg Studio</Authors>
     <Product>Microsoft Sql Server for Egg Development Kit</Product>
     <Description>Microsoft Sql Server for Egg Development Kit</Description>
@@ -9,12 +9,12 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/inmount/egg</PackageProjectUrl>
     <RepositoryUrl>https://github.com/inmount/egg</RepositoryUrl>
-    <Version>1.0.2011.1</Version>
+    <Version>6.0.2112.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="egg.db" Version="1.0.2011.1" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <PackageReference Include="egg.db" Version="6.0.2112.12" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
   </ItemGroup>
 
   <ItemGroup>
