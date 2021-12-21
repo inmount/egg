@@ -18,16 +18,17 @@ namespace egg.Lark.MemeryUnits {
         /// <summary>
         /// 实例化对象
         /// </summary>
+        /// <param name="pool"></param>
         /// <param name="val"></param>
-        public String(string val) : base(UnitTypes.String) {
+        public String(ScriptMemeryPool pool, string val) : base(pool, UnitTypes.String) {
             this.Value = val;
         }
 
-        /// <summary>
-        /// 实例化对象
-        /// </summary>
-        /// <returns></returns>
-        public static String Create(string val) { return new String(val); }
+        ///// <summary>
+        ///// 实例化对象
+        ///// </summary>
+        ///// <returns></returns>
+        //public static String Create(string val) { return new String(val); }
 
         /// <summary>
         /// 获取布尔值

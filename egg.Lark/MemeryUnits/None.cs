@@ -12,12 +12,12 @@ namespace egg.Lark.MemeryUnits {
         /// <summary>
         /// 实例化对象
         /// </summary>
-        public None() : base(UnitTypes.None) { }
+        public None(ScriptMemeryPool pool) : base(pool, UnitTypes.None) { }
 
-        /// <summary>
-        /// 创建一个新的空对象
-        /// </summary>
-        /// <returns></returns>
-        public static None Create() { return new None(); }
+        ///// <summary>
+        ///// 创建一个新的空对象
+        ///// </summary>
+        ///// <returns></returns>
+        //public static None Create() { return new None(); }
     }
 }

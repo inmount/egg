@@ -18,26 +18,27 @@ namespace egg.Lark.MemeryUnits {
         /// <summary>
         /// 实例化对象
         /// </summary>
+        /// <param name="pool"></param>
         /// <param name="val"></param>
-        public Boolean(bool val) : base(UnitTypes.Boolean) {
+        public Boolean(ScriptMemeryPool pool, bool val) : base(pool, UnitTypes.Boolean) {
             this.Value = val;
         }
 
-        /// <summary>
-        /// 实例化对象
-        /// </summary>
-        /// <returns></returns>
-        public static Boolean Create(bool val) { return new Boolean(val); }
+        ///// <summary>
+        ///// 实例化对象
+        ///// </summary>
+        ///// <returns></returns>
+        //public static Boolean Create(bool val) { return new Boolean(val); }
 
-        /// <summary>
-        /// 新建一个为真的对象
-        /// </summary>
-        public static Boolean True => new Boolean(true);
+        ///// <summary>
+        ///// 新建一个为真的对象
+        ///// </summary>
+        //public static Boolean True => new Boolean(true);
 
-        /// <summary>
-        /// 新建一个为假的对象
-        /// </summary>
-        public static Boolean False => new Boolean(false);
+        ///// <summary>
+        ///// 新建一个为假的对象
+        ///// </summary>
+        //public static Boolean False => new Boolean(false);
 
         /// <summary>
         /// 获取布尔值

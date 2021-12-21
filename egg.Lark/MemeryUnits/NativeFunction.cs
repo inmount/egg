@@ -23,9 +23,10 @@ namespace egg.Lark.MemeryUnits {
         /// <summary>
         /// 实例化对象
         /// </summary>
+        /// <param name="pool"></param>
         /// <param name="fn"></param>
         /// <param name="keys"></param>
-        public NativeFunction(ScriptEngine.Function fn, egg.Strings keys = null) : base(UnitTypes.NativeFunction) {
+        public NativeFunction(ScriptMemeryPool pool, ScriptEngine.Function fn, egg.Strings keys = null) : base(pool, UnitTypes.NativeFunction) {
             this.Function = fn;
             this.Keys = keys;
         }

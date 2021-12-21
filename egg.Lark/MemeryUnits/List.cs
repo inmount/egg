@@ -15,75 +15,75 @@ namespace egg.Lark.MemeryUnits {
         /// <summary>
         /// 实例化对象
         /// </summary>
-        public List() : base(UnitTypes.List) {
+        public List(ScriptMemeryPool pool) : base(pool, UnitTypes.List) {
             ls = new List<Unit>();
         }
 
-        /// <summary>
-        /// 实例化对象
-        /// </summary>
-        /// <returns></returns>
-        public static List Create() { return new List(); }
+        ///// <summary>
+        ///// 实例化对象
+        ///// </summary>
+        ///// <returns></returns>
+        //public static List Create() { return new List(); }
 
-        /// <summary>
-        /// 实例化对象
-        /// </summary>
-        /// <returns></returns>
-        public static List Create(string[] arr) {
-            var list = new List();
-            for (int i = 0; i < arr.Length; i++) {
-                list.Add(MemeryUnits.String.Create(arr[i]));
-            }
-            return list;
-        }
+        ///// <summary>
+        ///// 实例化对象
+        ///// </summary>
+        ///// <returns></returns>
+        //public static List Create(string[] arr) {
+        //    var list = new List();
+        //    for (int i = 0; i < arr.Length; i++) {
+        //        list.Add(MemeryUnits.String.Create(arr[i]));
+        //    }
+        //    return list;
+        //}
 
-        /// <summary>
-        /// 实例化对象
-        /// </summary>
-        /// <returns></returns>
-        public static List Create(int[] arr) {
-            var list = new List();
-            for (int i = 0; i < arr.Length; i++) {
-                list.Add(MemeryUnits.Number.Create(arr[i]));
-            }
-            return list;
-        }
+        ///// <summary>
+        ///// 实例化对象
+        ///// </summary>
+        ///// <returns></returns>
+        //public static List Create(int[] arr) {
+        //    var list = new List();
+        //    for (int i = 0; i < arr.Length; i++) {
+        //        list.Add(MemeryUnits.Number.Create(arr[i]));
+        //    }
+        //    return list;
+        //}
 
-        /// <summary>
-        /// 实例化对象
-        /// </summary>
-        /// <returns></returns>
-        public static List Create(long[] arr) {
-            var list = new List();
-            for (int i = 0; i < arr.Length; i++) {
-                list.Add(MemeryUnits.Number.Create(arr[i]));
-            }
-            return list;
-        }
+        ///// <summary>
+        ///// 实例化对象
+        ///// </summary>
+        ///// <returns></returns>
+        //public static List Create(long[] arr) {
+        //    var list = new List();
+        //    for (int i = 0; i < arr.Length; i++) {
+        //        list.Add(MemeryUnits.Number.Create(arr[i]));
+        //    }
+        //    return list;
+        //}
 
-        /// <summary>
-        /// 实例化对象
-        /// </summary>
-        /// <returns></returns>
-        public static List Create(float[] arr) {
-            var list = new List();
-            for (int i = 0; i < arr.Length; i++) {
-                list.Add(MemeryUnits.Number.Create(arr[i]));
-            }
-            return list;
-        }
+        ///// <summary>
+        ///// 实例化对象
+        ///// </summary>
+        ///// <returns></returns>
+        //public static List Create(float[] arr) {
+        //    var list = new List();
+        //    for (int i = 0; i < arr.Length; i++) {
+        //        list.Add(MemeryUnits.Number.Create(arr[i]));
+        //    }
+        //    return list;
+        //}
 
-        /// <summary>
-        /// 实例化对象
-        /// </summary>
-        /// <returns></returns>
-        public static List Create(double[] arr) {
-            var list = new List();
-            for (int i = 0; i < arr.Length; i++) {
-                list.Add(MemeryUnits.Number.Create(arr[i]));
-            }
-            return list;
-        }
+        ///// <summary>
+        ///// 实例化对象
+        ///// </summary>
+        ///// <returns></returns>
+        //public static List Create(double[] arr) {
+        //    var list = new List();
+        //    for (int i = 0; i < arr.Length; i++) {
+        //        list.Add(MemeryUnits.Number.Create(arr[i]));
+        //    }
+        //    return list;
+        //}
 
         /// <summary>
         /// 获取列表数量
@@ -97,17 +97,17 @@ namespace egg.Lark.MemeryUnits {
         /// <returns></returns>
         public Unit this[int index] {
             get {
-                if (index >= ls.Count) return new None();
+                if (index >= ls.Count) return this.MemeryPool.None;
                 return ls[index];
             }
             set {
                 if (index < ls.Count) {
                     ls[index] = value;
-                    value.Parent = this;
+                    //value.Parent = this;
                 } else {
-                    for (int i = ls.Count; i < index; i++) ls.Add(new None());
+                    for (int i = ls.Count; i < index; i++) ls.Add(this.MemeryPool.None);
                     ls.Add(value);
-                    value.Parent = this;
+                    //value.Parent = this;
                 }
             }
         }
@@ -222,7 +222,7 @@ namespace egg.Lark.MemeryUnits {
         /// <param name="unit"></param>
         public void Add(Unit unit) {
             ls.Add(unit);
-            unit.Parent = this;
+            //unit.Parent = this;
         }
 
         /// <summary>

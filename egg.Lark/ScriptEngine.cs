@@ -37,7 +37,7 @@ namespace egg.Lark {
                             if (valSource.UnitType == MemeryUnits.UnitTypes.Function) valSource = ((MemeryUnits.Function)valSource).Execute();
                             args[func.Keys[i]] = valSource;
                         } else {
-                            args[func.Keys[i]] = MemeryUnits.None.Create();
+                            args[func.Keys[i]] = parent.Engine.MemeryPool.None;
                         }
                     }
                 }
@@ -53,7 +53,7 @@ namespace egg.Lark {
                         if (valSource.UnitType == MemeryUnits.UnitTypes.Function) valSource = ((MemeryUnits.Function)valSource).Execute();
                         args[((ProcessUnits.Define)func.Params[i]).Name] = valSource;
                     } else {
-                        args[((ProcessUnits.Define)func.Params[i]).Name] = MemeryUnits.None.Create();
+                        args[((ProcessUnits.Define)func.Params[i]).Name] = parent.Engine.MemeryPool.None;
                     }
                 }
                 return ((MemeryUnits.Function)func.Params[func.Params.Count - 1].GetMemeryUnit()).Execute(args);
@@ -69,20 +69,28 @@ namespace egg.Lark {
         /// <returns></returns>
         public delegate MemeryUnits.Unit Function(egg.KeyValues<MemeryUnits.Unit> args);
 
+        /// <summary>
+        /// 存储池
+        /// </summary>
+        public ScriptMemeryPool MemeryPool { get; private set; }
+
+        /// <summary>
+        /// 获取地址集合
+        /// </summary>
+        internal List<string> Pathes { get; private set; }
+
         // 主函数
         private MemeryUnits.Function main;
         private egg.KeyValues<MemeryUnits.Unit> vars;
-        //private egg.KeyValues<Function> funs;
-        internal List<string> Pathes { get; private set; }
         private List<ScriptEngine> libs;
 
         /// <summary>
         /// 实例化对象
         /// </summary>
-        public ScriptEngine(bool isLibrary = false) {
-            main = new MemeryUnits.Function(this, null, "step");
+        public ScriptEngine(ScriptMemeryPool pool, bool isLibrary = false) {
+            this.MemeryPool = pool;
+            main = new MemeryUnits.Function(this, pool, null, "step");
             vars = new KeyValues<MemeryUnits.Unit>();
-            //funs = new KeyValues<Function>();
             this.Pathes = new List<string>();
             if (!isLibrary) {
                 libs = new List<ScriptEngine>();
@@ -113,12 +121,12 @@ namespace egg.Lark {
         }
 
         /// <summary>
-        /// 设置初始化变量
+        /// 设置主程序变量
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
         public void SetProcessVariable(string name, MemeryUnits.Unit value) {
-            main.SetVarValue(name, value, true);
+            main.SetVariableValue(name, value, true);
         }
 
         /// <summary>
@@ -126,19 +134,20 @@ namespace egg.Lark {
         /// </summary>
         /// <param name="name"></param>
         public MemeryUnits.Unit GetProcessVariable(string name) {
-            if (main.CheckVar(name)) return main.GetVarValue(name);
-            if (eggs.IsNull(this.libs)) return new MemeryUnits.None();
+            // 检测主程序变量
+            if (main.CheckVariable(name)) return main.GetVariableValue(name);
+            if (eggs.IsNull(this.libs)) return this.MemeryPool.None;
             for (int i = 0; i < libs.Count; i++) {
                 if (libs[i].CheckProcessVariable(name)) return libs[i].GetProcessVariable(name);
             }
-            return new MemeryUnits.None();
+            return this.MemeryPool.None;
         }
 
         /// <summary>
         /// 获取变量列表
         /// </summary>
-        public MemeryUnits.List GetProcessVariables() {
-            return main.GetVars();
+        public egg.Strings GetProcessVariables() {
+            return main.GetVariables();
         }
 
         /// <summary>
@@ -146,7 +155,7 @@ namespace egg.Lark {
         /// </summary>
         /// <param name="name"></param>
         public bool CheckProcessVariable(string name) {
-            if (main.CheckVar(name)) return true;
+            if (main.CheckVariable(name)) return true;
             if (eggs.IsNull(this.libs)) return false;
             for (int i = 0; i < libs.Count; i++) {
                 if (libs[i].CheckProcessVariable(name)) return true;
@@ -162,7 +171,7 @@ namespace egg.Lark {
         /// <param name="fun"></param>
         public void RegFunction(string name, Function fun, egg.Strings keys = null) {
             //funs[name] = fun;
-            this.SetVariable(name, new MemeryUnits.NativeFunction(fun, keys));
+            this.SetVariable(name, new MemeryUnits.NativeFunction(this.MemeryPool, fun, keys));
         }
 
         /// <summary>
@@ -191,9 +200,13 @@ namespace egg.Lark {
             for (int i = 0; i < this.Pathes.Count; i++) {
                 string path = $"{this.Pathes[i]}{name}.lark";
                 if (eggs.CheckFileExists(path)) {
-                    ScriptEngine lib = new ScriptEngine(true);
-                    lib.ExecuteFile(path);
-                    this.libs.Add(lib);
+                    try {
+                        ScriptEngine lib = new ScriptEngine(this.MemeryPool, true);
+                        lib.ExecuteFile(path);
+                        this.libs.Add(lib);
+                    } catch (Exception ex) {
+                        throw new Exception($"{System.IO.Path.GetFileName(path)}->{ex.Message}", ex);
+                    }
                     return;
                 }
             }
@@ -219,18 +232,6 @@ namespace egg.Lark {
             }
         }
 
-        //// 获取函数
-        //internal bool CheckFunction(string name) {
-        //    if (funs.ContainsKey(name)) return true;
-        //    return false;
-        //}
-
-        //// 获取函数
-        //internal Function GetFunction(string name) {
-        //    if (funs.ContainsKey(name)) return funs[name];
-        //    return null;
-        //}
-
         /// <summary>
         /// 执行代码
         /// </summary>
@@ -243,7 +244,11 @@ namespace egg.Lark {
         /// </summary>
         public void Execute(string script) {
             Parser.Parse(this, script);
-            main.Execute(vars);
+            try {
+                main.Execute(vars);
+            } catch (Exception ex) {
+                throw new Exception($"main->{ex.Message}", ex);
+            }
         }
 
         /// <summary>
@@ -252,7 +257,16 @@ namespace egg.Lark {
         public void ExecuteFile(string path) {
             string script = egg.File.UTF8File.ReadAllText(path);
             Parser.Parse(this, script);
-            main.Execute(vars);
+            try {
+                main.Execute(vars);
+            } catch (Exception ex) {
+                throw new Exception($"main->{ex.Message}", ex);
+            }
+        }
+
+        // 执行函数
+        internal MemeryUnits.Unit ExecuteFunction(MemeryUnits.Function fn, ScriptMemeryPool pool) {
+            return pool.None;
         }
 
         /// <summary>

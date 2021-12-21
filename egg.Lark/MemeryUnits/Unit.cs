@@ -58,17 +58,33 @@ namespace egg.Lark.MemeryUnits {
         public UnitTypes UnitType { get; private set; }
 
         /// <summary>
-        /// 单元类型
+        /// 获取单元句柄
         /// </summary>
-        public Unit Parent { get; internal set; }
+        public long Handle { get; internal set; }
+
+        /// <summary>
+        /// 获取存储池
+        /// </summary>
+        public ScriptMemeryPool MemeryPool { get; private set; }
 
         /// <summary>
         /// 实例化对象
         /// </summary>
+        /// <param name="pool"></param>
         /// <param name="unitType"></param>
-        public Unit(UnitTypes unitType) {
+        public Unit(ScriptMemeryPool pool, UnitTypes unitType) {
+            this.MemeryPool = pool;
             this.UnitType = unitType;
+            var item = pool.Reg(this);
+            this.Handle = item.Handle;
         }
+
+        /// <summary>
+        /// 获取存储项
+        /// </summary>
+        /// <returns></returns>
+        public ScriptMemeryItem ToMemeryItem() { return this.MemeryPool.GetMemeryByHandle(this.Handle); }
+
 
         /// <summary>
         /// 获取布尔值

@@ -38,10 +38,17 @@ namespace egg.Lark.ProcessUnits {
         public UnitTypes UnitType { get; private set; }
 
         /// <summary>
+        /// 获取存储池
+        /// </summary>
+        public ScriptMemeryPool MemeryPool { get; private set; }
+
+        /// <summary>
         /// 实例化对象
         /// </summary>
+        /// <param name="pool"></param>
         /// <param name="unitType"></param>
-        public Unit(UnitTypes unitType) {
+        public Unit(ScriptMemeryPool pool, UnitTypes unitType) {
+            this.MemeryPool = pool;
             this.UnitType = unitType;
         }
 
@@ -49,7 +56,7 @@ namespace egg.Lark.ProcessUnits {
         /// 获取存储单元
         /// </summary>
         /// <returns></returns>
-        protected virtual MemeryUnits.Unit OnGetMemeryUnit() { return new MemeryUnits.None(); }
+        protected virtual MemeryUnits.Unit OnGetMemeryUnit() { return this.MemeryPool.None; }
 
         /// <summary>
         /// 获取存储单元

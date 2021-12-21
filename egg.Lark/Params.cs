@@ -26,8 +26,8 @@ namespace egg.Lark {
         /// </summary>
         /// <returns></returns>
         public ProcessUnits.Pointer AddFunction(string name, Params args = null) {
-            MemeryUnits.Function obj = new MemeryUnits.Function(this.Function.Engine, this.Function, name, args);
-            ProcessUnits.Pointer ptr = new ProcessUnits.Pointer(this.Function, this.Function.Memery.AddFunction(obj));
+            MemeryUnits.Function obj = new MemeryUnits.Function(this.Function.Engine, this.Function.MemeryPool, this.Function, name, args);
+            ProcessUnits.Pointer ptr = new ProcessUnits.Pointer(this.Function, obj.Handle);
             this.Add(ptr);
             return ptr;
         }
@@ -47,7 +47,7 @@ namespace egg.Lark {
         /// </summary>
         /// <returns></returns>
         public ProcessUnits.Pointer AddNumber(double val) {
-            ProcessUnits.Pointer ptr = new ProcessUnits.Pointer(this.Function, this.Function.Memery.AddNumber(val));
+            ProcessUnits.Pointer ptr = new ProcessUnits.Pointer(this.Function, this.Function.MemeryPool.CreateNumber(val, this.Function.Handle).Handle);
             this.Add(ptr);
             return ptr;
         }
@@ -57,7 +57,7 @@ namespace egg.Lark {
         /// </summary>
         /// <returns></returns>
         public ProcessUnits.Pointer AddString(string val) {
-            ProcessUnits.Pointer ptr = new ProcessUnits.Pointer(this.Function, this.Function.Memery.AddString(val));
+            ProcessUnits.Pointer ptr = new ProcessUnits.Pointer(this.Function, this.Function.MemeryPool.CreateString(val, this.Function.Handle).Handle);
             this.Add(ptr);
             return ptr;
         }

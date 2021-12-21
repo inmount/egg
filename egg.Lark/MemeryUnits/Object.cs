@@ -15,15 +15,15 @@ namespace egg.Lark.MemeryUnits {
         /// <summary>
         /// 实例化对象
         /// </summary>
-        public Object() : base(UnitTypes.Object) {
+        public Object(ScriptMemeryPool pool) : base(pool, UnitTypes.Object) {
             ls = new egg.KeyValues<Unit>();
         }
 
-        /// <summary>
-        /// 实例化对象
-        /// </summary>
-        /// <returns></returns>
-        public static Object Create() { return new Object(); }
+        ///// <summary>
+        ///// 实例化对象
+        ///// </summary>
+        ///// <returns></returns>
+        //public static Object Create() { return new Object(); }
 
         /// <summary>
         /// 获取键名称集合
@@ -65,7 +65,7 @@ namespace egg.Lark.MemeryUnits {
                     return ((MemeryUnits.Object)obj)[cName];
                 } else {
                     if (ls.ContainsKey(key)) return ls[key];
-                    return new None();
+                    return this.MemeryPool.None;
                 }
             }
             set {
@@ -78,10 +78,10 @@ namespace egg.Lark.MemeryUnits {
                     MemeryUnits.Unit obj = ls[name];
                     if (obj.UnitType != MemeryUnits.UnitTypes.Object) throw new Exception($"变量'{name}'并非对象");
                     ((MemeryUnits.Object)obj)[cName] = value;
-                    value.Parent = this;
+                    //value.Parent = this;
                 } else {
                     ls[key] = value;
-                    value.Parent = this;
+                    //value.Parent = this;
                 }
             }
         }
@@ -155,7 +155,7 @@ namespace egg.Lark.MemeryUnits {
         /// <param name="val"></param>
         /// <returns></returns>
         public Object Num(string key, double val) {
-            this[key] = MemeryUnits.Number.Create(val);
+            this[key] = base.MemeryPool.CreateNumber(val, this.Handle).MemeryUnit;
             return this;
         }
 
@@ -186,7 +186,7 @@ namespace egg.Lark.MemeryUnits {
         /// <param name="val"></param>
         /// <returns></returns>
         public Object Str(string key, string val) {
-            this[key] = MemeryUnits.String.Create(val);
+            this[key] = base.MemeryPool.CreateString(val, this.Handle).MemeryUnit;
             return this;
         }
 
@@ -217,7 +217,7 @@ namespace egg.Lark.MemeryUnits {
         /// <param name="val"></param>
         /// <returns></returns>
         public Object Bool(string key, bool val) {
-            this[key] = MemeryUnits.Boolean.Create(val);
+            this[key] = base.MemeryPool.CreateBoolean(val, this.Handle).MemeryUnit;
             return this;
         }
 

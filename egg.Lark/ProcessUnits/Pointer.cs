@@ -19,12 +19,12 @@ namespace egg.Lark.ProcessUnits {
         /// <summary>
         /// 获取索引
         /// </summary>
-        public int IntPtr { get; private set; }
+        public long IntPtr { get; private set; }
 
         /// <summary>
         /// 实例化对象
         /// </summary>
-        public Pointer(MemeryUnits.Function fn, int pointer) : base(UnitTypes.Pointer) {
+        public Pointer(MemeryUnits.Function fn, long pointer) : base(fn.MemeryPool, UnitTypes.Pointer) {
             this.Function = fn;
             this.IntPtr = pointer;
         }
@@ -39,9 +39,7 @@ namespace egg.Lark.ProcessUnits {
         /// </summary>
         /// <returns></returns>
         protected override MemeryUnits.Unit OnGetMemeryUnit() {
-            // 处理空指针
-            if (eggs.IsNull(this.Function.Memery)) return new MemeryUnits.None();
-            return this.Function.Memery[this.IntPtr];
+            return this.MemeryPool.GetUnitByHandle(this.IntPtr);
         }
 
     }

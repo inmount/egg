@@ -12,6 +12,6 @@ namespace egg.Lark.ProcessUnits {
         /// <summary>
         /// 实例化对象
         /// </summary>
-        public None() : base(UnitTypes.None) { }
+        public None(ScriptMemeryPool pool) : base(pool, UnitTypes.None) { }
     }
 }

@@ -18,16 +18,11 @@ namespace egg.Lark.MemeryUnits {
         /// <summary>
         /// 实例化对象
         /// </summary>
+        /// <param name="pool"></param>
         /// <param name="val"></param>
-        public Number(double val) : base(UnitTypes.Number) {
+        public Number(ScriptMemeryPool pool, double val) : base(pool, UnitTypes.Number) {
             this.Value = val;
         }
-
-        /// <summary>
-        /// 创建一个新的空对象
-        /// </summary>
-        /// <returns></returns>
-        public static Number Create(double val) { return new Number(val); }
 
         /// <summary>
         /// 获取布尔值

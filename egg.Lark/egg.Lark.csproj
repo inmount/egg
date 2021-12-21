@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Version>6.1.2112.27</Version>
+    <Version>6.1.2112.33</Version>
     <Authors>Egg Studio</Authors>
     <Description>Lark Script Engine</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>

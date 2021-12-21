@@ -9,98 +9,20 @@
             Json解析器
             </summary>
         </member>
-        <member name="F:egg.Lark.Json.Parser.EnforceUnicode">
-            <summary>
-            是否强制使用Unicode进行非Ascii字符编码
-            </summary>
-        </member>
-        <member name="M:egg.Lark.Json.Parser.Parse(System.String,System.Type)">
+        <member name="M:egg.Lark.Json.Parser.Parse(egg.Lark.MemeryUnits.Unit,System.String)">
             <summary>
             从字符串中直接解析对象
             </summary>
+            <param name="unit"></param>
             <param name="json"></param>
-            <param name="tp"></param>
             <returns></returns>
         </member>
-        <member name="M:egg.Lark.Json.Parser.ParseJson(System.String,egg.Lark.MemeryUnits.Unit)">
+        <member name="M:egg.Lark.Json.Parser.GetString(egg.Lark.MemeryUnits.Unit)">
             <summary>
-            获取对象
+            从字符串中直接解析对象
             </summary>
-            <param name="json"></param>
-            <param name="target"></param>
+            <param name="unit"></param>
             <returns></returns>
-        </member>
-        <member name="M:egg.Lark.Json.Parser.GetJson(egg.Lark.MemeryUnits.Unit)">
-            <summary>
-            获取字符串
-            </summary>
-            <param name="target"></param>
-            <returns></returns>
-        </member>
-        <member name="T:egg.Lark.Memery">
-            <summary>
-            记忆存储器
-            </summary>
-        </member>
-        <member name="P:egg.Lark.Memery.Function">
-            <summary>
-            获取关联函数
-            </summary>
-        </member>
-        <member name="M:egg.Lark.Memery.#ctor(egg.Lark.MemeryUnits.Function)">
-            <summary>
-            实例化对象
-            </summary>
-            <param name="fn"></param>
-        </member>
-        <member name="P:egg.Lark.Memery.Item(System.Int32)">
-            <summary>
-             获取或设置单元
-            </summary>
-            <param name="index"></param>
-            <returns></returns>
-        </member>
-        <member name="M:egg.Lark.Memery.Clear">
-            <summary>
-            清空存储
-            </summary>
-        </member>
-        <member name="M:egg.Lark.Memery.AddNumber(System.Double)">
-            <summary>
-            添加一个数值
-            </summary>
-            <param name="val"></param>
-            <returns></returns>
-        </member>
-        <member name="M:egg.Lark.Memery.AddString(System.String)">
-            <summary>
-            添加一个字符串
-            </summary>
-            <param name="val"></param>
-            <returns></returns>
-        </member>
-        <member name="M:egg.Lark.Memery.AddList">
-            <summary>
-            添加一个列表
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:egg.Lark.Memery.AddObject">
-            <summary>
-            添加一个对象
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:egg.Lark.Memery.AddFunction(egg.Lark.MemeryUnits.Function)">
-            <summary>
-            添加一个对象
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:egg.Lark.Memery.Dispose">
-            <summary>
-            释放资源
-            </summary>
         </member>
         <member name="T:egg.Lark.MemeryUnits.Boolean">
             <summary>
@@ -112,27 +34,12 @@
             获取值
             </summary>
         </member>
-        <member name="M:egg.Lark.MemeryUnits.Boolean.#ctor(System.Boolean)">
+        <member name="M:egg.Lark.MemeryUnits.Boolean.#ctor(egg.Lark.ScriptMemeryPool,System.Boolean)">
             <summary>
             实例化对象
             </summary>
+            <param name="pool"></param>
             <param name="val"></param>
-        </member>
-        <member name="M:egg.Lark.MemeryUnits.Boolean.Create(System.Boolean)">
-            <summary>
-            实例化对象
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:egg.Lark.MemeryUnits.Boolean.True">
-            <summary>
-            新建一个为真的对象
-            </summary>
-        </member>
-        <member name="P:egg.Lark.MemeryUnits.Boolean.False">
-            <summary>
-            新建一个为假的对象
-            </summary>
         </member>
         <member name="M:egg.Lark.MemeryUnits.Boolean.OnGetBoolean">
             <summary>
@@ -172,21 +79,17 @@
             获取关联引擎
             </summary>
         </member>
-        <member name="P:egg.Lark.MemeryUnits.Function.Memery">
-            <summary>
-            获取值
-            </summary>
-        </member>
         <member name="P:egg.Lark.MemeryUnits.Function.ParentFunction">
             <summary>
             单元类型
             </summary>
         </member>
-        <member name="M:egg.Lark.MemeryUnits.Function.#ctor(egg.Lark.ScriptEngine,egg.Lark.MemeryUnits.Function,System.String,egg.Lark.Params)">
+        <member name="M:egg.Lark.MemeryUnits.Function.#ctor(egg.Lark.ScriptEngine,egg.Lark.ScriptMemeryPool,egg.Lark.MemeryUnits.Function,System.String,egg.Lark.Params)">
             <summary>
             实例化对象
             </summary>
             <param name="engine"></param>
+            <param name="pool"></param>
             <param name="name"></param>
             <param name="args"></param>
             <param name="parent"></param>
@@ -206,46 +109,10 @@
             列表
             </summary>
         </member>
-        <member name="M:egg.Lark.MemeryUnits.List.#ctor">
+        <member name="M:egg.Lark.MemeryUnits.List.#ctor(egg.Lark.ScriptMemeryPool)">
             <summary>
             实例化对象
             </summary>
-        </member>
-        <member name="M:egg.Lark.MemeryUnits.List.Create">
-            <summary>
-            实例化对象
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:egg.Lark.MemeryUnits.List.Create(System.String[])">
-            <summary>
-            实例化对象
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:egg.Lark.MemeryUnits.List.Create(System.Int32[])">
-            <summary>
-            实例化对象
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:egg.Lark.MemeryUnits.List.Create(System.Int64[])">
-            <summary>
-            实例化对象
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:egg.Lark.MemeryUnits.List.Create(System.Single[])">
-            <summary>
-            实例化对象
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:egg.Lark.MemeryUnits.List.Create(System.Double[])">
-            <summary>
-            实例化对象
-            </summary>
-            <returns></returns>
         </member>
         <member name="P:egg.Lark.MemeryUnits.List.Count">
             <summary>
@@ -365,10 +232,11 @@
             获取关键字
             </summary>
         </member>
-        <member name="M:egg.Lark.MemeryUnits.NativeFunction.#ctor(egg.Lark.ScriptEngine.Function,egg.Strings)">
+        <member name="M:egg.Lark.MemeryUnits.NativeFunction.#ctor(egg.Lark.ScriptMemeryPool,egg.Lark.ScriptEngine.Function,egg.Strings)">
             <summary>
             实例化对象
             </summary>
+            <param name="pool"></param>
             <param name="fn"></param>
             <param name="keys"></param>
         </member>
@@ -392,10 +260,11 @@
             获取关键字
             </summary>
         </member>
-        <member name="M:egg.Lark.MemeryUnits.NativeObject.#ctor(System.Object)">
+        <member name="M:egg.Lark.MemeryUnits.NativeObject.#ctor(egg.Lark.ScriptMemeryPool,System.Object)">
             <summary>
             实例化对象
             </summary>
+            <param name="pool"></param>
             <param name="obj"></param>
         </member>
         <member name="T:egg.Lark.MemeryUnits.None">
@@ -403,16 +272,10 @@
             空对象
             </summary>
         </member>
-        <member name="M:egg.Lark.MemeryUnits.None.#ctor">
+        <member name="M:egg.Lark.MemeryUnits.None.#ctor(egg.Lark.ScriptMemeryPool)">
             <summary>
             实例化对象
             </summary>
-        </member>
-        <member name="M:egg.Lark.MemeryUnits.None.Create">
-            <summary>
-            创建一个新的空对象
-            </summary>
-            <returns></returns>
         </member>
         <member name="T:egg.Lark.MemeryUnits.Number">
             <summary>
@@ -424,17 +287,12 @@
             获取值
             </summary>
         </member>
-        <member name="M:egg.Lark.MemeryUnits.Number.#ctor(System.Double)">
+        <member name="M:egg.Lark.MemeryUnits.Number.#ctor(egg.Lark.ScriptMemeryPool,System.Double)">
             <summary>
             实例化对象
             </summary>
+            <param name="pool"></param>
             <param name="val"></param>
-        </member>
-        <member name="M:egg.Lark.MemeryUnits.Number.Create(System.Double)">
-            <summary>
-            创建一个新的空对象
-            </summary>
-            <returns></returns>
         </member>
         <member name="M:egg.Lark.MemeryUnits.Number.OnGetBoolean">
             <summary>
@@ -459,16 +317,10 @@
             列表
             </summary>
         </member>
-        <member name="M:egg.Lark.MemeryUnits.Object.#ctor">
+        <member name="M:egg.Lark.MemeryUnits.Object.#ctor(egg.Lark.ScriptMemeryPool)">
             <summary>
             实例化对象
             </summary>
-        </member>
-        <member name="M:egg.Lark.MemeryUnits.Object.Create">
-            <summary>
-            实例化对象
-            </summary>
-            <returns></returns>
         </member>
         <member name="P:egg.Lark.MemeryUnits.Object.Keys">
             <summary>
@@ -608,17 +460,12 @@
             获取值
             </summary>
         </member>
-        <member name="M:egg.Lark.MemeryUnits.String.#ctor(System.String)">
+        <member name="M:egg.Lark.MemeryUnits.String.#ctor(egg.Lark.ScriptMemeryPool,System.String)">
             <summary>
             实例化对象
             </summary>
+            <param name="pool"></param>
             <param name="val"></param>
-        </member>
-        <member name="M:egg.Lark.MemeryUnits.String.Create(System.String)">
-            <summary>
-            实例化对象
-            </summary>
-            <returns></returns>
         </member>
         <member name="M:egg.Lark.MemeryUnits.String.OnGetBoolean">
             <summary>
@@ -698,16 +545,28 @@
             单元类型
             </summary>
         </member>
-        <member name="P:egg.Lark.MemeryUnits.Unit.Parent">
+        <member name="P:egg.Lark.MemeryUnits.Unit.Handle">
             <summary>
-            单元类型
+            获取单元句柄
             </summary>
         </member>
-        <member name="M:egg.Lark.MemeryUnits.Unit.#ctor(egg.Lark.MemeryUnits.UnitTypes)">
+        <member name="P:egg.Lark.MemeryUnits.Unit.MemeryPool">
+            <summary>
+            获取存储池
+            </summary>
+        </member>
+        <member name="M:egg.Lark.MemeryUnits.Unit.#ctor(egg.Lark.ScriptMemeryPool,egg.Lark.MemeryUnits.UnitTypes)">
             <summary>
             实例化对象
             </summary>
+            <param name="pool"></param>
             <param name="unitType"></param>
+        </member>
+        <member name="M:egg.Lark.MemeryUnits.Unit.ToMemeryItem">
+            <summary>
+            获取存储项
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:egg.Lark.MemeryUnits.Unit.OnGetBoolean">
             <summary>
@@ -839,7 +698,7 @@
             空对象
             </summary>
         </member>
-        <member name="M:egg.Lark.ProcessUnits.None.#ctor">
+        <member name="M:egg.Lark.ProcessUnits.None.#ctor(egg.Lark.ScriptMemeryPool)">
             <summary>
             实例化对象
             </summary>
@@ -859,7 +718,7 @@
             获取索引
             </summary>
         </member>
-        <member name="M:egg.Lark.ProcessUnits.Pointer.#ctor(egg.Lark.MemeryUnits.Function,System.Int32)">
+        <member name="M:egg.Lark.ProcessUnits.Pointer.#ctor(egg.Lark.MemeryUnits.Function,System.Int64)">
             <summary>
             实例化对象
             </summary>
@@ -910,10 +769,16 @@
             单元类型
             </summary>
         </member>
-        <member name="M:egg.Lark.ProcessUnits.Unit.#ctor(egg.Lark.ProcessUnits.UnitTypes)">
+        <member name="P:egg.Lark.ProcessUnits.Unit.MemeryPool">
+            <summary>
+            获取存储池
+            </summary>
+        </member>
+        <member name="M:egg.Lark.ProcessUnits.Unit.#ctor(egg.Lark.ScriptMemeryPool,egg.Lark.ProcessUnits.UnitTypes)">
             <summary>
             实例化对象
             </summary>
+            <param name="pool"></param>
             <param name="unitType"></param>
         </member>
         <member name="M:egg.Lark.ProcessUnits.Unit.OnGetMemeryUnit">
@@ -955,7 +820,17 @@
             <param name="args"></param>
             <returns></returns>
         </member>
-        <member name="M:egg.Lark.ScriptEngine.#ctor(System.Boolean)">
+        <member name="P:egg.Lark.ScriptEngine.MemeryPool">
+            <summary>
+            存储池
+            </summary>
+        </member>
+        <member name="P:egg.Lark.ScriptEngine.Pathes">
+            <summary>
+            获取地址集合
+            </summary>
+        </member>
+        <member name="M:egg.Lark.ScriptEngine.#ctor(egg.Lark.ScriptMemeryPool,System.Boolean)">
             <summary>
             实例化对象
             </summary>
@@ -977,7 +852,7 @@
         </member>
         <member name="M:egg.Lark.ScriptEngine.SetProcessVariable(System.String,egg.Lark.MemeryUnits.Unit)">
             <summary>
-            设置初始化变量
+            设置主程序变量
             </summary>
             <param name="name"></param>
             <param name="value"></param>
@@ -1035,6 +910,325 @@
             </summary>
         </member>
         <member name="M:egg.Lark.ScriptEngine.Dispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="T:egg.Lark.ScriptMemeryItem">
+            <summary>
+            脚本存储池元素
+            </summary>
+        </member>
+        <member name="P:egg.Lark.ScriptMemeryItem.Handle">
+            <summary>
+            获取句柄
+            </summary>
+        </member>
+        <member name="P:egg.Lark.ScriptMemeryItem.ParentHandle">
+            <summary>
+            获取父对象句柄
+            </summary>
+        </member>
+        <member name="P:egg.Lark.ScriptMemeryItem.MemeryUnit">
+            <summary>
+            获取存储单元
+            </summary>
+        </member>
+        <member name="P:egg.Lark.ScriptMemeryItem.MemeryUnitType">
+            <summary>
+            获取存储单元类型
+            </summary>
+        </member>
+        <member name="P:egg.Lark.ScriptMemeryItem.MemeryUnitTypeName">
+            <summary>
+            获取存储单元类型
+            </summary>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.IsFunction">
+            <summary>
+            判断是否为函数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.IsObject">
+            <summary>
+            判断是否为对象
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.IsNaviteObject">
+            <summary>
+            判断是否为原生对象
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.IsList">
+            <summary>
+            判断是否为列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.IsString">
+            <summary>
+            判断是否为字符串
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.IsNumber">
+            <summary>
+            判断是否为数值
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.IsBoolean">
+            <summary>
+            判断是否为布尔
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.IsNone">
+            <summary>
+            判断是否为空
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.ToBoolean">
+            <summary>
+            获取布尔值
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.ToNumber">
+            <summary>
+            获取数值
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.ToString">
+            <summary>
+            获取字符串
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.ToObject">
+            <summary>
+            获取对象
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.ToList">
+            <summary>
+            获取列表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.ToFunction">
+            <summary>
+            获取函数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.ToNativeFunction">
+            <summary>
+            获取函数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.ToNativeObject">
+            <summary>
+            获取函数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryItem.Dispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="T:egg.Lark.ScriptMemeryPool">
+            <summary>
+            脚本存储池
+            </summary>
+        </member>
+        <member name="P:egg.Lark.ScriptMemeryPool.Indexer">
+            <summary>
+            获取当前索引器
+            </summary>
+        </member>
+        <member name="P:egg.Lark.ScriptMemeryPool.None">
+            <summary>
+            获取一个空值
+            </summary>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.GetUnitByHandle(System.Int64)">
+            <summary>
+            获取存储单元
+            </summary>
+            <param name="handle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.GetMemeryByHandle(System.Int64)">
+            <summary>
+            获取存储单元
+            </summary>
+            <param name="handle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.GetMemeriesByParentHandle(System.Int64)">
+            <summary>
+            获取存储单元
+            </summary>
+            <param name="handle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.#ctor">
+            <summary>
+            实例化一个新的脚本存储池
+            </summary>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateBoolean(System.Boolean,System.Int64)">
+            <summary>
+            创建一个布尔型数据
+            </summary>
+            <param name="val"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateNumber(System.Double,System.Int64)">
+            <summary>
+            创建一个数值型存储
+            </summary>
+            <param name="val"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateNumber(System.Int32,System.Int64)">
+            <summary>
+            创建一个数值型存储
+            </summary>
+            <param name="val"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateNumber(System.Int64,System.Int64)">
+            <summary>
+            创建一个数值型存储
+            </summary>
+            <param name="val"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateNumber(System.Single,System.Int64)">
+            <summary>
+            创建一个数值型存储
+            </summary>
+            <param name="val"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateNumber(System.Byte,System.Int64)">
+            <summary>
+            创建一个数值型存储
+            </summary>
+            <param name="val"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateString(System.String,System.Int64)">
+            <summary>
+            创建一个字符串存储
+            </summary>
+            <param name="val"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateList(System.Int64)">
+            <summary>
+            创建一个列表存储
+            </summary>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateList(egg.Strings,System.Int64)">
+            <summary>
+            创建一个列表存储
+            </summary>
+            <param name="arr"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateList(System.String[],System.Int64)">
+            <summary>
+            创建一个列表存储
+            </summary>
+            <param name="arr"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateList(System.Double[],System.Int64)">
+            <summary>
+            创建一个列表存储
+            </summary>
+            <param name="arr"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateList(System.Single[],System.Int64)">
+            <summary>
+            创建一个列表存储
+            </summary>
+            <param name="arr"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateList(System.Int64[],System.Int64)">
+            <summary>
+            创建一个列表存储
+            </summary>
+            <param name="arr"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateList(System.Int32[],System.Int64)">
+            <summary>
+            创建一个列表存储
+            </summary>
+            <param name="arr"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateList(System.Byte[],System.Int64)">
+            <summary>
+            创建一个列表存储
+            </summary>
+            <param name="arr"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateList(System.Boolean[],System.Int64)">
+            <summary>
+            创建一个列表存储
+            </summary>
+            <param name="arr"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateObject(System.Int64)">
+            <summary>
+            创建一个对象存储
+            </summary>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateNavtiveObject(System.Object,System.Int64)">
+            <summary>
+            创建一个原生对象存储
+            </summary>
+            <param name="obj"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.Dispose">
             <summary>
             释放资源
             </summary>

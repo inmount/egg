@@ -23,8 +23,9 @@ namespace egg.Lark.MemeryUnits {
         /// <summary>
         /// 实例化对象
         /// </summary>
+        /// <param name="pool"></param>
         /// <param name="obj"></param>
-        public NativeObject(object obj) : base(UnitTypes.NativeObject) {
+        public NativeObject(ScriptMemeryPool pool, object obj) : base(pool, UnitTypes.NativeObject) {
             this.Object = obj;
         }
     }
