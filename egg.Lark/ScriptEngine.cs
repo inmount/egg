@@ -227,6 +227,9 @@ namespace egg.Lark {
                 case "http":
                     Imports.Http.Reg(this);
                     break;
+                case "hash":
+                    Imports.Hash.Reg(this);
+                    break;
                 default:
                     throw new Exception($"未找到'{name}'库文件");
             }
