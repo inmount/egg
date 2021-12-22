@@ -42,7 +42,7 @@ namespace egg.Lark.Imports {
                 if (url.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'url'不支持类型'{url.UnitType.ToString()}'");
                 if (arg.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'arg'不支持类型'{arg.UnitType.ToString()}'");
                 return engine.MemeryPool.CreateString(egg.Net.HttpClient.Post(url.ToString(), arg.ToString(), GetHeaderFromObject(header)), http.Handle).MemeryUnit;
-            }, egg.Strings.Create("url", "aargrgs", "header"));
+            }, egg.Strings.Create("url", "arg", "header"));
         }
     }
 }
