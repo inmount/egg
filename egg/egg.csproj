@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Version>6.0.2111.22</Version>
+    <Version>6.1.2112.23</Version>
     <Authors>Egg Studio</Authors>
     <Product>Egg Development Kit</Product>
     <Description>一个基于.Net 6的综合性辅助开发套件基础件，包含基础类型扩展、文件处理、常见协议解析处理(json/xml/html/css)及网络访问</Description>

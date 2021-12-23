@@ -70,7 +70,7 @@ namespace egg.Xml {
             res = res.Replace("&", "&amp;");//处理特殊输入
             //res = res.Replace("\r", "").Replace("\n", "&enter;");//处理换行
             res = res.Replace("\"", "&quot;");//处理双引号
-            //res = res.Replace(" ", "&nbsp;");//处理空格
+            res = res.Replace(" ", "&nbsp;");//处理空格
             res = res.Replace("<", "&lt;");//处理小于号
             res = res.Replace(">", "&gt;");//处理大于号
             res = res.Replace("'", "&apos;");//处理单引号
@@ -87,7 +87,7 @@ namespace egg.Xml {
             //res = res.Replace("&enter;", "\r\n");//处理换行
             res = res.Replace("&quot;", "\"");//处理双引号
             res = res.Replace("&apos;", "'");//处理双引号
-            //res = res.Replace("&nbsp;", " ");//处理空格
+            res = res.Replace("&nbsp;", " ");//处理空格
             res = res.Replace("&lt;", "<");//处理小于号
             res = res.Replace("&gt;", ">");//处理大于号
             res = res.Replace("&amp;", "&");//处理特殊输入
@@ -354,6 +354,8 @@ namespace egg.Xml {
                             pt = ParserTypes.PropertyName;
                         } else if (pt == ParserTypes.CData || pt == ParserTypes.PropertyValue || pt == ParserTypes.Note) {
                             sb.Append(chr);
+                        } else if (pt == ParserTypes.NodeFinish || pt == ParserTypes.None) {
+                            if (sb.Length > 0) sb.Append(chr);
                         } else {
                             //throw new Exception($"规则外的字符'{chr}'");
                         }
