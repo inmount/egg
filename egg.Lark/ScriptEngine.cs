@@ -263,7 +263,7 @@ namespace egg.Lark {
             try {
                 main.Execute(vars);
             } catch (Exception ex) {
-                throw new Exception($"main->{ex.Message}", ex);
+                throw new Exception($"ERROR::main() -> {path}", ex);
             }
         }
 

@@ -277,6 +277,24 @@
             实例化对象
             </summary>
         </member>
+        <member name="M:egg.Lark.MemeryUnits.None.OnGetBoolean">
+            <summary>
+            获取布尔值
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.MemeryUnits.None.OnGetNumber">
+            <summary>
+            获取数值
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.MemeryUnits.None.OnGetString">
+            <summary>
+            获取字符串
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:egg.Lark.MemeryUnits.Number">
             <summary>
             数值对象

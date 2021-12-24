@@ -474,12 +474,29 @@ namespace egg.Lark.MemeryUnits {
                         // 兼容函数执行
                         if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
                         if (value2.UnitType == MemeryUnits.UnitTypes.Function) value2 = ((MemeryUnits.Function)value2).Execute();
-                        if (value1.UnitType != value2.UnitType) throw new Exception("等于函数的两个参数必须类型相同");
+                        if (value1.UnitType != value2.UnitType) throw new Exception($"等于函数的两个参数必须类型相同'{value1.UnitType.ToString()}':'{value2.UnitType.ToString()}'");
                         switch (value1.UnitType) {
                             case UnitTypes.None: return this.MemeryPool.CreateBoolean(true, this.Handle).MemeryUnit;
                             case UnitTypes.Boolean: return this.MemeryPool.CreateBoolean(((MemeryUnits.Boolean)value1).Value == ((MemeryUnits.Boolean)value2).Value, this.Handle).MemeryUnit;
                             case UnitTypes.Number: return this.MemeryPool.CreateBoolean(((MemeryUnits.Number)value1).Value == ((MemeryUnits.Number)value2).Value, this.Handle).MemeryUnit;
                             case UnitTypes.String: return this.MemeryPool.CreateBoolean(((MemeryUnits.String)value1).Value == ((MemeryUnits.String)value2).Value, this.Handle).MemeryUnit;
+                            default: throw new Exception($"{this.Name}函数不知道'{value1.UnitType.ToString()}'类型参数");
+                        }
+                    #endregion
+                    case "not_equal": // 判断不相等操作
+                        #region [====判断不相等操作====]
+                        if (this.Params.Count != 2) throw new Exception($"{this.Name}函数只允许两个参数");
+                        value1 = this.Params[0].GetMemeryUnit();
+                        value2 = this.Params[1].GetMemeryUnit();
+                        // 兼容函数执行
+                        if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
+                        if (value2.UnitType == MemeryUnits.UnitTypes.Function) value2 = ((MemeryUnits.Function)value2).Execute();
+                        if (value1.UnitType != value2.UnitType) throw new Exception($"等于函数的两个参数必须类型相同'{value1.UnitType.ToString()}':'{value2.UnitType.ToString()}'");
+                        switch (value1.UnitType) {
+                            case UnitTypes.None: return this.MemeryPool.CreateBoolean(true, this.Handle).MemeryUnit;
+                            case UnitTypes.Boolean: return this.MemeryPool.CreateBoolean(((MemeryUnits.Boolean)value1).Value != ((MemeryUnits.Boolean)value2).Value, this.Handle).MemeryUnit;
+                            case UnitTypes.Number: return this.MemeryPool.CreateBoolean(((MemeryUnits.Number)value1).Value != ((MemeryUnits.Number)value2).Value, this.Handle).MemeryUnit;
+                            case UnitTypes.String: return this.MemeryPool.CreateBoolean(((MemeryUnits.String)value1).Value != ((MemeryUnits.String)value2).Value, this.Handle).MemeryUnit;
                             default: throw new Exception($"{this.Name}函数不知道'{value1.UnitType.ToString()}'类型参数");
                         }
                     #endregion
@@ -491,7 +508,7 @@ namespace egg.Lark.MemeryUnits {
                         // 兼容函数执行
                         if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
                         if (value2.UnitType == MemeryUnits.UnitTypes.Function) value2 = ((MemeryUnits.Function)value2).Execute();
-                        if (value1.UnitType != value2.UnitType) throw new Exception("等于函数的两个参数必须类型相同");
+                        if (value1.UnitType != value2.UnitType) throw new Exception($"等于函数的两个参数必须类型相同'{value1.UnitType.ToString()}':'{value2.UnitType.ToString()}'");
                         switch (value1.UnitType) {
                             case UnitTypes.None: return this.MemeryPool.CreateBoolean(false, this.Handle).MemeryUnit;
                             case UnitTypes.Number: return this.MemeryPool.CreateBoolean(((MemeryUnits.Number)value1).Value < ((MemeryUnits.Number)value2).Value, this.Handle).MemeryUnit;
@@ -506,7 +523,7 @@ namespace egg.Lark.MemeryUnits {
                         // 兼容函数执行
                         if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
                         if (value2.UnitType == MemeryUnits.UnitTypes.Function) value2 = ((MemeryUnits.Function)value2).Execute();
-                        if (value1.UnitType != value2.UnitType) throw new Exception("等于函数的两个参数必须类型相同");
+                        if (value1.UnitType != value2.UnitType) throw new Exception($"等于函数的两个参数必须类型相同'{value1.UnitType.ToString()}':'{value2.UnitType.ToString()}'");
                         switch (value1.UnitType) {
                             case UnitTypes.None: return this.MemeryPool.CreateBoolean(false, this.Handle).MemeryUnit;
                             case UnitTypes.Number: return this.MemeryPool.CreateBoolean(((MemeryUnits.Number)value1).Value > ((MemeryUnits.Number)value2).Value, this.Handle).MemeryUnit;
@@ -521,7 +538,7 @@ namespace egg.Lark.MemeryUnits {
                         // 兼容函数执行
                         if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
                         if (value2.UnitType == MemeryUnits.UnitTypes.Function) value2 = ((MemeryUnits.Function)value2).Execute();
-                        if (value1.UnitType != value2.UnitType) throw new Exception("等于函数的两个参数必须类型相同");
+                        if (value1.UnitType != value2.UnitType) throw new Exception($"等于函数的两个参数必须类型相同'{value1.UnitType.ToString()}':'{value2.UnitType.ToString()}'");
                         switch (value1.UnitType) {
                             case UnitTypes.None: return this.MemeryPool.CreateBoolean(false, this.Handle).MemeryUnit;
                             case UnitTypes.Number: return this.MemeryPool.CreateBoolean(((MemeryUnits.Number)value1).Value <= ((MemeryUnits.Number)value2).Value, this.Handle).MemeryUnit;
@@ -536,7 +553,7 @@ namespace egg.Lark.MemeryUnits {
                         // 兼容函数执行
                         if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
                         if (value2.UnitType == MemeryUnits.UnitTypes.Function) value2 = ((MemeryUnits.Function)value2).Execute();
-                        if (value1.UnitType != value2.UnitType) throw new Exception("等于函数的两个参数必须类型相同");
+                        if (value1.UnitType != value2.UnitType) throw new Exception($"等于函数的两个参数必须类型相同'{value1.UnitType.ToString()}':'{value2.UnitType.ToString()}'");
                         switch (value1.UnitType) {
                             case UnitTypes.None: return this.MemeryPool.CreateBoolean(false, this.Handle).MemeryUnit;
                             case UnitTypes.Number: return this.MemeryPool.CreateBoolean(((MemeryUnits.Number)value1).Value >= ((MemeryUnits.Number)value2).Value, this.Handle).MemeryUnit;
@@ -609,6 +626,8 @@ namespace egg.Lark.MemeryUnits {
                         #region [====转化为数值====]
                         if (this.Params.Count != 1) throw new Exception("转化为数值函数仅支持一个参数");
                         value1 = this.Params[0].GetMemeryUnit();
+                        if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
+                        if (value1.UnitType == MemeryUnits.UnitTypes.Number) return value1;
                         if (value1.UnitType == MemeryUnits.UnitTypes.String) return this.MemeryPool.CreateNumber(((MemeryUnits.String)value1).Value.ToDouble(), this.Handle).MemeryUnit;
                         if (value1.UnitType == MemeryUnits.UnitTypes.Boolean) return this.MemeryPool.CreateNumber(((MemeryUnits.Boolean)value1).Value ? 1 : 0, this.Handle).MemeryUnit;
                         throw new Exception($"num函数的参数不支持类型{value1.UnitType.ToString()}");
@@ -617,6 +636,8 @@ namespace egg.Lark.MemeryUnits {
                         #region [====转化为字符串====]
                         if (this.Params.Count != 1) throw new Exception("转化为数值函数仅支持一个参数");
                         value1 = this.Params[0].GetMemeryUnit();
+                        if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
+                        if (value1.UnitType == MemeryUnits.UnitTypes.String) return value1;
                         if (value1.UnitType == MemeryUnits.UnitTypes.Number) return this.MemeryPool.CreateString(((MemeryUnits.Number)value1).Value.ToString(), this.Handle).MemeryUnit;
                         if (value1.UnitType == MemeryUnits.UnitTypes.Boolean) return this.MemeryPool.CreateString(((MemeryUnits.Boolean)value1).Value ? "true" : "false", this.Handle).MemeryUnit;
                         throw new Exception($"str函数的参数不支持类型{value1.UnitType.ToString()}");
@@ -704,7 +725,76 @@ namespace egg.Lark.MemeryUnits {
                         }
                 }
             } catch (Exception ex) {
-                throw new Exception($"{this.Name}->{ex.Message}", ex);
+                if (this.Name == "step") {
+                    throw new Exception($"ERROR::{this.Name}()", ex);
+                }
+                // 输出详细的调用信息
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < this.Params.Count; i++) {
+                    if (sb.Length > 0) sb.Append(", ");
+                    var param = this.Params[i];
+                    switch (param.UnitType) {
+                        case ProcessUnits.UnitTypes.None: sb.Append("[None]"); break;
+                        case ProcessUnits.UnitTypes.Pointer:
+                            try {
+                                var item = ((ProcessUnits.Pointer)param).GetMemeryUnit().ToMemeryItem();
+                                switch (item.MemeryUnitType) {
+                                    case UnitTypes.None: sb.Append("[None]"); break;
+                                    case UnitTypes.Function:
+                                        sb.Append("[Function]");
+                                        sb.Append(item.ToFunction().Name);
+                                        break;
+                                    case UnitTypes.NativeFunction:
+                                        sb.Append("[NativeFunction]");
+                                        break;
+                                    case UnitTypes.List:
+                                        sb.Append("[List:");
+                                        sb.Append(item.ToList().Count);
+                                        sb.Append("]");
+                                        break;
+                                    case UnitTypes.Object:
+                                        sb.Append("[Object:");
+                                        sb.Append(item.ToObject().Keys.Count);
+                                        sb.Append("]");
+                                        break;
+                                    case UnitTypes.NativeObject:
+                                        sb.Append("[NativeObject]");
+                                        break;
+                                    case UnitTypes.Boolean:
+                                        sb.Append("[Boolean]");
+                                        sb.Append(item.ToBoolean());
+                                        break;
+                                    case UnitTypes.Number:
+                                        sb.Append("[Number]");
+                                        sb.Append(item.ToNumber());
+                                        break;
+                                    case UnitTypes.String:
+                                        sb.Append("[String]\"");
+                                        sb.Append(item.ToString());
+                                        sb.Append("\"");
+                                        break;
+                                    default:
+                                        sb.Append("[");
+                                        sb.Append(item.MemeryUnitTypeName);
+                                        sb.Append("]");
+                                        break;
+                                }
+                            } catch {
+                                sb.Append("[Error]");
+                            }
+                            break;
+                        case ProcessUnits.UnitTypes.Define:
+                            sb.Append("[Define]");
+                            sb.Append(((ProcessUnits.Define)param).Name);
+                            break;
+                        default:
+                            sb.Append("[");
+                            sb.Append(this.Params[i].UnitType.ToString());
+                            sb.Append("]");
+                            break;
+                    }
+                }
+                throw new Exception($"ERROR::{this.Name}({sb.ToString()})", ex);
             }
         }
     }

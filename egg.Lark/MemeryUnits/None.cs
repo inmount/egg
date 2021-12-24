@@ -14,10 +14,23 @@ namespace egg.Lark.MemeryUnits {
         /// </summary>
         public None(ScriptMemeryPool pool) : base(pool, UnitTypes.None) { }
 
-        ///// <summary>
-        ///// 创建一个新的空对象
-        ///// </summary>
-        ///// <returns></returns>
-        //public static None Create() { return new None(); }
+        /// <summary>
+        /// 获取布尔值
+        /// </summary>
+        /// <returns></returns>
+        protected override bool OnGetBoolean() { return false; }
+
+        /// <summary>
+        /// 获取数值
+        /// </summary>
+        /// <returns></returns>
+        protected override double OnGetNumber() { return 0; }
+
+        /// <summary>
+        /// 获取字符串
+        /// </summary>
+        /// <returns></returns>
+        protected override string OnGetString() { return null; }
+
     }
 }
