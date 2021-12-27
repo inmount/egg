@@ -13,7 +13,7 @@ namespace egg.Lark.Imports {
             MemeryUnits.Object lark = engine.MemeryPool.CreateObject().ToObject();
             engine.SetVariable("lark", lark);
             // 获取对象的键值集合
-            lark["getObjectKeys"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            lark["getObjectKeys"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "lark.getObjectKeys";
                 var obj = args["obj"];
                 if (obj.UnitType != MemeryUnits.UnitTypes.Object) throw new Exception($"{fnName}函数的参数'obj'不支持类型{obj.UnitType.ToString()}");
@@ -25,7 +25,7 @@ namespace egg.Lark.Imports {
                 return list;
             }, egg.Strings.Create("obj"));
             // 判断对象是否存在对应键值
-            lark["containsObjectKey"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            lark["containsObjectKey"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "lark.containsObjectKey";
                 var obj = args["obj"];
                 var key = args["key"];
@@ -35,28 +35,28 @@ namespace egg.Lark.Imports {
                 return engine.MemeryPool.CreateBoolean(objKeys.Contains(key.ToString()), lark.Handle).MemeryUnit;
             }, egg.Strings.Create("obj", "key"));
             // 获取列表的元素数量
-            lark["getListCount"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            lark["getListCount"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "lark.getListCount";
                 var list = args["list"];
                 if (list.UnitType != MemeryUnits.UnitTypes.List) throw new Exception($"{fnName}函数的参数'list'不支持类型{list.UnitType.ToString()}");
                 return engine.MemeryPool.CreateNumber(((MemeryUnits.List)list).Count, lark.Handle).MemeryUnit;
             }, egg.Strings.Create("list"));
             // 截取字符的码
-            lark["getCode"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            lark["getCode"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "lark.getCode";
                 var str = args["str"];
                 if (str.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'str'不支持类型{str.UnitType.ToString()}");
                 return engine.MemeryPool.CreateNumber(str.ToString()[0], lark.Handle).MemeryUnit;
             }, egg.Strings.Create("str"));
             // 截取字符的码
-            lark["getChar"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            lark["getChar"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "lark.getChar";
                 var code = args["code"];
-                if (code.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'code'不支持类型{code.UnitType.ToString()}");
+                if (code.UnitType != MemeryUnits.UnitTypes.Number) throw new Exception($"{fnName}函数的参数'code'不支持类型{code.UnitType.ToString()}");
                 return engine.MemeryPool.CreateString(((char)code.ToNumber()).ToString(), lark.Handle).MemeryUnit;
             }, egg.Strings.Create("code"));
             // 获取环境路径的集合
-            lark["getPathes"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            lark["getPathes"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 //string fnName = "lark.getPathes";
                 var list = engine.MemeryPool.CreateList(lark.Handle).ToList();
                 foreach (var path in engine.Pathes) {
@@ -65,7 +65,7 @@ namespace egg.Lark.Imports {
                 return list;
             });
             // 获取环境路径的集合
-            lark["getVarNames"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            lark["getVarNames"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 return engine.MemeryPool.CreateList(engine.GetProcessVariables(), lark.Handle).MemeryUnit;
             });
         }

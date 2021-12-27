@@ -76,7 +76,6 @@ namespace egg.Lark {
         public ScriptMemeryPool() {
             this.Indexer = 0;
             this.None = new MemeryUnits.None(this);
-            this.None.Handle = 0;
         }
 
         #region [=====创建各种对象=====]
@@ -333,6 +332,19 @@ namespace egg.Lark {
         public ScriptMemeryItem CreateNavtiveObject(object obj, long parent = 0) {
             MemeryUnits.NativeObject list = new MemeryUnits.NativeObject(this, obj);
             ScriptMemeryItem item = GetMemeryByHandle(list.Handle);
+            item.ParentHandle = parent;
+            return item;
+        }
+
+        /// <summary>
+        /// 创建一个原生对象存储
+        /// </summary>
+        /// <param name="fn"></param>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        public ScriptMemeryItem CreateNavtiveFunction(ScriptEngine.Function fn, long parent = 0) {
+            MemeryUnits.NativeFunction obj = new MemeryUnits.NativeFunction(this, fn);
+            ScriptMemeryItem item = GetMemeryByHandle(obj.Handle);
             item.ParentHandle = parent;
             return item;
         }

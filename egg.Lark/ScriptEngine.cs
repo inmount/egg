@@ -28,7 +28,7 @@ namespace egg.Lark {
             if (fn.UnitType == MemeryUnits.UnitTypes.NativeFunction) {
                 // 外部函数
                 MemeryUnits.NativeFunction func = (MemeryUnits.NativeFunction)fn;
-                egg.KeyValues<MemeryUnits.Unit> args = new KeyValues<MemeryUnits.Unit>();
+                ScriptEngine.FunctionArgs args = new ScriptEngine.FunctionArgs();
                 if (!eggs.IsNull(func.Keys)) {
                     if (parent.Params.Count > func.Keys.Count) throw new Exception($"函数'{parent.Name}'只允许{func.Keys.Count}个参数");
                     for (int i = 0; i < func.Keys.Count; i++) {
@@ -46,7 +46,7 @@ namespace egg.Lark {
                 // 自定义函数
                 MemeryUnits.Function func = (MemeryUnits.Function)fn;
                 if (parent.Params.Count >= func.Params.Count) throw new Exception($"函数'{parent.Name}'只允许{func.Params.Count - 1}个参数");
-                egg.KeyValues<MemeryUnits.Unit> args = new KeyValues<MemeryUnits.Unit>();
+                ScriptEngine.FunctionArgs args = new ScriptEngine.FunctionArgs();
                 for (int i = 0; i < func.Params.Count - 1; i++) {
                     if (parent.Params.Count > i) {
                         var valSource = parent.Params[i].GetMemeryUnit();
@@ -63,11 +63,17 @@ namespace egg.Lark {
         #endregion
 
         /// <summary>
+        /// 函数参数
+        /// </summary>
+        public class FunctionArgs : egg.KeyValues<MemeryUnits.Unit> { }
+
+        /// <summary>
         /// 函数定义接口
         /// </summary>
+        /// <param name="pool"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public delegate MemeryUnits.Unit Function(egg.KeyValues<MemeryUnits.Unit> args);
+        public delegate MemeryUnits.Unit Function(ScriptMemeryPool pool, FunctionArgs args);
 
         /// <summary>
         /// 存储池
@@ -81,7 +87,7 @@ namespace egg.Lark {
 
         // 主函数
         private MemeryUnits.Function main;
-        private egg.KeyValues<MemeryUnits.Unit> vars;
+        private ScriptEngine.FunctionArgs vars;
         private List<ScriptEngine> libs;
 
         /// <summary>
@@ -90,7 +96,7 @@ namespace egg.Lark {
         public ScriptEngine(ScriptMemeryPool pool, bool isLibrary = false) {
             this.MemeryPool = pool;
             main = new MemeryUnits.Function(this, pool, null, "step");
-            vars = new KeyValues<MemeryUnits.Unit>();
+            vars = new ScriptEngine.FunctionArgs();
             this.Pathes = new List<string>();
             if (!isLibrary) {
                 libs = new List<ScriptEngine>();
@@ -260,11 +266,15 @@ namespace egg.Lark {
         public void ExecuteFile(string path) {
             string script = egg.File.UTF8File.ReadAllText(path);
             Parser.Parse(this, script);
+#if DEBUG
+            main.Execute(vars);
+#else
             try {
                 main.Execute(vars);
             } catch (Exception ex) {
                 throw new Exception($"ERROR::main() -> {path}", ex);
             }
+#endif
         }
 
         // 执行函数

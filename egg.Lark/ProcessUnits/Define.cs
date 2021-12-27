@@ -35,6 +35,8 @@ namespace egg.Lark.ProcessUnits {
         /// </summary>
         /// <returns></returns>
         protected override MemeryUnits.Unit OnGetMemeryUnit() {
+            // 特殊定义
+            if (this.Name == "null") return this.Function.MemeryPool.None;
             int idx = this.Name.IndexOf('.');
             if (idx > 0) {
                 string name = this.Name.Substring(0, idx);

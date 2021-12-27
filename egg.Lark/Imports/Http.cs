@@ -27,14 +27,14 @@ namespace egg.Lark.Imports {
             // 设置json内置对象
             MemeryUnits.Object http = engine.MemeryPool.CreateObject().ToObject();
             engine.SetProcessVariable("http", http);
-            http["get"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            http["get"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "http.get";
                 var url = args["url"];
                 var header = args["header"];
                 if (url.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'url'不支持类型'{url.UnitType.ToString()}'");
                 return engine.MemeryPool.CreateString(egg.Net.HttpClient.Get(url.ToString(), GetHeaderFromObject(header)), http.Handle).MemeryUnit;
             }, egg.Strings.Create("url", "header"));
-            http["post"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            http["post"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "http.post";
                 var url = args["url"];
                 var arg = args["arg"];

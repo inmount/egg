@@ -63,5 +63,11 @@ namespace egg.Lark.ProcessUnits {
         /// </summary>
         /// <returns></returns>
         public MemeryUnits.Unit GetMemeryUnit() { return OnGetMemeryUnit(); }
+
+        /// <summary>
+        /// 获取存储单元
+        /// </summary>
+        /// <returns></returns>
+        public ScriptMemeryItem GetMemeryItem() { return OnGetMemeryUnit().ToMemeryItem(); }
     }
 }

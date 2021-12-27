@@ -34,8 +34,8 @@ namespace egg.Lark.MemeryUnits {
         /// <summary>
         /// 执行函数
         /// </summary>
-        public MemeryUnits.Unit Execute(egg.KeyValues<MemeryUnits.Unit> args = null) {
-            return this.Function(args);
+        public MemeryUnits.Unit Execute(ScriptEngine.FunctionArgs args = null) {
+            return this.Function(this.MemeryPool, args);
         }
     }
 }

@@ -99,7 +99,12 @@
             释放资源
             </summary>
         </member>
-        <member name="M:egg.Lark.MemeryUnits.Function.Execute(egg.KeyValues{egg.Lark.MemeryUnits.Unit})">
+        <member name="M:egg.Lark.MemeryUnits.Function.Execute(egg.Lark.ScriptEngine.FunctionArgs)">
+            <summary>
+            执行函数
+            </summary>
+        </member>
+        <member name="M:egg.Lark.MemeryUnits.Function.ExecuteToMemeryItem(egg.Lark.ScriptEngine.FunctionArgs)">
             <summary>
             执行函数
             </summary>
@@ -240,7 +245,7 @@
             <param name="fn"></param>
             <param name="keys"></param>
         </member>
-        <member name="M:egg.Lark.MemeryUnits.NativeFunction.Execute(egg.KeyValues{egg.Lark.MemeryUnits.Unit})">
+        <member name="M:egg.Lark.MemeryUnits.NativeFunction.Execute(egg.Lark.ScriptEngine.FunctionArgs)">
             <summary>
             执行函数
             </summary>
@@ -811,6 +816,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:egg.Lark.ProcessUnits.Unit.GetMemeryItem">
+            <summary>
+            获取存储单元
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:egg.Lark.ScriptEngine">
             <summary>
             百灵鸟脚本引擎
@@ -831,10 +842,16 @@
             <param name="fn"></param>
             <returns></returns>
         </member>
+        <member name="T:egg.Lark.ScriptEngine.FunctionArgs">
+            <summary>
+            函数参数
+            </summary>
+        </member>
         <member name="T:egg.Lark.ScriptEngine.Function">
             <summary>
             函数定义接口
             </summary>
+            <param name="pool"></param>
             <param name="args"></param>
             <returns></returns>
         </member>
@@ -1243,6 +1260,14 @@
             创建一个原生对象存储
             </summary>
             <param name="obj"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:egg.Lark.ScriptMemeryPool.CreateNavtiveFunction(egg.Lark.ScriptEngine.Function,System.Int64)">
+            <summary>
+            创建一个原生对象存储
+            </summary>
+            <param name="fn"></param>
             <param name="parent"></param>
             <returns></returns>
         </member>

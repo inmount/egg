@@ -13,14 +13,14 @@ namespace egg.Lark.Imports {
             MemeryUnits.Object io = engine.MemeryPool.CreateObject().ToObject();
             engine.SetProcessVariable("io", io);
             // 目录存在性判断
-            io["folderExists"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            io["folderExists"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "io.folderExists";
                 var path = args["path"];
                 if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{path.UnitType.ToString()}");
                 return engine.MemeryPool.CreateBoolean(eggs.CheckFolderExists(path.ToString()), io.Handle).MemeryUnit;
             }, egg.Strings.Create("path"));
             // 目录创建
-            io["folderCreate"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            io["folderCreate"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "io.folderCreate";
                 var path = args["path"];
                 if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{path.UnitType.ToString()}");
@@ -28,7 +28,7 @@ namespace egg.Lark.Imports {
                 return engine.MemeryPool.None;
             }, egg.Strings.Create("path"));
             // 目录删除
-            io["folderDelete"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            io["folderDelete"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "io.folderDelete";
                 var path = args["path"];
                 if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{path.UnitType.ToString()}");
@@ -36,14 +36,14 @@ namespace egg.Lark.Imports {
                 return engine.MemeryPool.None;
             }, egg.Strings.Create("path"));
             // 目录文件存在性判断
-            io["fileExists"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            io["fileExists"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "io.fileExists";
                 var path = args["path"];
                 if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{path.UnitType.ToString()}");
                 return engine.MemeryPool.CreateBoolean(eggs.CheckFileExists(path.ToString()), io.Handle).MemeryUnit;
             }, egg.Strings.Create("path"));
             // 文件创建
-            io["fileCreate"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            io["fileCreate"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "io.fileCreate";
                 var path = args["path"];
                 if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{path.UnitType.ToString()}");
@@ -51,7 +51,7 @@ namespace egg.Lark.Imports {
                 return engine.MemeryPool.None;
             }, egg.Strings.Create("path"));
             // 文件删除
-            io["fileDelete"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            io["fileDelete"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "io.folderDelete";
                 var path = args["path"];
                 if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{path.UnitType.ToString()}");
@@ -59,7 +59,7 @@ namespace egg.Lark.Imports {
                 return engine.MemeryPool.None;
             }, egg.Strings.Create("path"));
             // 文件复制
-            io["fileCopy"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            io["fileCopy"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "io.fileCopy";
                 var pathSource = args["pathSource"];
                 if (pathSource.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{pathSource.UnitType.ToString()}");
@@ -69,7 +69,7 @@ namespace egg.Lark.Imports {
                 return engine.MemeryPool.None;
             }, egg.Strings.Create("pathSource", "pathTarget"));
             // 文件复制
-            io["fileMove"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            io["fileMove"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "io.fileMove";
                 var pathSource = args["pathSource"];
                 if (pathSource.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{pathSource.UnitType.ToString()}");
@@ -79,7 +79,7 @@ namespace egg.Lark.Imports {
                 return engine.MemeryPool.None;
             }, egg.Strings.Create("pathSource", "pathTarget"));
             // 读取全部文本
-            io["readAllText"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            io["readAllText"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "io.readAllText";
                 var path = args["path"];
                 if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{path.UnitType.ToString()}");
@@ -93,7 +93,7 @@ namespace egg.Lark.Imports {
                 }
             }, egg.Strings.Create("path", "encoding"));
             // 写入全部文本
-            io["writeAllText"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            io["writeAllText"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "io.writeAllText";
                 var path = args["path"];
                 if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{path.UnitType.ToString()}");
@@ -110,7 +110,7 @@ namespace egg.Lark.Imports {
                 return engine.MemeryPool.None;
             }, egg.Strings.Create("path", "content", "encoding"));
             // 获取子目录
-            io["getFolders"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            io["getFolders"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "io.getFolders";
                 var path = args["path"];
                 if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{path.UnitType.ToString()}");
@@ -133,7 +133,7 @@ namespace egg.Lark.Imports {
                 return list;
             }, egg.Strings.Create("path", "pattern"));
             // 获取文件
-            io["getFiles"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            io["getFiles"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "io.getFiles";
                 var path = args["path"];
                 if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{path.UnitType.ToString()}");
@@ -156,21 +156,21 @@ namespace egg.Lark.Imports {
                 return list;
             }, egg.Strings.Create("path", "pattern"));
             // 获取文件名
-            io["getFileName"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            io["getFileName"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "io.getFileName";
                 var path = args["path"];
                 if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{path.UnitType.ToString()}");
                 return engine.MemeryPool.CreateString(System.IO.Path.GetFileName(path.ToString()), io.Handle).MemeryUnit;
             }, egg.Strings.Create("path"));
             // 获取父目录
-            io["getParentFolder"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            io["getParentFolder"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 string fnName = "io.getParentFolder";
                 var path = args["path"];
                 if (path.UnitType != MemeryUnits.UnitTypes.String) throw new Exception($"{fnName}函数的参数'path'不支持类型{path.UnitType.ToString()}");
                 return engine.MemeryPool.CreateString(System.IO.Path.GetDirectoryName(path.ToString()), io.Handle).MemeryUnit;
             }, egg.Strings.Create("path"));
             // 获取驱动器列表
-            io["getDrives"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+            io["getDrives"] = new MemeryUnits.NativeFunction(engine.MemeryPool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                 //string fnName = "io.getDrives";
                 string[] drives = System.IO.Directory.GetLogicalDrives();
                 var list = engine.MemeryPool.CreateList(io.Handle).ToList();

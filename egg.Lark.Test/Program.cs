@@ -9,11 +9,11 @@ namespace egg.Lark.Test {
             using (egg.Lark.ScriptMemeryPool pool = new ScriptMemeryPool()) {
                 using (egg.Lark.ScriptEngine engine = new ScriptEngine(pool)) {
                     var sys = pool.CreateObject().ToObject();
-                    sys["readNumber"] = new MemeryUnits.NativeFunction(pool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+                    sys["readNumber"] = new MemeryUnits.NativeFunction(pool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                         double r = System.Console.ReadLine().ToDouble();
                         return pool.CreateNumber(r, sys.Handle).MemeryUnit;
                     });
-                    sys["print"] = new MemeryUnits.NativeFunction(pool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+                    sys["print"] = new MemeryUnits.NativeFunction(pool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                         var content = args["content"];
                         if (content.UnitType == MemeryUnits.UnitTypes.Number)
                             System.Console.Write(((MemeryUnits.Number)content).Value);
@@ -21,7 +21,7 @@ namespace egg.Lark.Test {
                             System.Console.Write(((MemeryUnits.String)content).Value);
                         return pool.None;
                     }, egg.Strings.Create("content"));
-                    sys["println"] = new MemeryUnits.NativeFunction(pool, (egg.KeyValues<MemeryUnits.Unit> args) => {
+                    sys["println"] = new MemeryUnits.NativeFunction(pool, (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                         var content = args["content"];
                         if (content.UnitType == MemeryUnits.UnitTypes.Number)
                             System.Console.WriteLine(((MemeryUnits.Number)content).Value);
@@ -29,11 +29,11 @@ namespace egg.Lark.Test {
                             System.Console.WriteLine(((MemeryUnits.String)content).Value);
                         return pool.None;
                     }, egg.Strings.Create("content"));
-                    //engine.RegFunction("readNumber", (egg.KeyValues<MemeryUnits.Unit> args) => {
+                    //engine.RegFunction("readNumber", (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                     //    double r = System.Console.ReadLine().ToDouble();
                     //    return new MemeryUnits.Number(r);
                     //});
-                    //engine.RegFunction("print", (egg.KeyValues<MemeryUnits.Unit> args) => {
+                    //engine.RegFunction("print", (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                     //    //double r = System.Console.ReadLine().ToDouble();
                     //    var content = args["content"];
                     //    if (content.UnitType == MemeryUnits.UnitTypes.Number)
@@ -42,7 +42,7 @@ namespace egg.Lark.Test {
                     //        System.Console.Write(((MemeryUnits.String)content).Value);
                     //    return new MemeryUnits.None();
                     //}, egg.Strings.Create("content"));
-                    //engine.RegFunction("println", (egg.KeyValues<MemeryUnits.Unit> args) => {
+                    //engine.RegFunction("println", (ScriptMemeryPool pool, ScriptEngine.FunctionArgs args) => {
                     //    //double r = System.Console.ReadLine().ToDouble();
                     //    var content = args["content"];
                     //    if (content.UnitType == MemeryUnits.UnitTypes.Number)
@@ -62,7 +62,7 @@ namespace egg.Lark.Test {
                     //engine.Execute();
                     //engine.Execute("let(area,circleArea(r))");
                     //System.Console.WriteLine(((MemeryUnits.Number)engine.GetVariable("area")).Value);
-                    engine.ExecuteFile(@"X:\temp\lark\test.lark");
+                    engine.ExecuteFile(@"X:\temp\lark\test2.lark");
                 }
             }
 
