@@ -137,7 +137,7 @@ namespace egg.Lark.MemeryUnits {
             }
         }
 
-        private MemeryUnits.Unit Execute() {
+        private MemeryUnits.Unit ExecuteProcess() {
             switch (this.Name) {
                 case "step": // 所有参数按顺序执行
                     #region [====顺序执行====]
@@ -836,15 +836,14 @@ namespace egg.Lark.MemeryUnits {
                 }
             }
 #if DEBUG
-            return this.Execute();
+            return this.ExecuteProcess();
 #else
             try {
-                return this.Execute();
+                return this.ExecuteProcess();
             } catch (Exception ex) {
                 if (this.Name == "step") {
                     throw new Exception($"ERROR::{this.Name}()", ex);
                 }
-
                 // 输出详细的调用信息
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < this.Params.Count; i++) {
@@ -914,7 +913,6 @@ namespace egg.Lark.MemeryUnits {
                 throw new Exception($"ERROR::{this.Name}({sb.ToString()})", ex);
             }
 #endif
-
         }
 
 
