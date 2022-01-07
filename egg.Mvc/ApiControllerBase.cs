@@ -198,10 +198,10 @@ namespace egg.Mvc {
                     if (!eggs.IsNull(field)) {
                         if (field.Enabled) {
                             switch (field.DataType) {
-                                case ApiControllerFieldSetting.DataTypes.Decimal: this.Form[key] = ((double)JRequest.Form[key]).ToString(); break;
-                                case ApiControllerFieldSetting.DataTypes.Long: this.Form[key] = ((long)JRequest.Form[key]).ToString(); break;
-                                case ApiControllerFieldSetting.DataTypes.Integer: this.Form[key] = ((int)JRequest.Form[key]).ToString(); break;
-                                default: this.Form[key] = (string)JRequest.Form[key]; break;
+                                case ApiControllerFieldSetting.DataTypes.Decimal: this.Form[key] = JRequest.Form[key].ToDouble().ToString(); break;
+                                case ApiControllerFieldSetting.DataTypes.Long: this.Form[key] = JRequest.Form[key].ToLong().ToString(); break;
+                                case ApiControllerFieldSetting.DataTypes.Integer: this.Form[key] = JRequest.Form[key].ToInteger().ToString(); break;
+                                default: this.Form[key] = JRequest.Form.String(key); break;
                             }
                         }
                     }
@@ -281,7 +281,7 @@ namespace egg.Mvc {
                 action(this.JRequest, this.JResponse);
                 return this.JResponse.ToJsonString();
             } catch (Exception ex) {
-                return Error(0, ex.Message);
+                return Error(0, ex.Message, ex.ToString());
             }
         }
 

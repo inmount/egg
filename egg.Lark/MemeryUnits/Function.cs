@@ -685,6 +685,24 @@ namespace egg.Lark.MemeryUnits {
                     if (value1.UnitType != MemeryUnits.UnitTypes.Boolean) throw new Exception("加法函数参数必须为布尔值，请使用num()函数转换");
                     return this.MemeryPool.CreateBoolean(!((MemeryUnits.Boolean)value1).Value, this.Handle).MemeryUnit;
                 #endregion
+                case "isNumber": // 判断是否为数值
+                    #region [====判断是否为数值====]
+                    if (this.Params.Count != 1) throw new Exception("转化为数值函数仅支持一个参数");
+                    value1 = this.Params[0].GetMemeryUnit();
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Number) return this.MemeryPool.CreateBoolean(true, this.Handle).MemeryUnit;
+                    if (value1.UnitType == MemeryUnits.UnitTypes.String) return this.MemeryPool.CreateBoolean(((MemeryUnits.String)value1).Value.IsDouble(), this.Handle).MemeryUnit;
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Boolean) return this.MemeryPool.CreateBoolean(true, this.Handle).MemeryUnit;
+                    return this.MemeryPool.CreateBoolean(false, this.Handle).MemeryUnit;
+                #endregion
+                case "isNone": // 判断是否为空
+                    #region [====判断是否为空====]
+                    if (this.Params.Count != 1) throw new Exception("转化为数值函数仅支持一个参数");
+                    value1 = this.Params[0].GetMemeryUnit();
+                    if (value1.UnitType == MemeryUnits.UnitTypes.Function) value1 = ((MemeryUnits.Function)value1).Execute();
+                    if (value1.UnitType == MemeryUnits.UnitTypes.None) return this.MemeryPool.CreateBoolean(true, this.Handle).MemeryUnit;
+                    return this.MemeryPool.CreateBoolean(false, this.Handle).MemeryUnit;
+                #endregion
                 case "join": // 字符串连接
                     #region [====字符串连接操作====]
                     if (this.Params.Count < 2) throw new Exception("字符串连接函数至少需要两个参数");

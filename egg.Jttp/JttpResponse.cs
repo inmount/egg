@@ -12,7 +12,7 @@ namespace egg.Jttp {
     /// </summary>
     public class JttpResponse : egg.Object {
 
-        private JsonNode _node;
+        private JsonObject _node;
 
         /// <summary>
         /// 获取或设置结果
@@ -20,7 +20,7 @@ namespace egg.Jttp {
         public int Result {
             get {
                 if (eggs.IsNull(_node)) return 0;
-                return (int)_node["Result"];
+                return _node["Result"].ToInteger();
             }
             set {
                 _node["Result"] = value;
@@ -248,7 +248,7 @@ namespace egg.Jttp {
         }
 
         public JttpResponse(string json) {
-            _node = JsonNode.Parse(json);
+            _node = (JsonObject)JsonNode.Parse(json);
         }
 
         /// <summary>

@@ -5,7 +5,7 @@
     <Authors>Egg Studio</Authors>
     <Product>Jttp for Egg Development Kit</Product>
     <Description>Jttp for Egg Development Kit</Description>
-    <Version>6.0.2112.13</Version>
+    <Version>6.1.2201.14</Version>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/inmount/egg</PackageProjectUrl>
     <RepositoryType></RepositoryType>
@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="egg" Version="6.0.2111.22" />
+    <PackageReference Include="egg" Version="6.2.2201.26" />
   </ItemGroup>
 
   <ItemGroup>
