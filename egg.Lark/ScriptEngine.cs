@@ -65,7 +65,145 @@ namespace egg.Lark {
         /// <summary>
         /// 函数参数
         /// </summary>
-        public class FunctionArgs : egg.KeyValues<MemeryUnits.Unit> { }
+        public class FunctionArgs : egg.KeyValues<MemeryUnits.Unit> {
+
+            /// <summary>
+            /// 获取字符串内容
+            /// </summary>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public string GetString(string name) {
+                var res = this[name];
+                if (res.UnitType == egg.Lark.MemeryUnits.UnitTypes.String) return res.ToString();
+                if (res.UnitType == egg.Lark.MemeryUnits.UnitTypes.Number) return res.ToString();
+                if (res.UnitType == egg.Lark.MemeryUnits.UnitTypes.Boolean) return res.ToString();
+                throw new Exception($"函数的'{name}'参数不支持的类型'{res.UnitType.ToString()}'。");
+            }
+
+            /// <summary>
+            /// 获取字符串内容
+            /// </summary>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public bool GetBoolean(string name) {
+                var res = this[name];
+                if (res.UnitType == egg.Lark.MemeryUnits.UnitTypes.String) return res.ToBoolean();
+                if (res.UnitType == egg.Lark.MemeryUnits.UnitTypes.Number) return res.ToBoolean();
+                if (res.UnitType == egg.Lark.MemeryUnits.UnitTypes.Boolean) return res.ToBoolean();
+                throw new Exception($"函数的'{name}'参数不支持的类型'{res.UnitType.ToString()}'。");
+            }
+
+            /// <summary>
+            /// 获取双精度内容
+            /// </summary>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public double GetDouble(string name) {
+                var res = this[name];
+                if (res.UnitType == egg.Lark.MemeryUnits.UnitTypes.String) return res.ToNumber();
+                if (res.UnitType == egg.Lark.MemeryUnits.UnitTypes.Number) return res.ToNumber();
+                if (res.UnitType == egg.Lark.MemeryUnits.UnitTypes.Boolean) return res.ToNumber();
+                throw new Exception($"函数的'{name}'参数不支持的类型'{res.UnitType.ToString()}'。");
+            }
+
+            /// <summary>
+            /// 获取双精度内容
+            /// </summary>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public float GetSingle(string name) { return (float)GetDouble(name); }
+
+            /// <summary>
+            /// 获取长整型内容
+            /// </summary>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public long GetLong(string name) { return (long)GetDouble(name); }
+
+            /// <summary>
+            /// 获取整型内容
+            /// </summary>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public int GetInteger(string name) { return (int)GetDouble(name); }
+
+            /// <summary>
+            /// 获取字符串参数
+            /// </summary>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public MemeryUnits.String String(string name) {
+                var res = this[name];
+                if (res.UnitType == egg.Lark.MemeryUnits.UnitTypes.String) return (MemeryUnits.String)res;
+                throw new Exception($"函数的'{name}'参数不支持的类型'{res.UnitType.ToString()}'。");
+            }
+
+            /// <summary>
+            /// 获取数值参数
+            /// </summary>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public MemeryUnits.Number Number(string name) {
+                var res = this[name];
+                if (res.UnitType == egg.Lark.MemeryUnits.UnitTypes.Number) return (MemeryUnits.Number)res;
+                throw new Exception($"函数的'{name}'参数不支持的类型'{res.UnitType.ToString()}'。");
+            }
+
+            /// <summary>
+            /// 获取布尔参数
+            /// </summary>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public MemeryUnits.Boolean Boolean(string name) {
+                var res = this[name];
+                if (res.UnitType == egg.Lark.MemeryUnits.UnitTypes.Boolean) return (MemeryUnits.Boolean)res;
+                throw new Exception($"函数的'{name}'参数不支持的类型'{res.UnitType.ToString()}'。");
+            }
+
+            /// <summary>
+            /// 获取对象参数
+            /// </summary>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public MemeryUnits.Object Object(string name) {
+                var res = this[name];
+                if (res.UnitType == egg.Lark.MemeryUnits.UnitTypes.Object) return (MemeryUnits.Object)res;
+                throw new Exception($"函数的'{name}'参数不支持的类型'{res.UnitType.ToString()}'。");
+            }
+
+            /// <summary>
+            /// 获取列表参数
+            /// </summary>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public MemeryUnits.List List(string name) {
+                var res = this[name];
+                if (res.UnitType == egg.Lark.MemeryUnits.UnitTypes.List) return (MemeryUnits.List)res;
+                throw new Exception($"函数的'{name}'参数不支持的类型'{res.UnitType.ToString()}'。");
+            }
+
+            /// <summary>
+            /// 获取对象参数
+            /// </summary>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public MemeryUnits.NativeObject NativeObject(string name) {
+                var res = this[name];
+                if (res.UnitType == egg.Lark.MemeryUnits.UnitTypes.NativeObject) return (MemeryUnits.NativeObject)res;
+                throw new Exception($"函数的'{name}'参数不支持的类型'{res.UnitType.ToString()}'。");
+            }
+
+            /// <summary>
+            /// 获取函数参数
+            /// </summary>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public MemeryUnits.Function Function(string name) {
+                var res = this[name];
+                if (res.UnitType == egg.Lark.MemeryUnits.UnitTypes.Function) return (MemeryUnits.Function)res;
+                throw new Exception($"函数的'{name}'参数不支持的类型'{res.UnitType.ToString()}'。");
+            }
+        }
 
         /// <summary>
         /// 函数定义接口

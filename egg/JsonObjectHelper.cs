@@ -17,6 +17,7 @@ namespace egg {
         /// </summary>
         public static string String(this JsonObject obj, string key) {
             JsonNode node = obj[key];
+            if (eggs.IsNull(node)) return "";
             string nodeType = node.GetType().FullName;
             switch (nodeType) {
                 case "System.Text.Json.Nodes.JsonObject":
@@ -52,6 +53,7 @@ namespace egg {
         /// </summary>
         public static double Double(this JsonObject obj, string key) {
             JsonNode node = obj[key];
+            if (eggs.IsNull(node)) return 0;
             string nodeType = node.GetType().FullName;
             switch (nodeType) {
                 case "System.Text.Json.Nodes.JsonObject":
@@ -133,6 +135,7 @@ namespace egg {
         /// </summary>
         public static bool Bool(this JsonObject obj, string key) {
             JsonNode node = obj[key];
+            if (eggs.IsNull(node)) return false;
             string nodeType = node.GetType().FullName;
             switch (nodeType) {
                 case "System.Text.Json.Nodes.JsonObject":
