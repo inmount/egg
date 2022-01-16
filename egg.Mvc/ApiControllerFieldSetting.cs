@@ -56,12 +56,18 @@ namespace egg.Mvc {
         public DataTypes DataType { get; set; }
 
         /// <summary>
+        /// 获取或设置默认值
+        /// </summary>
+        public string DefaultValue { get; set; }
+
+        /// <summary>
         /// 对象实例化
         /// </summary>
         public ApiControllerFieldSetting() {
             this.Enabled = true;
             this.DataType = DataTypes.String;
             this.IsMust = false;
+            this.DefaultValue = "";
         }
 
     }

@@ -52,6 +52,12 @@ namespace egg.Mvc {
         /// 添加字段设定
         /// </summary>
         /// <param name="name"></param>
+        protected void AddConfig(string name, ApiControllerFieldSetting.DataTypes types, string defaultValue) { this.Configs.Add(new ApiControllerFieldSetting() { Name = name, DataType = types, IsMust = false, Enabled = true, DefaultValue = defaultValue }); }
+
+        /// <summary>
+        /// 添加字段设定
+        /// </summary>
+        /// <param name="name"></param>
         protected void AddConfig(string name, ApiControllerFieldSetting.DataTypes types, bool isMust = false, bool isEnable = true) { this.Configs.Add(new ApiControllerFieldSetting() { Name = name, DataType = types, IsMust = isMust, Enabled = isEnable }); }
 
         /// <summary>
@@ -108,6 +114,21 @@ namespace egg.Mvc {
         /// 设置字段设定
         /// </summary>
         /// <param name="name"></param>
+        protected void SetConfig(string name, string defaultValue) {
+            ApiControllerFieldSetting cfg = FindConfig(name);
+            if (eggs.IsNull(cfg)) {
+                AddConfig(name, ApiControllerFieldSetting.DataTypes.String, defaultValue);
+            } else {
+                cfg.DefaultValue = defaultValue;
+                cfg.IsMust = false;
+                cfg.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// 设置字段设定
+        /// </summary>
+        /// <param name="name"></param>
         protected void SetConfig(string name, ApiControllerFieldSetting.DataTypes types, bool isMust = false, bool isEnable = true) {
             ApiControllerFieldSetting cfg = FindConfig(name);
             if (eggs.IsNull(cfg)) {
@@ -116,6 +137,22 @@ namespace egg.Mvc {
                 cfg.DataType = types;
                 cfg.IsMust = isEnable;
                 cfg.Enabled = isEnable;
+            }
+        }
+
+        /// <summary>
+        /// 设置字段设定
+        /// </summary>
+        /// <param name="name"></param>
+        protected void SetConfig(string name, ApiControllerFieldSetting.DataTypes types, string defaultValue) {
+            ApiControllerFieldSetting cfg = FindConfig(name);
+            if (eggs.IsNull(cfg)) {
+                AddConfig(name, types, defaultValue);
+            } else {
+                cfg.DataType = types;
+                cfg.DefaultValue = defaultValue;
+                cfg.IsMust = false;
+                cfg.Enabled = true;
             }
         }
 
@@ -187,6 +224,10 @@ namespace egg.Mvc {
                             JResponse.SetFail($"缺少必要的 '{cfg.Name}' 参数");
                             return JResponse.ToJsonString();
                         }
+                    } else {
+                        if (!JRequest.Form.ContainsKey(cfg.Name)) {
+                            JRequest.Form[cfg.Name] = cfg.DefaultValue;
+                        }
                     }
                 }
 
@@ -216,6 +257,10 @@ namespace egg.Mvc {
                         if (!Request.Form.ContainsKey(cfg.Name)) {
                             JResponse.SetFail($"缺少必要的 '{cfg.Name}' 参数");
                             return JResponse.ToJsonString();
+                        }
+                    } else {
+                        if (!JRequest.Form.ContainsKey(cfg.Name)) {
+                            JRequest.Form[cfg.Name] = cfg.DefaultValue;
                         }
                     }
                 }
