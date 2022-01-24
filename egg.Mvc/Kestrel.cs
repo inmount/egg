@@ -39,6 +39,9 @@ namespace egg.Mvc {
             if (config.Enable) {
                 webBuilder.ConfigureKestrel(options => {
 
+                    // 不使用
+                    options.AddServerHeader = false;
+
                     // 判断是否启用HTTP配置
                     if (config.HttpEnable) {
                         // 填入配置中的监听端口
