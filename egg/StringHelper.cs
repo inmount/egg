@@ -11,6 +11,16 @@ namespace egg {
     public static class StringHelper {
 
         /// <summary>
+        /// 以安全的方式获取长度
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static int GetLength(this string s) {
+            if (s.IsEmpty()) return 0;
+            return s.Length;
+        }
+
+        /// <summary>
         /// 是否为空字符串
         /// </summary>
         public static bool IsNull(this string sz) {

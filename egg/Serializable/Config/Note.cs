@@ -2,31 +2,24 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace egg.File.Conf {
+namespace egg.Serializable.Config {
 
     /// <summary>
-    /// 配置项
+    /// 注释
     /// </summary>
-    public class Setting : Line {
+    public class Note : Line {
 
         /// <summary>
-        /// 获取或设置键
+        /// 获取或设置注释内容
         /// </summary>
-        public string Key { get; set; }
-
-        /// <summary>
-        /// 获取或设置值
-        /// </summary>
-        public string Value { get; set; }
+        public string Content { get; set; }
 
         /// <summary>
         /// 获取标准字符串表示形式
         /// </summary>
         /// <returns></returns>
         protected override string OnParseString() {
-            if (this.Value == null) return this.Key;
-            return $"{this.Key} = {this.Value}";
-
+            return $"#{Content}";
         }
 
         /// <summary>
@@ -34,8 +27,7 @@ namespace egg.File.Conf {
         /// </summary>
         protected override void OnDispose() {
 
-            this.Key = null;
-            this.Value = null;
+            Content = null;
 
             base.OnDispose();
         }

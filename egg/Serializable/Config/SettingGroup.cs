@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace egg.File.Conf {
+namespace egg.Serializable.Config {
 
     /// <summary>
     /// 设置组
     /// </summary>
-    public class SettingGroup : egg.BasicObject {
+    public class SettingGroup : BasicObject {
 
         /// <summary>
         /// 获取或设置名称
@@ -96,6 +96,10 @@ namespace egg.File.Conf {
         /// <param name="key"></param>
         /// <param name="value"></param>
         public void Set(string key, string value = null) {
+            // 进行字符串兼容
+            if (value.GetLength() >= 2) {
+                if (value.StartsWith("\"") && value.EndsWith("\"")) value = value.Substring(1, value.Length - 2);
+            }
             for (int i = 0; i < settings.Count; i++) {
                 Setting setting = settings[i];
                 if (setting.Key == key) {
@@ -141,7 +145,7 @@ namespace egg.File.Conf {
         /// <returns></returns>
         protected override string OnParseString() {
             string res = "";
-            if (this.Name != "") res += $"[{this.Name}]\r\n";
+            if (Name != "") res += $"[{Name}]\r\n";
 
             for (int i = 0; i < lines.Count; i++) {
                 Line line = lines[i];

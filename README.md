@@ -4,7 +4,7 @@
 ## 支持框架
 | 组件 | 目前基于版本 | 旧版本版本及框架 | Nuget地址 |
 | ---- | ----- | ---- | ---- |
-| egg | .Net Standard 2.0 | 6.x/.Net 6 | <https://www.nuget.org/packages/egg> |
+| egg | .Net Standard 2.1 | 6.x/.Net 6 | <https://www.nuget.org/packages/egg> |
 
 ## 特别说明
 自2022年5月开始，为了增加套件的兼容性，大多数基础类将往低版本迁移
