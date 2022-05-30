@@ -136,10 +136,9 @@ namespace egg {
         public BasicObject this[long boid] { get { return GetObjectById(boid); } }
 
         /// <summary>
-        /// 释放对象
+        /// 清除所有成员对象
         /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
-        public void Dispose() {
+        public void Clear() {
             for (int i = objects.Count - 1; i >= 0; i--) {
                 BasicObject obj = objects[i];
                 objects.RemoveAt(i);
@@ -148,6 +147,14 @@ namespace egg {
                 obj.Dispose();
             }
             objects.Clear();
+        }
+
+        /// <summary>
+        /// 释放对象
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public void Dispose() {
+            this.Clear();
             objects = null;
         }
 
