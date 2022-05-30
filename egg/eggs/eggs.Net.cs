@@ -163,9 +163,9 @@ public partial class eggs {
         ///// </summary>
         ///// <param name="url"></param>
         ///// <returns></returns>
-        //public static egg.Html.HtmlDocument GetHttpHtmlDocument(string url) {
+        //public static egg.Serializable.Html.HtmlDocument GetHttpHtmlDocument(string url) {
         //    string html = egg.Net.HttpClient.Get(url);
-        //    return egg.Html.Parser.GetDocument(html);
+        //    return egg.Serializable.Html.Parser.GetDocument(html);
         //}
 
     }

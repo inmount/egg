@@ -7,7 +7,7 @@ namespace egg.Serializable.Config {
     /// <summary>
     /// Linux系统常见配置类型
     /// </summary>
-    public class Document : BasicObject, ISerializable {
+    public class Document : Serializable.Document {
 
         /// <summary>
         /// 获取全部的配置组
@@ -74,14 +74,9 @@ namespace egg.Serializable.Config {
             this.Groups.Clear();
         }
 
-        /// <summary>
-        /// 反序列化内容填充
-        /// </summary>
-        /// <param name="val"></param>
-        /// <param name="offset"></param>
-        /// <param name="count"></param>
-        public void Deserialize(byte[] val, int offset = 0, int count = 0) {
-            Deserialize(System.Text.Encoding.UTF8.GetString(val, offset, count));
+        // 反序列化内容填充
+        protected override void OnDeserialize(Span<byte> bytes) {
+            Deserialize(System.Text.Encoding.UTF8.GetString(bytes));
         }
 
         /// <summary>
@@ -125,12 +120,8 @@ namespace egg.Serializable.Config {
             }
         }
 
-        /// <summary>
-        /// 内容序列化到字节数组
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public byte[] SerializeToBytes() {
+        // 内容序列化到字节数组
+        protected override byte[] OnSerializeToBytes() {
             return System.Text.Encoding.UTF8.GetBytes(SerializeToString());
         }
 

@@ -138,6 +138,39 @@ namespace egg {
         }
 
         /// <summary>
+        /// 使用Unicode进行字符串编码
+        /// </summary>
+        public static string UnicodeCoding(this string sz) {
+            char[] charbuffers = sz.ToCharArray();
+            byte[] buffer;
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < charbuffers.Length; i++) {
+                buffer = System.Text.Encoding.Unicode.GetBytes(charbuffers[i].ToString());
+                sb.Append(System.String.Format("\\u{0:X2}{1:X2}", buffer[1], buffer[0]));
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// 使用Unicode进行字符串解码
+        /// </summary>
+        public static string UnicodeDecoding(this string sz) {
+            StringBuilder sb = new StringBuilder();
+            string src = sz;
+            int len = sz.Length / 6;
+            for (int i = 0; i <= len - 1; i++) {
+                string str = "";
+                str = src.Substring(0, 6).Substring(2);
+                src = src.Substring(6);
+                byte[] bytes = new byte[2];
+                bytes[1] = byte.Parse(int.Parse(str.Substring(0, 2), System.Globalization.NumberStyles.HexNumber).ToString());
+                bytes[0] = byte.Parse(int.Parse(str.Substring(2, 2), System.Globalization.NumberStyles.HexNumber).ToString());
+                sb.Append(Encoding.Unicode.GetString(bytes));
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
         /// 获取字符串的MD5值
         /// </summary>
         public static string GetMD5(this string sz) {

@@ -33,8 +33,8 @@ namespace egg.Serializable.Json {
         /// <param name="bytes"></param>
         /// <param name="offset"></param>
         /// <param name="count"></param>
-        public void Deserialize(byte[] bytes, int offset = 0, int count = 0) {
-            Deserialize(System.Text.Encoding.UTF8.GetString(bytes, offset, count));
+        public void Deserialize(Span<byte> bytes) {
+            Deserialize(System.Text.Encoding.UTF8.GetString(bytes));
         }
 
         /// <summary>

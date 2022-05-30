@@ -66,6 +66,13 @@ namespace egg.Serializable.Json {
             this.Objects.Clear();
         }
 
+        // 释放资源
+        protected override void OnDispose() {
+            this.Clear();
+            nodes = null;
+            base.OnDispose();
+        }
+
         // 获取序列化内容
         protected override string OnSerialize() {
             StringBuilder sb = new StringBuilder();

@@ -15,7 +15,7 @@ namespace egg.Serializable {
         /// <param name="bytes"></param>
         /// <param name="offset"></param>
         /// <param name="count"></param>
-        void Deserialize(byte[] bytes, int offset = 0, int count = 0);
+        void Deserialize(Span<byte> bytes);
 
         /// <summary>
         /// 反序列化字符串内容

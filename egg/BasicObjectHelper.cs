@@ -17,5 +17,12 @@ namespace egg {
             return eggs.IsNull(obj);
         }
 
+        /// <summary>
+        /// 释放对象，可兼容为空处理
+        /// </summary>
+        public static void Destroy(this BasicObject obj) {
+            if (!obj.IsNull()) obj.Dispose();
+        }
+
     }
 }
