@@ -19,12 +19,20 @@ namespace egg.Serializable.Json {
             nodes = new List<Node>();
         }
 
-        // 获取数量
+        /// <summary>
+        /// 获取数量
+        /// </summary>
+        /// <returns></returns>
         protected override int OnGetItemCount() {
             return nodes.Count;
         }
 
-        // 获取一个子对象
+        /// <summary>
+        /// 获取一个子对象
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="autoCreate"></param>
+        /// <returns></returns>
         protected override Node OnGetIndexItem(int index, bool autoCreate) {
             int count = nodes.Count;
             if (count > index) return nodes[index];

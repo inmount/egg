@@ -23,7 +23,7 @@ namespace egg {
         /// </summary>
         public Object BoOwner {
             get {
-                if (eggs.IsNull(this.BoManager)) return null;
+                if (eggs.Object.IsNull(this.BoManager)) return null;
                 return this.BoManager.Owner;
             }
         }

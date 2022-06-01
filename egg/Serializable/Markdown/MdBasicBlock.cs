@@ -34,7 +34,7 @@ namespace egg.Serializable.Markdown {
         /// </summary>
         /// <returns></returns>
         public string GetSpace() {
-            if (eggs.IsNull(this.ParentBlock)) {
+            if (this.ParentBlock.IsNull()) {
                 return "";
             } else {
                 StringBuilder sb = new StringBuilder();
@@ -49,7 +49,7 @@ namespace egg.Serializable.Markdown {
         /// </summary>
         /// <returns></returns>
         public string GetFullLevelString() {
-            if (eggs.IsNull(this.ParentBlock)) {
+            if (this.ParentBlock.IsNull()) {
                 return this.LevelString;
             } else {
                 StringBuilder sb = new StringBuilder();

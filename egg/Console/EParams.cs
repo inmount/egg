@@ -13,7 +13,6 @@ namespace egg.Console {
         /// 对象实例化
         /// </summary>
         /// <param name="args"></param>
-        /// <param name="tags"></param>
         public EParams(string[] args = null) {
             // 获取参数
             for (int i = 0; i < args.Length; i++) {

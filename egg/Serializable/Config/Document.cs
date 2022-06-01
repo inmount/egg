@@ -74,7 +74,10 @@ namespace egg.Serializable.Config {
             this.Groups.Clear();
         }
 
-        // 反序列化内容填充
+        /// <summary>
+        /// 反序列化内容填充
+        /// </summary>
+        /// <param name="bytes"></param>
         protected override void OnDeserialize(Span<byte> bytes) {
             Deserialize(System.Text.Encoding.UTF8.GetString(bytes));
         }
@@ -120,7 +123,10 @@ namespace egg.Serializable.Config {
             }
         }
 
-        // 内容序列化到字节数组
+        /// <summary>
+        /// 内容序列化到字节数组
+        /// </summary>
+        /// <returns></returns>
         protected override byte[] OnSerializeToBytes() {
             return System.Text.Encoding.UTF8.GetBytes(SerializeToString());
         }

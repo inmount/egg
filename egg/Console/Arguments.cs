@@ -18,7 +18,7 @@ namespace egg.Console {
 
             string sign = null;
             string value = null;
-            if (eggs.IsNull(tags)) tags = new string[] { "-", "/" };
+            if (eggs.Object.IsNull(tags)) tags = new string[] { "-", "/" };
 
             // 获取参数
             for (int i = 0; i < args.Length; i++) {

@@ -13,8 +13,6 @@ namespace egg.Serializable {
         /// 反序列化字节内容
         /// </summary>
         /// <param name="bytes"></param>
-        /// <param name="offset"></param>
-        /// <param name="count"></param>
         void Deserialize(Span<byte> bytes);
 
         /// <summary>

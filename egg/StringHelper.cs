@@ -24,7 +24,7 @@ namespace egg {
         /// 是否为空字符串
         /// </summary>
         public static bool IsNull(this string sz) {
-            return eggs.IsNull(sz);
+            return eggs.Object.IsNull(sz);
         }
 
         /// <summary>

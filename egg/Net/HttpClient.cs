@@ -18,14 +18,41 @@ namespace egg.Net {
         /// 支持的方法
         /// </summary>
         public enum Methods {
+            /// <summary>
+            /// GET方法
+            /// </summary>
             GET = 0x01,
+            /// <summary>
+            /// POST方法
+            /// </summary>
             POST = 0x02,
+            /// <summary>
+            /// HEAD方法
+            /// </summary>
             HEAD = 0x03,
+            /// <summary>
+            /// OPTIONS方法
+            /// </summary>
             OPTIONS = 0x11,
+            /// <summary>
+            /// PUT方法
+            /// </summary>
             PUT = 0x12,
+            /// <summary>
+            /// PATCH方法
+            /// </summary>
             PATCH = 0x13,
+            /// <summary>
+            /// DELETE方法
+            /// </summary>
             DELETE = 0x14,
+            /// <summary>
+            /// TRACE方法
+            /// </summary>
             TRACE = 0x15,
+            /// <summary>
+            /// CONNECT方法
+            /// </summary>
             CONNECT = 0x16
         }
 
@@ -71,6 +98,7 @@ namespace egg.Net {
         /// 对象实例化
         /// </summary>
         /// <param name="url"></param>
+        /// <param name="headers"></param>
         public HttpClient(string url, HttpModules.HttpHeaders headers) {
             // 初始化属性
             this.Method = Methods.GET;
@@ -92,7 +120,6 @@ namespace egg.Net {
         /// <summary>
         /// 获取内容
         /// </summary>
-        /// <param name="url"></param>
         /// <returns></returns>
         public string GetContent() {
 
@@ -148,8 +175,6 @@ namespace egg.Net {
         /// 上传文件并获取数据
         /// </summary>
         /// <param name="path"></param>
-        /// <param name="url"></param>
-        /// <param name="headers"></param>
         /// <returns></returns>
         public string UploadFile(string path) {
             // 新建一个Handler
@@ -183,7 +208,6 @@ namespace egg.Net {
         /// <summary>
         /// 下载文件
         /// </summary>
-        /// <param name="url"></param>
         /// <param name="path"></param>
         /// <param name="downloading"></param>
         public void Download(string path, DownloadingDelegate downloading = null) {

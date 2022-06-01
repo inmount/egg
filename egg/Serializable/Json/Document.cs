@@ -21,7 +21,10 @@ namespace egg.Serializable.Json {
             this.RootNode = null;
         }
 
-        // 反序列化内容填充
+        /// <summary>
+        /// 反序列化内容填充
+        /// </summary>
+        /// <param name="bytes"></param>
         protected override void OnDeserialize(Span<byte> bytes) {
             if (bytes.Length > 0) {
                 this.RootNode = eggs.Json.Parse(System.Text.Encoding.UTF8.GetString(bytes));
@@ -30,12 +33,17 @@ namespace egg.Serializable.Json {
             }
         }
 
-        // 内容序列化到字节数组
+        /// <summary>
+        /// 内容序列化到字节数组
+        /// </summary>
+        /// <returns></returns>
         protected override byte[] OnSerializeToBytes() {
             return this.RootNode.SerializeToBytes();
         }
 
-        // 释放资源
+        /// <summary>
+        /// 释放资源
+        /// </summary>
         protected override void OnDispose() {
             if (!this.RootNode.IsNull()) this.RootNode.Dispose();
             base.OnDispose();

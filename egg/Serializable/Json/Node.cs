@@ -90,10 +90,6 @@ namespace egg.Serializable.Json {
             base.OnDispose();
         }
 
-        #region [=====标准操作接口=====]
-
-        #endregion
-
         #region [=====对象节点操作接口=====]
 
         /// <summary>
@@ -203,7 +199,7 @@ namespace egg.Serializable.Json {
         /// <returns></returns>
         public Object Object(string key) {
             Node node = OnGetKeyItem(key, false);
-            if (eggs.IsNull(node)) {
+            if (node.IsNull()) {
                 OnSetKeyItem(key, new Object());
                 return (Object)OnGetKeyItem(key, false);
             }
@@ -222,7 +218,7 @@ namespace egg.Serializable.Json {
         /// <returns></returns>
         public List List(string key) {
             Node node = OnGetKeyItem(key, false);
-            if (eggs.IsNull(node)) {
+            if (node.IsNull()) {
                 OnSetKeyItem(key, new List());
                 return (List)OnGetKeyItem(key, false);
             }
@@ -329,7 +325,7 @@ namespace egg.Serializable.Json {
         /// <returns></returns>
         public Object Object(int index) {
             Node node = OnGetIndexItem(index, false);
-            if (eggs.IsNull(node)) {
+            if (node.IsNull()) {
                 OnSetIndexItem(index, new Object());
                 return (Object)OnGetIndexItem(index, false);
             }
@@ -348,7 +344,7 @@ namespace egg.Serializable.Json {
         /// <returns></returns>
         public List List(int index) {
             Node node = OnGetIndexItem(index, false);
-            if (eggs.IsNull(node)) {
+            if (node.IsNull()) {
                 OnSetIndexItem(index, new List());
                 return (List)OnGetIndexItem(index, false);
             }
@@ -404,6 +400,122 @@ namespace egg.Serializable.Json {
         /// <returns></returns>
         public bool ToBoolean() { return OnParseBoolean(); }
 
+
+        #endregion
+
+        #region [=====赋值转化接口=====]
+
+        /// <summary>
+        /// 赋值为布尔型
+        /// </summary>
+        /// <param name="node">节点</param>
+        public static implicit operator bool(Node node) {
+            return node.ToBoolean();
+        }
+
+        /// <summary>
+        /// 从布尔型建立对象
+        /// </summary>
+        /// <param name="value">内容</param>
+        public static implicit operator Node(bool value) {
+            return new Boolean() { Value = value };
+        }
+
+        /// <summary>
+        /// 赋值为字节型数值
+        /// </summary>
+        /// <param name="node">节点</param>
+        public static implicit operator byte(Node node) {
+            return (byte)node.ToNumber();
+        }
+
+        /// <summary>
+        /// 从字节型数据建立对象
+        /// </summary>
+        /// <param name="value">内容</param>
+        public static implicit operator Node(byte value) {
+            return new Number() { Value = value };
+        }
+
+        /// <summary>
+        /// 赋值为整型数值
+        /// </summary>
+        /// <param name="node">节点</param>
+        public static implicit operator int(Node node) {
+            return (int)node.ToNumber();
+        }
+
+        /// <summary>
+        /// 从整型数据建立对象
+        /// </summary>
+        /// <param name="value">内容</param>
+        public static implicit operator Node(int value) {
+            return new Number() { Value = value };
+        }
+
+        /// <summary>
+        /// 赋值为长整型数值
+        /// </summary>
+        /// <param name="node">节点</param>
+        public static implicit operator long(Node node) {
+            return (long)node.ToNumber();
+        }
+
+        /// <summary>
+        /// 从长整型数据建立对象
+        /// </summary>
+        /// <param name="value">内容</param>
+        public static implicit operator Node(long value) {
+            return new Number() { Value = value };
+        }
+
+        /// <summary>
+        /// 赋值为浮点型数值
+        /// </summary>
+        /// <param name="node">节点</param>
+        public static implicit operator float(Node node) {
+            return (float)node.ToNumber();
+        }
+
+        /// <summary>
+        /// 从浮点型数据建立对象
+        /// </summary>
+        /// <param name="value">内容</param>
+        public static implicit operator Node(float value) {
+            return new Number() { Value = value };
+        }
+
+        /// <summary>
+        /// 赋值为双精度浮点型数值
+        /// </summary>
+        /// <param name="node">节点</param>
+        public static implicit operator double(Node node) {
+            return node.ToNumber();
+        }
+
+        /// <summary>
+        /// 从双精度浮点型数据建立对象
+        /// </summary>
+        /// <param name="value">内容</param>
+        public static implicit operator Node(double value) {
+            return new Number() { Value = value };
+        }
+
+        /// <summary>
+        /// 赋值为字符串
+        /// </summary>
+        /// <param name="node">节点</param>
+        public static implicit operator string(Node node) {
+            return node.ToString();
+        }
+
+        /// <summary>
+        /// 从字符串建立对象
+        /// </summary>
+        /// <param name="value">内容</param>
+        public static implicit operator Node(string value) {
+            return new String() { Value = value };
+        }
 
         #endregion
 

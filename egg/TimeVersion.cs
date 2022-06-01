@@ -36,7 +36,7 @@ namespace egg {
 
         // 设置默认版本
         private void SetDefaultVersion() {
-            var t = eggs.GetNow();
+            var t = eggs.Time.GetNow();
             this.Year = 1;
             this.Month = 0;
             this.Sign = (t.Year % 100) * 100 + t.Month;
@@ -48,7 +48,7 @@ namespace egg {
         /// </summary>
         /// <returns></returns>
         public TimeVersion GetNextVersion() {
-            var t = eggs.GetNow();
+            var t = eggs.Time.GetNow();
             int y = this.Year;
             int m = this.Month;
 

@@ -2,12 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>12.3.2205.36</Version>
+    <Version>12.3.2205.39</Version>
     <Authors>Egg Stuido</Authors>
     <Company>Egg Stuido</Company>
     <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/inmount/egg</RepositoryUrl>
+    <Description>Egg开发套件基础件，包含基础类型扩展、文件处理、常见协议解析处理(json/xml/html/css)及网络资源访问</Description>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

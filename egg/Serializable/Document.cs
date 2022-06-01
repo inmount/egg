@@ -12,24 +12,17 @@ namespace egg.Serializable {
         /// 反序列化
         /// </summary>
         /// <param name="bytes"></param>
-        /// <param name="offset"></param>
-        /// <param name="count"></param>
         protected virtual void OnDeserialize(Span<byte> bytes) { }
 
         /// <summary>
         /// 序列化
         /// </summary>
-        /// <param name="bytes"></param>
-        /// <param name="offset"></param>
-        /// <param name="count"></param>
         protected virtual byte[] OnSerializeToBytes() { return null; }
 
         /// <summary>
         /// 反序列化
         /// </summary>
         /// <param name="bytes"></param>
-        /// <param name="offset"></param>
-        /// <param name="count"></param>
         public void Deserialize(Span<byte> bytes) {
             this.OnDeserialize(bytes);
         }

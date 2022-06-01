@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32519.379
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "egg.db.Sqlite", "egg.db.Sqlite.csproj", "{0139DCBE-3838-4C5C-84E7-CA8CA610F682}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0139DCBE-3838-4C5C-84E7-CA8CA610F682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0139DCBE-3838-4C5C-84E7-CA8CA610F682}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0139DCBE-3838-4C5C-84E7-CA8CA610F682}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0139DCBE-3838-4C5C-84E7-CA8CA610F682}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7D48998C-BEF6-4A09-B899-01A5C364D521}
+	EndGlobalSection
+EndGlobal

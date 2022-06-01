@@ -27,9 +27,9 @@ namespace egg.Serializable.Html {
         /// </summary>
         /// <param name="node"></param>
         public new void Add(Node node) {
-            egg.Debug.WriteLine("Add");
+            eggs.Debug.WriteLine("Add");
             if (this.Parent != null) {
-                egg.Debug.WriteLine("Add -> Parent is On");
+                eggs.Debug.WriteLine("Add -> Parent is On");
                 node.Parent = this.Parent;
             }
             base.Add(node);

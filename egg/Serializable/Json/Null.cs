@@ -29,5 +29,10 @@ namespace egg.Serializable.Json {
         protected override bool OnCheckNull() {
             return true;
         }
+
+        /// <summary>
+        /// 获取一个空实体
+        /// </summary>
+        public static Null Entity { get { return new Null(); } }
     }
 }

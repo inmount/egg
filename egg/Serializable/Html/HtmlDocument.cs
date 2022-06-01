@@ -56,7 +56,6 @@ namespace egg.Serializable.Html {
         /// <summary>
         /// 对象实例化
         /// </summary>
-        /// <param name="html"></param>
         public HtmlDocument() {
             this.Nodes = new HtmlNodeCollection();
             // 填充默认节点
@@ -241,7 +240,10 @@ namespace egg.Serializable.Html {
             }
         }
 
-        // 反序列化内容填充
+        /// <summary>
+        /// 反序列化内容填充
+        /// </summary>
+        /// <param name="bytes"></param>
         protected override void OnDeserialize(Span<byte> bytes) {
             if (bytes.Length > 0) {
                 this.Nodes.Clear();
@@ -254,7 +256,10 @@ namespace egg.Serializable.Html {
             this.FillDefaultNode();
         }
 
-        // 内容序列化到字节数组
+        /// <summary>
+        /// 内容序列化到字节数组
+        /// </summary>
+        /// <returns></returns>
         protected override byte[] OnSerializeToBytes() {
             return System.Text.Encoding.UTF8.GetBytes(this.InnerHTML);
         }

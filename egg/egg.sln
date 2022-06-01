@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "egg", "egg.csproj", "{0D497F6F-7B12-443A-AA85-70C466AD633C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "egg", "egg.csproj", "{0D497F6F-7B12-443A-AA85-70C466AD633C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{00667D54-D72F-4392-8A50-15BF95F99005}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

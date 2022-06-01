@@ -173,7 +173,7 @@ namespace egg.Net.HttpModules {
                                         //获取主体长度并定义主体
                                         string lenStr = System.Text.Encoding.ASCII.GetString(bodyLen.ToArray());
                                         int len = Convert.ToInt32(lenStr, 16);
-                                        egg.Debug.WriteLine($" [+]Find '\\r',rnCount:{len}");
+                                        eggs.Debug.WriteLine($" [+]Find '\\r',rnCount:{len}");
                                         body = new byte[len];
                                         bodyIndex = 0;
                                         isBody = true;

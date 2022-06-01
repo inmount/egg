@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>disable</Nullable>
+    <Authors>Egg Studio</Authors>
+    <Description>Egg开发套件中的基于Json的封装协议</Description>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/inmount/egg</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/inmount/egg</PackageProjectUrl>
+    <Version>12.2.2205.15</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\icon\logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="egg" Version="12.3.2205.39" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
