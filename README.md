@@ -6,7 +6,12 @@
 | ---- | ----- | ---- | ---- |
 | egg | .Net Standard 2.1 | 基础组件 | <https://www.nuget.org/packages/egg> |
 | egg.db | .Net Standard 2.1 | 数据库组件 | <https://www.nuget.org/packages/egg.db> |
+| egg.db.MicrosoftSqlServer | .Net Standard 2.1 | SqlServer数据库组件 | <https://www.nuget.org/packages/egg.db.MicrosoftSqlServer> |
+| egg.db.MySql | .Net Standard 2.1 | MySql数据库组件 | <https://www.nuget.org/packages/egg.db.MySql> |
+| egg.db.PostgreSql | .Net Standard 2.1 | PostgreSql数据库组件 | <https://www.nuget.org/packages/egg.db.PostgreSql> |
+| egg.db.Sqlite | .Net Standard 2.1 | Sqlite数据库组件 | <https://www.nuget.org/packages/egg.db.Sqlite> |
 | egg.Jttp | .Net Standard 2.1 | Json自定协议组件 | <https://www.nuget.org/packages/egg.Jttp> |
+| egg.Lark | .Net Standard 2.1 | 百灵鸟脚本引擎组件 | <https://www.nuget.org/packages/egg.Jttp> |
 | egg.Mvc | .Net 6 | Asp.Net相关组件 | <https://www.nuget.org/packages/egg.Mvc> |
 
 ## 特别说明
