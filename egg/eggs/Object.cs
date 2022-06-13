@@ -12,17 +12,22 @@ namespace eggs {
     /// </summary>
     public static class Object {
 
-        // 基础对象管理器
-        private static BasicObjectsMnanger objects = null;
-
         /// <summary>
         /// 获取基础对象管理器
         /// </summary>    
-        public static BasicObjectsMnanger Objects {
-            get {
-                if (IsNull(objects)) objects = new BasicObjectsMnanger();
-                return objects;
-            }
+        public static BasicObjectsMnanger Objects { get; private set; }
+
+        /// <summary>
+        /// 获取系统空对象
+        /// </summary>
+        public static None None { get; private set; }
+
+        /// <summary>
+        /// 初始化静态类
+        /// </summary>
+        static Object() {
+            Objects = new BasicObjectsMnanger();
+            None = new None();
         }
 
         /// <summary>

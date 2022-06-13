@@ -21,7 +21,10 @@ namespace egg.Serializable.Markdown {
             this.Root = null;
         }
 
-        // 反序列化内容填充
+        /// <summary>
+        /// 反序列化内容填充
+        /// </summary>
+        /// <param name="bytes"></param>
         protected override void OnDeserialize(Span<byte> bytes) {
             if (bytes.Length > 0) {
                 this.Root = eggs.Markdown.GetDocument(System.Text.Encoding.UTF8.GetString(bytes));
@@ -30,14 +33,19 @@ namespace egg.Serializable.Markdown {
             }
         }
 
-        // 内容序列化到字节数组
+        /// <summary>
+        /// 内容序列化到字节数组
+        /// </summary>
+        /// <returns></returns>
         protected override byte[] OnSerializeToBytes() {
             return System.Text.Encoding.UTF8.GetBytes(this.Root.ToMarkdown());
         }
 
-        // 释放资源
+        /// <summary>
+        /// 释放资源
+        /// </summary>
         protected override void OnDispose() {
-            this.Root.Destroy();
+            this.Root.Dispose();
             base.OnDispose();
         }
 

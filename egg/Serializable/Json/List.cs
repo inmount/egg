@@ -47,7 +47,11 @@ namespace egg.Serializable.Json {
             }
         }
 
-        // 设置一个子对象
+        /// <summary>
+        /// 设置一个子对象
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="node"></param>
         protected override void OnSetIndexItem(int index, Node node) {
             int count = nodes.Count;
             if (count > index) {
@@ -68,20 +72,27 @@ namespace egg.Serializable.Json {
             nodes.Add(node);
         }
 
-        // 清理对象
+        /// <summary>
+        /// 清理对象
+        /// </summary>
         protected override void OnClear() {
             nodes.Clear();
             this.Objects.Clear();
         }
 
-        // 释放资源
+        /// <summary>
+        /// 释放资源
+        /// </summary>
         protected override void OnDispose() {
             this.Clear();
             nodes = null;
             base.OnDispose();
         }
 
-        // 获取序列化内容
+        /// <summary>
+        /// 获取序列化内容
+        /// </summary>
+        /// <returns></returns>
         protected override string OnSerialize() {
             StringBuilder sb = new StringBuilder();
             sb.Append("[");

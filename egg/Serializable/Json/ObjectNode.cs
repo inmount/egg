@@ -22,15 +22,13 @@ namespace egg.Serializable.Json {
             this.Objects = new BasicObjectsMnanger(this);
         }
 
-        // 释放资源
+        /// <summary>
+        /// 释放资源
+        /// </summary>
         protected override void OnDispose() {
             this.Objects.Dispose();
             base.OnDispose();
         }
-
-        // 不支持的操作
-        private new double ToNumber() { throw new Exception("不支持的操作"); }
-        private new double ToBoolean() { throw new Exception("不支持的操作"); }
 
     }
 }

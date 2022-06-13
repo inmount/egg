@@ -23,7 +23,7 @@ namespace test {
             using (var f = eggs.IO.OpenJsonDocument("X:\\temp.json")) {
                 var obj = f.Document.RootNode;
                 //var obj = new egg.Serializable.Json.Object();
-                string json = "{\"Timestamp\":\"1653910554\",\"Token\":\"这是令牌\",\"Form\":{}}";
+                string json = "{\"Result\":1,\"Datas\":[{\"ID\":\"1\",\"Name\":\"/u65E0/u540D\",\"Score\":\"0\"},{\"ID\":\"2\",\"Name\":\"/u65E0/u540D\",\"Score\":\"0\"}]}";
                 //var obj = eggs.Json.Parse(json);
                 obj.Json("header", json);
                 if (obj.Keys.Contains("Index")) {
@@ -39,9 +39,9 @@ namespace test {
             using (var f = eggs.IO.OpenXmlDocument("X:\\temp.xml")) {
                 var doc = f.Document;
                 var root = doc["root"];
-                if (root.IsNull()) root = doc.AddNode("root");
+                if (root == null) root = doc.AddNode("root");
                 var header = root["header"];
-                if (header.IsNull()) header = root.AddNode("header");
+                if (header == null) header = root.AddNode("header");
                 if (header.Attr["Index"].ToInteger() <= 0) {
                     header.Attr["Index"] = "1";
                 } else {
@@ -75,7 +75,7 @@ namespace test {
             }
             // 对象为空测试
             egg.KeyStrings sz = null;
-            Console.WriteLine($"sz:{sz.IsNull()}");
+            Console.WriteLine($"sz:{sz == null}");
             // Unicode测试
             string us = "我爱北京天安门，OK";
             Console.WriteLine(us.UnicodeCoding());

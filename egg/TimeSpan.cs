@@ -21,7 +21,8 @@ namespace egg {
         /// <summary>
         /// 对象实例化
         /// </summary>
-        /// <param name="dt"></param>
+        /// <param name="t1"></param>
+        /// <param name="t2"></param>
         public TimeSpan(Time t1, Time t2) {
             ts = (int)(t1.ToMillisecondsTimeStamp() - t2.ToMillisecondsTimeStamp());
         }
@@ -29,8 +30,7 @@ namespace egg {
         /// <summary>
         /// 对象实例化
         /// </summary>
-        /// <param name="tsp"></param>
-        /// <param name="hasMilliseconds"></param>
+        /// <param name="ms"></param>
         public TimeSpan(int ms = 0) {
             ts = ms;
         }
@@ -38,8 +38,11 @@ namespace egg {
         /// <summary>
         /// 对象实例化
         /// </summary>
-        /// <param name="tsp"></param>
-        /// <param name="hasMilliseconds"></param>
+        /// <param name="days"></param>
+        /// <param name="hours"></param>
+        /// <param name="minutes"></param>
+        /// <param name="seconds"></param>
+        /// <param name="milliseconds"></param>
         public TimeSpan(int days = 0, int hours = 0, int minutes = 0, int seconds = 0, int milliseconds = 0) {
             ts = 0;
             if (days != 0) ts += days * MS_Day;
@@ -97,14 +100,11 @@ namespace egg {
         /// <summary>
         /// 获取调整后的时间
         /// </summary>
-        /// <param name="years"></param>
-        /// <param name="months"></param>
         /// <param name="days"></param>
         /// <param name="hours"></param>
         /// <param name="minutes"></param>
         /// <param name="seconds"></param>
         /// <param name="milliseconds"></param>
-        /// <returns></returns>
         public void Change(int days = 0, int hours = 0, int minutes = 0, int seconds = 0, int milliseconds = 0) {
             if (days != 0) ts += days * MS_Day;
             if (hours != 0) ts += hours * MS_Hour;
@@ -116,14 +116,7 @@ namespace egg {
         /// <summary>
         /// 获取调整后的时间
         /// </summary>
-        /// <param name="years"></param>
-        /// <param name="months"></param>
-        /// <param name="days"></param>
-        /// <param name="hours"></param>
-        /// <param name="minutes"></param>
-        /// <param name="seconds"></param>
-        /// <param name="milliseconds"></param>
-        /// <returns></returns>
+        /// <param name="tsp"></param>
         public void Change(TimeSpan tsp) {
             ts += tsp.Milliseconds;
         }

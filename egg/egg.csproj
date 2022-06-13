@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>12.3.2205.39</Version>
+    <Version>12.4.2206.43</Version>
     <Authors>Egg Stuido</Authors>
     <Company>Egg Stuido</Company>
     <PackageIcon>logo.png</PackageIcon>

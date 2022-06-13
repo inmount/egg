@@ -45,6 +45,7 @@ namespace eggs {
         /// 根据URL获取超文本内容
         /// </summary>
         /// <param name="url"></param>
+        /// <param name="headers"></param>
         /// <returns></returns>
         public static string GetHttpContent(string url, egg.Net.HttpModules.HttpHeaders headers) {
             using (egg.Net.HttpClient http = new egg.Net.HttpClient(url, headers)) {
@@ -56,6 +57,7 @@ namespace eggs {
         /// 根据URL提交数据并获取超文本内容
         /// </summary>
         /// <param name="url"></param>
+        /// <param name="postData"></param>
         /// <returns></returns>
         public static string GetHttpContent(string url, string postData) {
             using (egg.Net.HttpClient http = new egg.Net.HttpClient(url)) {
@@ -69,6 +71,8 @@ namespace eggs {
         /// 根据URL提交数据并获取超文本内容
         /// </summary>
         /// <param name="url"></param>
+        /// <param name="postData"></param>
+        /// <param name="headers"></param>
         /// <returns></returns>
         public static string GetHttpContent(string url, string postData, egg.Net.HttpModules.HttpHeaders headers) {
             using (egg.Net.HttpClient http = new egg.Net.HttpClient(url, headers)) {
@@ -81,6 +85,7 @@ namespace eggs {
         /// <summary>
         /// 上传文件并获取超文本内容
         /// </summary>
+        /// <param name="path"></param>
         /// <param name="url"></param>
         /// <returns></returns>
         public static string UploadFile(string path, string url) {
@@ -92,7 +97,9 @@ namespace eggs {
         /// <summary>
         /// 上传文件并获取超文本内容
         /// </summary>
+        /// <param name="path"></param>
         /// <param name="url"></param>
+        /// <param name="headers"></param>
         /// <returns></returns>
         public static string UploadFile(string path, string url, egg.Net.HttpModules.HttpHeaders headers) {
             using (egg.Net.HttpClient http = new egg.Net.HttpClient(url, headers)) {
@@ -103,8 +110,8 @@ namespace eggs {
         /// <summary>
         /// 下载文件
         /// </summary>
+        /// <param name="path"></param>
         /// <param name="url"></param>
-        /// <returns></returns>
         public static void DownloadFile(string path, string url) {
             using (egg.Net.HttpClient http = new egg.Net.HttpClient(url)) {
                 http.Download(path);
@@ -114,8 +121,9 @@ namespace eggs {
         /// <summary>
         /// 下载文件
         /// </summary>
+        /// <param name="path"></param>
         /// <param name="url"></param>
-        /// <returns></returns>
+        /// <param name="headers"></param>
         public static void DownloadFile(string path, string url, egg.Net.HttpModules.HttpHeaders headers) {
             using (egg.Net.HttpClient http = new egg.Net.HttpClient(url, headers)) {
                 http.Download(path);
@@ -125,8 +133,9 @@ namespace eggs {
         /// <summary>
         /// 提交数据并下载文件
         /// </summary>
+        /// <param name="path"></param>
         /// <param name="url"></param>
-        /// <returns></returns>
+        /// <param name="postData"></param>
         public static void DownloadFile(string path, string url, string postData) {
             using (egg.Net.HttpClient http = new egg.Net.HttpClient(url)) {
                 http.Method = egg.Net.HttpClient.Methods.POST;
@@ -138,8 +147,10 @@ namespace eggs {
         /// <summary>
         /// 提交数据并下载文件
         /// </summary>
+        /// <param name="path"></param>
         /// <param name="url"></param>
-        /// <returns></returns>
+        /// <param name="postData"></param>
+        /// <param name="headers"></param>
         public static void DownloadFile(string path, string url, string postData, egg.Net.HttpModules.HttpHeaders headers) {
             using (egg.Net.HttpClient http = new egg.Net.HttpClient(url, headers)) {
                 http.Method = egg.Net.HttpClient.Methods.POST;

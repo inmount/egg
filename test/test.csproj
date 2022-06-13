@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="egg">
-      <HintPath>..\egg\bin\Debug\netstandard2.1\egg.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\egg.CloudDB\egg.CloudDB.csproj" />
+    <ProjectReference Include="..\egg.Jttp\egg.Jttp.csproj" />
+    <ProjectReference Include="..\egg\egg.csproj" />
   </ItemGroup>
 
 </Project>

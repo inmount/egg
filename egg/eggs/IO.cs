@@ -88,7 +88,6 @@ namespace eggs {
         /// 打开并返回一个Json文件
         /// </summary>
         /// <param name="path"></param>
-        /// <param name="create"></param>
         /// <returns></returns>
         public static egg.File.SerializableFile<egg.Serializable.Json.Document> OpenJsonDocument(string path) {
             return new egg.File.SerializableFile<egg.Serializable.Json.Document>(path);
@@ -98,7 +97,6 @@ namespace eggs {
         /// 打开并返回一个Xml文件
         /// </summary>
         /// <param name="path"></param>
-        /// <param name="create"></param>
         /// <returns></returns>
         public static egg.File.SerializableFile<egg.Serializable.Xml.XmlDocument> OpenXmlDocument(string path) {
             return new egg.File.SerializableFile<egg.Serializable.Xml.XmlDocument>(path);
@@ -108,7 +106,6 @@ namespace eggs {
         /// 打开并返回一个Html文件
         /// </summary>
         /// <param name="path"></param>
-        /// <param name="create"></param>
         /// <returns></returns>
         public static egg.File.SerializableFile<egg.Serializable.Html.HtmlDocument> OpenHtmlDocument(string path) {
             return new egg.File.SerializableFile<egg.Serializable.Html.HtmlDocument>(path);
@@ -118,7 +115,6 @@ namespace eggs {
         /// 打开并返回一个Markdown文件
         /// </summary>
         /// <param name="path"></param>
-        /// <param name="create"></param>
         /// <returns></returns>
         public static egg.File.SerializableFile<egg.Serializable.Markdown.Document> OpenMarkdownDocument(string path) {
             return new egg.File.SerializableFile<egg.Serializable.Markdown.Document>(path);

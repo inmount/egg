@@ -128,7 +128,7 @@ namespace egg.Net {
                 AutomaticDecompression = DecompressionMethods.None,
                 AllowAutoRedirect = true,
                 UseProxy = false,
-                Proxy = null,
+                //Proxy = null,
                 ClientCertificateOptions = ClientCertificateOption.Automatic
             };
 
@@ -152,15 +152,20 @@ namespace egg.Net {
                     break;
                 case Methods.POST:
                     if (this.Headers.ContentType.IsEmpty()) this.Headers.ContentType = HttpModules.HttpHeaders.x_www_form_urlencoded;
+                    // 建立传输内容
+                    HttpContent content = new StringContent(this.Data);
+                    content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(this.Headers.ContentType);
                     // 添加头信息
                     foreach (var h in this.Headers) {
-                        if (webRequest.DefaultRequestHeaders.Contains(h.Key)) {
-                            webRequest.DefaultRequestHeaders.Remove(h.Key);
+                        if (h.Key != HttpModules.HttpHeaders.content_type) {
+                            if (content.Headers.Contains(h.Key)) {
+                                content.Headers.Remove(h.Key);
+                            }
+                            content.Headers.Add(h.Key, h.Value);
                         }
-                        webRequest.DefaultRequestHeaders.Add(h.Key, h.Value);
                     }
                     // 提交申请并返回应答器
-                    response = webRequest.PostAsync(this.Uri.ToString(), new StringContent(this.Data)).Result;
+                    response = webRequest.PostAsync(this.Uri.ToString(), content).Result;
                     break;
                 default:
                     throw new Exception("不支持的请求方式");
@@ -182,7 +187,7 @@ namespace egg.Net {
                 AutomaticDecompression = DecompressionMethods.None,
                 AllowAutoRedirect = true,
                 UseProxy = false,
-                Proxy = null,
+                //Proxy = null,
                 ClientCertificateOptions = ClientCertificateOption.Automatic
             };
             // 新建一个HttpClient
@@ -217,7 +222,7 @@ namespace egg.Net {
                 AutomaticDecompression = DecompressionMethods.None,
                 AllowAutoRedirect = true,
                 UseProxy = false,
-                Proxy = null,
+                //Proxy = null,
                 ClientCertificateOptions = ClientCertificateOption.Automatic
             };
 
@@ -241,15 +246,20 @@ namespace egg.Net {
                     break;
                 case Methods.POST:
                     if (this.Headers.ContentType.IsEmpty()) this.Headers.ContentType = HttpModules.HttpHeaders.x_www_form_urlencoded;
+                    // 建立传输内容
+                    HttpContent content = new StringContent(this.Data);
+                    content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(this.Headers.ContentType);
                     // 添加头信息
                     foreach (var h in this.Headers) {
-                        if (webRequest.DefaultRequestHeaders.Contains(h.Key)) {
-                            webRequest.DefaultRequestHeaders.Remove(h.Key);
+                        if (h.Key != HttpModules.HttpHeaders.content_type) {
+                            if (content.Headers.Contains(h.Key)) {
+                                content.Headers.Remove(h.Key);
+                            }
+                            content.Headers.Add(h.Key, h.Value);
                         }
-                        webRequest.DefaultRequestHeaders.Add(h.Key, h.Value);
                     }
                     // 提交申请并返回应答器
-                    response = webRequest.PostAsync(this.Uri.ToString(), new StringContent(this.Data)).Result;
+                    response = webRequest.PostAsync(this.Uri.ToString(), content).Result;
                     break;
                 default:
                     throw new Exception("不支持的请求方式");

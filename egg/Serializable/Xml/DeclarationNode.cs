@@ -43,9 +43,7 @@ namespace egg.Serializable.Xml {
         /// </summary>
         protected override void OnDispose() {
             base.OnDispose();
-
             this.Attr.Dispose();
-
         }
 
     }

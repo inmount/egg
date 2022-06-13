@@ -101,7 +101,9 @@ namespace egg.Jttp {
         /// <summary>
         /// 创建一个成功获取器
         /// </summary>
+        /// <param name="data"></param>
         /// <param name="msg"></param>
+        /// <returns></returns>
         public static JttpResponse Success(Serializable.Json.Object data, string msg = null) {
             JttpResponse res = new JttpResponse();
             res.SetSuccess(data, msg);
@@ -111,7 +113,9 @@ namespace egg.Jttp {
         /// <summary>
         /// 创建一个成功获取器
         /// </summary>
+        /// <param name="datas"></param>
         /// <param name="msg"></param>
+        /// <returns></returns>
         public static JttpResponse Success(Serializable.Json.List datas, string msg = null) {
             JttpResponse res = new JttpResponse();
             res.SetSuccess(datas, msg);
@@ -131,7 +135,10 @@ namespace egg.Jttp {
         /// <summary>
         /// 创建一个失败获取器
         /// </summary>
+        /// <param name="code"></param>
         /// <param name="msg"></param>
+        /// <param name="info"></param>
+        /// <returns></returns>
         public static JttpResponse Error(int code = 0, string msg = null, string info = null) {
             JttpResponse res = new JttpResponse();
             res.SetError(code, msg, info);
@@ -242,10 +249,18 @@ namespace egg.Jttp {
             }
         }
 
+
+        /// <summary>
+        /// 对象实例化
+        /// </summary>
         public JttpResponse() {
             obj = new Serializable.Json.Object();
         }
 
+        /// <summary>
+        /// 对象实例化
+        /// </summary>
+        /// <param name="json"></param>
         public JttpResponse(string json) {
             obj = (Serializable.Json.Object)eggs.Json.Parse(json);
         }

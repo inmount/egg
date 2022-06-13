@@ -4,13 +4,11 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>disable</Nullable>
     <Authors>Egg Studio</Authors>
-    <Description>Egg开发套件中的基于Json的封装协议</Description>
+    <Description>Egg套件中专门服务于CloudDB的组件</Description>
     <PackageIcon>logo.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/inmount/egg</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/inmount/egg</PackageProjectUrl>
-    <Version>12.3.2206.19</Version>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Version>1.0.2206.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,13 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="egg" Version="12.4.2206.43" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+    <PackageReference Include="egg.Jttp" Version="12.3.2206.19" />
   </ItemGroup>
 
 </Project>

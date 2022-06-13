@@ -62,6 +62,9 @@ namespace egg.Jttp {
                 if (!obj.Keys.Contains("Form")) obj["Form"] = new Serializable.Json.Object();
                 return (Serializable.Json.Object)obj["Form"];
             }
+            set {
+                obj["Form"] = value;
+            }
         }
 
         /// <summary>
@@ -80,7 +83,6 @@ namespace egg.Jttp {
         /// <summary>
         /// 对象实例化
         /// </summary>
-        /// <param name="json"></param>
         public JttpRequest() {
             obj = new Serializable.Json.Object();
         }

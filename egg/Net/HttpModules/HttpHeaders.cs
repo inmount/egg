@@ -15,9 +15,14 @@ namespace egg.Net.HttpModules {
         public const string x_www_form_urlencoded = "application/x-www-form-urlencoded";
 
         /// <summary>
+        /// content_type
+        /// </summary>
+        public const string content_type = "content-type";
+
+        /// <summary>
         /// ContentType
         /// </summary>
-        public string ContentType { get { return this["content-type"]; } set { this["content-type"] = value; } }
+        public string ContentType { get { return this[content_type]; } set { this[content_type] = value; } }
 
         /// <summary>
         /// 创建一个实例化对象

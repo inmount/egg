@@ -229,8 +229,8 @@ namespace egg {
         /// <summary>
         /// 一个时间加上间隔获得另外一个时间
         /// </summary>
-        /// <param name="t1"></param>
-        /// <param name="t2"></param>
+        /// <param name="t"></param>
+        /// <param name="ts"></param>
         /// <returns></returns>
         public static Time operator +(Time t, TimeSpan ts) {
             return t.Change(milliseconds: ts.Milliseconds);
@@ -239,8 +239,8 @@ namespace egg {
         /// <summary>
         /// 一个时间减去间隔获得另外一个时间
         /// </summary>
-        /// <param name="t1"></param>
-        /// <param name="t2"></param>
+        /// <param name="t"></param>
+        /// <param name="ts"></param>
         /// <returns></returns>
         public static Time operator -(Time t, TimeSpan ts) {
             return t.Change(milliseconds: 0 - ts.Milliseconds);

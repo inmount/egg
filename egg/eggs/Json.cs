@@ -704,8 +704,8 @@ namespace eggs {
         /// <summary>
         /// 将Json对象覆盖到标准对象
         /// </summary>
-        /// <param name="unit"></param>
-        /// <param name="tp"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="node"></param>
         /// <returns></returns>
         public static T GetObject<T>(Node node) {
 
@@ -901,7 +901,6 @@ namespace eggs {
         /// 将Json字符串反序列化并按类型返回对象
         /// </summary>
         /// <param name="json"></param>
-        /// <param name="tp"></param>
         /// <returns></returns>
         public static T DeserializeObject<T>(string json) {
             using (var node = Parse(json)) {

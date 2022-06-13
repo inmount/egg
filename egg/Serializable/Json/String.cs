@@ -19,7 +19,10 @@ namespace egg.Serializable.Json {
         /// </summary>
         public String() : base(NodeTypes.String) { }
 
-        // 转化为布尔型内容
+        /// <summary>
+        /// 转化为布尔型内容
+        /// </summary>
+        /// <returns></returns>
         protected override bool OnParseBoolean() {
             if (this.Value.IsDouble()) return this.Value.ToDouble() > 0;
             string sz = this.Value.ToLower();
@@ -28,16 +31,25 @@ namespace egg.Serializable.Json {
             return base.OnParseBoolean();
         }
 
-        // 获取字符串内容
+        /// <summary>
+        /// 获取字符串内容
+        /// </summary>
+        /// <returns></returns>
         protected override double OnParseNumber() {
             if (this.Value.IsDouble()) return this.Value.ToDouble();
             return base.OnParseNumber();
         }
 
-        // 获取字符串内容
+        /// <summary>
+        /// 获取字符串内容
+        /// </summary>
+        /// <returns></returns>
         protected override string OnParseString() { return this.Value; }
 
-        // 获取序列化内容
+        /// <summary>
+        /// 获取序列化内容
+        /// </summary>
+        /// <returns></returns>
         protected override string OnSerialize() {
             return eggs.Json.GetJsonString(this.Value);
         }

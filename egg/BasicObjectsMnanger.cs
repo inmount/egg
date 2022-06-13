@@ -115,9 +115,7 @@ namespace egg {
             foreach (BasicObject obj in objects) {
                 if (obj.BoId == boid) {
                     objects.Remove(obj);
-                    obj.BoId = 0;
-                    obj.BoManager = null;
-                    obj.Dispose();
+                    obj.Destroy();
                     return;
                 }
             }
@@ -144,7 +142,7 @@ namespace egg {
                 objects.RemoveAt(i);
                 obj.BoId = 0;
                 obj.BoManager = null;
-                obj.Dispose();
+                obj.Destroy();
             }
             objects.Clear();
         }

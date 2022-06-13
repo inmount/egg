@@ -17,7 +17,6 @@ namespace egg.Serializable.Xml {
         /// <summary>
         /// 对象实例化
         /// </summary>
-        /// <param name="xml"></param>
         public XmlDocument() {
             this.Nodes = new List<Node>();
         }
@@ -179,7 +178,10 @@ namespace egg.Serializable.Xml {
             return node;
         }
 
-        // 反序列化内容填充
+        /// <summary>
+        /// 反序列化内容填充
+        /// </summary>
+        /// <param name="bytes"></param>
         protected override void OnDeserialize(Span<byte> bytes) {
             if (bytes.Length > 0) {
                 this.Nodes.Clear();
@@ -190,7 +192,10 @@ namespace egg.Serializable.Xml {
             }
         }
 
-        // 内容序列化到字节数组
+        /// <summary>
+        /// 内容序列化到字节数组
+        /// </summary>
+        /// <returns></returns>
         protected override byte[] OnSerializeToBytes() {
             return System.Text.Encoding.UTF8.GetBytes(this.InnerXml);
         }
@@ -200,13 +205,10 @@ namespace egg.Serializable.Xml {
         /// </summary>
         protected override void OnDispose() {
             base.OnDispose();
-
             for (int i = 0; i < this.Nodes.Count; i++) {
-                this.Nodes[i].Destroy();
+                this.Nodes[i].Dispose();
             }
-
             this.Nodes.Clear();
-
         }
     }
 }

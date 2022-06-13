@@ -1,27 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace egg {
 
     /// <summary>
-    /// 基础对象扩展
+    /// BasicObject助手类
     /// </summary>
     public static class BasicObjectHelper {
 
         /// <summary>
-        /// 是否为空字符串
+        /// 判断对象是否为空
         /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static bool IsNull(this BasicObject obj) {
             return eggs.Object.IsNull(obj);
         }
 
         /// <summary>
-        /// 释放对象，可兼容为空处理
+        /// 能兼容为空情况的释放资源
         /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static void Destroy(this BasicObject obj) {
-            if (!obj.IsNull()) obj.Dispose();
+            if (eggs.Object.IsNull(obj)) return;
+            obj.BoId = 0;
+            obj.BoManager = null;
+            obj.Dispose();
         }
 
     }

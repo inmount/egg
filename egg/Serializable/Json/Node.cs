@@ -31,8 +31,6 @@ namespace egg.Serializable.Json {
         /// 反序列化
         /// </summary>
         /// <param name="bytes"></param>
-        /// <param name="offset"></param>
-        /// <param name="count"></param>
         public void Deserialize(Span<byte> bytes) {
             Deserialize(System.Text.Encoding.UTF8.GetString(bytes));
         }
@@ -113,15 +111,17 @@ namespace egg.Serializable.Json {
         /// 获取子对象
         /// </summary>
         /// <param name="key"></param>
+        /// <param name="autoCreate"></param>
         /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         protected virtual Node OnGetKeyItem(string key, bool autoCreate) { throw new Exception($"{this.NodeType.ToString()}类型尚未支持获取索引子对象"); }
 
         /// <summary>
         /// 设置子对象
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="unit"></param>
-        /// <returns></returns>
+        /// <param name="node"></param>
+        /// <exception cref="Exception"></exception>
         protected virtual void OnSetKeyItem(string key, Node node) { throw new Exception($"{this.NodeType.ToString()}类型尚未支持设置索引子对象"); }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace egg.Serializable.Json {
         /// <returns></returns>
         public Object Object(string key) {
             Node node = OnGetKeyItem(key, false);
-            if (node.IsNull()) {
+            if (node.IsNull() || node.IsNullNode()) {
                 OnSetKeyItem(key, new Object());
                 return (Object)OnGetKeyItem(key, false);
             }
@@ -218,7 +218,7 @@ namespace egg.Serializable.Json {
         /// <returns></returns>
         public List List(string key) {
             Node node = OnGetKeyItem(key, false);
-            if (node.IsNull()) {
+            if (node.IsNull() || node.IsNullNode()) {
                 OnSetKeyItem(key, new List());
                 return (List)OnGetKeyItem(key, false);
             }
@@ -239,15 +239,17 @@ namespace egg.Serializable.Json {
         /// 获取索引对象
         /// </summary>
         /// <param name="index"></param>
+        /// <param name="autoCreate"></param>
         /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         protected virtual Node OnGetIndexItem(int index, bool autoCreate) { throw new Exception($"{this.NodeType.ToString()}类型尚未支持获取索引对象"); }
 
         /// <summary>
         /// 设置索引对象
         /// </summary>
         /// <param name="index"></param>
-        /// <param name="unit"></param>
-        /// <returns></returns>
+        /// <param name="node"></param>
+        /// <exception cref="Exception"></exception>
         protected virtual void OnSetIndexItem(int index, Node node) { throw new Exception($"{this.NodeType.ToString()}类型尚未支持设置索引对象"); }
 
         /// <summary>
@@ -325,7 +327,7 @@ namespace egg.Serializable.Json {
         /// <returns></returns>
         public Object Object(int index) {
             Node node = OnGetIndexItem(index, false);
-            if (node.IsNull()) {
+            if (node.IsNull() || node.IsNullNode()) {
                 OnSetIndexItem(index, new Object());
                 return (Object)OnGetIndexItem(index, false);
             }
@@ -344,7 +346,7 @@ namespace egg.Serializable.Json {
         /// <returns></returns>
         public List List(int index) {
             Node node = OnGetIndexItem(index, false);
-            if (node.IsNull()) {
+            if (node.IsNull() || node.IsNullNode()) {
                 OnSetIndexItem(index, new List());
                 return (List)OnGetIndexItem(index, false);
             }
@@ -372,7 +374,7 @@ namespace egg.Serializable.Json {
         /// 判断是否为空节点
         /// </summary>
         /// <returns></returns>
-        public bool IsNull() { return OnCheckNull(); }
+        public bool IsNullNode() { return OnCheckNull(); }
 
         /// <summary>
         /// 转化为数值

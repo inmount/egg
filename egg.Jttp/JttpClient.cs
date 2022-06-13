@@ -40,11 +40,19 @@ namespace egg.Jttp {
         /// 提交内容到指定地址并获取返回应答器
         /// </summary>
         /// <param name="url"></param>
-        /// <param name="request"></param>
+        /// <param name="args"></param>
         /// <returns></returns>
         public static JttpResponse Post(string url, string args) {
-            string json = eggs.Net.GetHttpContent(url, args);
-            return new JttpResponse(json);
+            try {
+                string json = eggs.Net.GetHttpContent(url, args);
+                try {
+                    return new JttpResponse(json);
+                } catch (Exception ex) {
+                    throw new Exception($"返回数据解析异常:\r\n{json}", ex);
+                }
+            } catch (Exception ex) {
+                throw new Exception($"获取数据发生异常[{url}]:\r\n{args}", ex);
+            }
         }
 
         /// <summary>
