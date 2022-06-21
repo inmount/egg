@@ -29,13 +29,13 @@ namespace egg.Mvc {
         /// <summary>
         /// 获取证书集合
         /// </summary>
-        public KeyList<KestrelCertConfig> Certs { get; private set; }
+        public List<KestrelCertConfig> Certs { get; private set; }
 
         /// <summary>
         /// 对象实例化
         /// </summary>
         public KestrelHttpConfig() {
-            this.Certs = new KeyList<KestrelCertConfig>();
+            this.Certs = new List<KestrelCertConfig>();
         }
 
     }

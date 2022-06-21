@@ -5,7 +5,7 @@
     <Nullable>disable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Description>Egg开发套件中关于Sqlite数据库支持的可选组件</Description>
-    <Version>12.2.2206.8</Version>
+    <Version>12.2.2206.7</Version>
     <Authors>Egg Studio</Authors>
     <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="egg" Version="12.4.2206.43" />
-    <PackageReference Include="egg.db" Version="12.2.2206.15" />
+    <PackageReference Include="egg.db" Version="12.1.2205.14" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.6" />
   </ItemGroup>
 

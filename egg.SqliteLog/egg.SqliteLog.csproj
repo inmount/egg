@@ -3,14 +3,15 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>disable</Nullable>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <Description>Egg开发套件中关于Sqlite数据库支持的可选组件</Description>
-    <Version>12.2.2206.8</Version>
+    <Version>1.0.2206.4</Version>
     <Authors>Egg Studio</Authors>
+    <Description>Egg开发套件中基于Sqlite数据库日志管理器的可选组件</Description>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/inmount/egg</RepositoryUrl>
     <PackageProjectUrl>https://github.com/inmount/egg</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/inmount/egg</RepositoryUrl>
+    <RepositoryType></RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,9 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="egg" Version="12.4.2206.43" />
-    <PackageReference Include="egg.db" Version="12.2.2206.15" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.6" />
+    <PackageReference Include="egg.db.Sqlite" Version="12.2.2206.8" />
   </ItemGroup>
 
   <ItemGroup>

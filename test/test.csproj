@@ -6,9 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\egg.CloudDB\egg.CloudDB.csproj" />
-    <ProjectReference Include="..\egg.Jttp\egg.Jttp.csproj" />
-    <ProjectReference Include="..\egg\egg.csproj" />
+    <ProjectReference Include="..\egg.SqliteLog\egg.SqliteLog.csproj" />
   </ItemGroup>
 
 </Project>

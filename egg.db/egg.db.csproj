@@ -5,7 +5,7 @@
     <Nullable>disable</Nullable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>logo.png</PackageIcon>
-    <Version>12.1.2205.14</Version>
+    <Version>12.2.2206.15</Version>
     <Authors>Egg Studio</Authors>
     <Description>Egg开发套件中负责数据库支持的组件，组件中集成了一套特有的数据库操作方式</Description>
     <RepositoryUrl>https://github.com/inmount/egg</RepositoryUrl>
@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="egg" Version="12.3.2205.39" />
+    <PackageReference Include="egg" Version="12.4.2206.43" />
   </ItemGroup>
 
   <ItemGroup>
