@@ -11,6 +11,7 @@ namespace test {
 
             // egg组件测试
             //EggTest eggTest = new EggTest();
+            //EggJsonTest.Test();
 
             // CloudDB组件测试
             //EggCloudDB cloudDB = new EggCloudDB();
@@ -21,8 +22,11 @@ namespace test {
             // 测试Log
             EggLog.Test();
 
+            // 测试DB
+            //EggDB.Test();
+
             // 读取控制台
-            Console.ReadKey();
+            try { Console.ReadKey(); } catch { }
         }
     }
 }

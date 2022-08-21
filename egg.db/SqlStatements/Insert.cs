@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using egg.db.Orm;
 
 namespace egg.db.SqlStatements {
 
@@ -16,7 +17,7 @@ namespace egg.db.SqlStatements {
         private SqlUnits.Table _table;
 
         // 行数据对象
-        private Row _row;
+        private egg.db.Row _row;
 
         /// <summary>
         /// 获取是否为复杂对象
@@ -29,9 +30,20 @@ namespace egg.db.SqlStatements {
         /// <param name="dbc"></param>
         /// <param name="table"></param>
         /// <param name="row"></param>
-        public Insert(Connection dbc, SqlUnits.Table table, Row row) {
+        public Insert(Connection dbc, SqlUnits.Table table, egg.db.Row row) {
             _dbc = dbc;
             _table = table;
+            _row = row;
+        }
+
+        /// <summary>
+        /// 对象实例化
+        /// </summary>
+        /// <param name="dbc"></param>
+        /// <param name="row"></param>
+        public Insert(Connection dbc, Orm.Row row) {
+            _dbc = dbc;
+            _table = row.GetTableDefine();
             _row = row;
         }
 
@@ -57,7 +69,7 @@ namespace egg.db.SqlStatements {
                     }
                     switch (tp) {
                         case DatabaseTypes.MySQL:
-                            vals += $"'{_row[key].Replace("'", "\'")}'";
+                            vals += $"'{_row[key].ToString().Replace("'", "\'")}'";
                             break;
                         //return $"'{_value.Replace("'", "\'")}'";
                         case DatabaseTypes.Microsoft_Office_Access:
@@ -66,7 +78,7 @@ namespace egg.db.SqlStatements {
                         case DatabaseTypes.SQLite:
                         case DatabaseTypes.SQLite_3:
                         case DatabaseTypes.PostgreSQL:
-                            vals += $"'{_row[key].Replace("'", "''")}'";
+                            vals += $"'{_row[key].ToString().Replace("'", "''")}'";
                             break;
                         //return $"'{_value.Replace("'", "''")}'";
                         default:

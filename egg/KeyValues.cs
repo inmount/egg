@@ -6,34 +6,34 @@ using System.Text;
 namespace egg {
 
     /// <summary>
-    /// 键/值存储字典
+    /// 键/值存储集合
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class KeyValues<T> : egg.BasicObject, IDictionary<string, T> {
+    public class KeyValues : egg.BasicObject, IDictionary<string, Values.Value> {
 
-        private Dictionary<string, T> dict;
+        private Dictionary<string, Values.Value> dict;
 
         /// <summary>
         /// 对象实例化
         /// </summary>
         public KeyValues() {
-            dict = new Dictionary<string, T>();
+            dict = new Dictionary<string, Values.Value>();
         }
 
         /// <summary>
         /// 返回默认值事件
         /// </summary>
         /// <returns></returns>
-        protected virtual T OnReturnDefaultValue() { return default(T); }
+        protected virtual Values.Value OnReturnDefaultValue() { return new Values.None(); }
 
         /// <summary>
         /// 获取或设置键值内容
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public T this[string key] {
+        public Values.Value this[string key] {
             get {
                 if (dict.ContainsKey(key)) {
+                    if (eggs.Object.IsNull(dict[key])) return OnReturnDefaultValue();
                     return dict[key];
                 } else {
                     return OnReturnDefaultValue();
@@ -41,6 +41,8 @@ namespace egg {
             }
             set {
                 if (dict.ContainsKey(key)) {
+                    // 释放原对象
+                    dict[key].Dispose();
                     dict[key] = value;
                 } else {
                     dict.Add(key, value);
@@ -56,20 +58,20 @@ namespace egg {
         /// <summary>
         /// 获取值集合
         /// </summary>
-        public ICollection<T> Values { get { return dict.Values; } }
+        public ICollection<Values.Value> Values { get { return dict.Values; } }
 
         /// <summary>
         /// 获取集合内元素数量
         /// </summary>
         public int Count { get { return dict.Count; } }
 
-        bool ICollection<KeyValuePair<string, T>>.IsReadOnly => throw new NotImplementedException();
+        bool ICollection<KeyValuePair<string, Values.Value>>.IsReadOnly => throw new NotImplementedException();
 
-        void IDictionary<string, T>.Add(string key, T value) {
+        void IDictionary<string, Values.Value>.Add(string key, Values.Value value) {
             throw new NotImplementedException();
         }
 
-        void ICollection<KeyValuePair<string, T>>.Add(KeyValuePair<string, T> item) {
+        void ICollection<KeyValuePair<string, Values.Value>>.Add(KeyValuePair<string, Values.Value> item) {
             throw new NotImplementedException();
         }
 
@@ -80,7 +82,7 @@ namespace egg {
             dict.Clear();
         }
 
-        bool ICollection<KeyValuePair<string, T>>.Contains(KeyValuePair<string, T> item) {
+        bool ICollection<KeyValuePair<string, Values.Value>>.Contains(KeyValuePair<string, Values.Value> item) {
             throw new NotImplementedException();
         }
 
@@ -94,7 +96,7 @@ namespace egg {
             return dict.ContainsKey(key);
         }
 
-        void ICollection<KeyValuePair<string, T>>.CopyTo(KeyValuePair<string, T>[] array, int arrayIndex) {
+        void ICollection<KeyValuePair<string, Values.Value>>.CopyTo(KeyValuePair<string, Values.Value>[] array, int arrayIndex) {
             throw new NotImplementedException();
         }
 
@@ -102,7 +104,7 @@ namespace egg {
         /// 获取枚举管理器
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<KeyValuePair<string, T>> GetEnumerator() {
+        public IEnumerator<KeyValuePair<string, Values.Value>> GetEnumerator() {
             //throw new NotImplementedException();
             return dict.GetEnumerator();
         }
@@ -125,7 +127,7 @@ namespace egg {
             return dict.Remove(key);
         }
 
-        bool ICollection<KeyValuePair<string, T>>.Remove(KeyValuePair<string, T> item) {
+        bool ICollection<KeyValuePair<string, Values.Value>>.Remove(KeyValuePair<string, Values.Value> item) {
             throw new NotImplementedException();
         }
 
@@ -135,7 +137,7 @@ namespace egg {
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool TryGetValue(string key, out T value) {
+        public bool TryGetValue(string key, out Values.Value value) {
             return dict.TryGetValue(key, out value);
         }
 

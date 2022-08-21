@@ -5,12 +5,13 @@
     <Nullable>disable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Description>Egg开发套件中关于Sqlite数据库支持的可选组件</Description>
-    <Version>12.2.2206.8</Version>
+    <Version>12.3.2207.18</Version>
     <Authors>Egg Studio</Authors>
     <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/inmount/egg</RepositoryUrl>
     <PackageProjectUrl>https://github.com/inmount/egg</PackageProjectUrl>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="egg" Version="12.4.2206.43" />
-    <PackageReference Include="egg.db" Version="12.2.2206.15" />
+    <PackageReference Include="egg" Version="12.5.2207.46" />
+    <PackageReference Include="egg.db" Version="12.3.2207.24" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.6" />
   </ItemGroup>
 

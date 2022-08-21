@@ -13,6 +13,7 @@
 | egg.Jttp | .Net Standard 2.1 | Json自定协议组件 |
 | egg.Lark | .Net Standard 2.1 | 百灵鸟脚本引擎组件 |
 | egg.Mvc | .Net 6 | Asp.Net相关组件 |
+| egg.SqliteLog | .Net Standard 2.1 | 基于数据库的日志组件 |
 
 ## Nuget包下载
 

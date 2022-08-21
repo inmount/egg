@@ -1,4 +1,5 @@
 ﻿using egg.db;
+using Orm = egg.db.Orm;
 using System;
 using egg;
 using System.Collections.Generic;
@@ -32,55 +33,30 @@ namespace egg.SqliteLog {
         /// 加载所有的对象
         /// </summary>
         /// <returns></returns>
-        public List<LoggerObject> GetAllObjects() {
-            // 定义返回对象
-            List<LoggerObject> objects = new List<LoggerObject>();
+        public Orm.Rows<Orms.Objects> GetAllObjects() {
             // 定义数据库
             var db = this.Database;
             // 定义表对象
-            var Objects = OrmMapper.Table("Objects");
+            var Objects = Orm.Table.CreateTableDefine<Orms.Objects>();
             using (egg.db.Connection dbc = new egg.db.Connection(db)) {
                 // 读取所有数据
-                var rows = dbc.Select(Objects).GetRows();
-                // 遍历数据
-                foreach (var row in rows) {
-                    // 建立新对象
-                    LoggerObject obj = new LoggerObject();
-                    obj.Id = row["ID"].ToLong();
-                    obj.Name = row["Name"];
-                    obj.Description = row["Description"];
-                    objects.Add(obj);
-                }
+                return dbc.Select(Objects).GetRows<Orms.Objects>();
             }
-            return objects;
         }
 
         /// <summary>
         /// 加载所有的事件
         /// </summary>
         /// <returns></returns>
-        public List<LoggerEvent> GetAllEvents(long objId) {
-            // 定义返回对象
-            List<LoggerEvent> events = new List<LoggerEvent>();
+        public Orm.Rows<Orms.Events> GetAllEvents(long objId) {
             // 定义数据库
             var db = this.Database;
             // 定义表对象
-            var Events = OrmMapper.Table("Events");
+            var Events = Orm.Table.CreateTableDefine<Orms.Events>();
             using (egg.db.Connection dbc = new egg.db.Connection(db)) {
                 // 读取所有数据
-                var rows = dbc.Select(Events).Where(Events["ObjectID"] == objId).GetRows();
-                // 遍历数据
-                foreach (var row in rows) {
-                    // 建立新对象
-                    LoggerEvent obj = new LoggerEvent();
-                    obj.Id = row["ID"].ToLong();
-                    obj.ObjectId = row["ObjectID"].ToLong();
-                    obj.Name = row["Name"];
-                    obj.Description = row["Description"];
-                    events.Add(obj);
-                }
+                return dbc.Select(Events).Where(Events["ObjectID"] == objId).GetRows<Orms.Events>();
             }
-            return events;
         }
 
         /// <summary>
@@ -92,19 +68,19 @@ namespace egg.SqliteLog {
             // 定义数据库
             var db = this.Database;
             // 定义表对象
-            var Objects = OrmMapper.Table("Objects");
+            var Objects = Orm.Table.CreateTableDefine<Orms.Objects>();
             using (egg.db.Connection dbc = new egg.db.Connection(db)) {
                 // 读取数据
-                var row = dbc.Select(Objects).Where(Objects["Name"] == name).GetRow();
+                var row = dbc.Select(Objects).Where(Objects["Name"] == name).GetRow<Orms.Objects>();
                 if (!row.IsEmpty) return row["ID"].ToLong();
                 // 插入一条新数据
-                var rowInsert = new Row();
-                rowInsert["Name"] = name;
-                rowInsert["Description"] = $"";
-                dbc.Insert(Objects, rowInsert).Exec();
+                var rowInsert = new Orms.Objects();
+                rowInsert.Name = name;
+                rowInsert.Description = $"";
+                dbc.Insert(rowInsert).Exec();
                 // 重新读取数据
-                row = dbc.Select(Objects).Where(Objects["Name"] == name).GetRow();
-                return row["ID"].ToLong();
+                row = dbc.Select(Objects).Where(Objects["Name"] == name).GetRow<Orms.Objects>();
+                return row.ID;
             }
         }
 
@@ -118,20 +94,20 @@ namespace egg.SqliteLog {
             // 定义数据库
             var db = this.Database;
             // 定义表对象
-            var Events = OrmMapper.Table("Events");
+            var Events = Orm.Table.CreateTableDefine<Orms.Events>();
             using (egg.db.Connection dbc = new egg.db.Connection(db)) {
                 // 读取数据
-                var row = dbc.Select(Events).Where(Events["Name"] == name & Events["ObjectID"] == objId).GetRow();
+                var row = dbc.Select(Events).Where(Events["Name"] == name & Events["ObjectID"] == objId).GetRow<Orms.Events>();
                 if (!row.IsEmpty) return row["ID"].ToLong();
                 // 插入一条新数据
-                var rowInsert = new Row();
-                rowInsert["ObjectID"] = $"{objId}";
+                var rowInsert = new Orms.Events();
+                rowInsert.ObjectID = objId;
                 rowInsert["Name"] = name;
                 rowInsert["Description"] = $"";
-                dbc.Insert(Events, rowInsert).Exec();
+                dbc.Insert(rowInsert).Exec();
                 // 重新读取数据
-                row = dbc.Select(Events).Where(Events["Name"] == name & Events["ObjectID"] == objId).GetRow();
-                return row["ID"].ToLong();
+                row = dbc.Select(Events).Where(Events["Name"] == name & Events["ObjectID"] == objId).GetRow<Orms.Events>();
+                return row.ID;
             }
         }
 
@@ -140,35 +116,35 @@ namespace egg.SqliteLog {
         /// </summary>
         /// <param name="formula"></param>
         /// <returns></returns>
-        public List<LoggerRecord> GetRecords(Formula formula) {
-            // 定义返回对象
-            List<LoggerRecord> records = new List<LoggerRecord>();
+        public Orm.Rows<LoggerRecord> GetRecords(Formula formula) {
             // 定义数据库
             var db = this.Database;
             // 定义表对象
-            var Objects = OrmMapper.Table("Objects");
-            var Events = OrmMapper.Table("Events");
-            var Logs = OrmMapper.Table("Logs");
+            //var Objects = OrmMapper.Table("Objects");
+            //var Events = OrmMapper.Table("Events");
+            //var Logs = OrmMapper.Table("Logs");
+            var Objects = Orm.Table.CreateTableDefine<Orms.Objects>();
+            var Events = Orm.Table.CreateTableDefine<Orms.Events>();
+            var Logs = Orm.Table.CreateTableDefine<Orms.Logs>();
             using (egg.db.Connection dbc = new egg.db.Connection(db)) {
                 // 读取数据
                 var rows = dbc.Select(Logs, Objects, Events)
                     .Columns(Logs["*"], Objects["Name"].As("ObjectName"), Events["Name"].As("EventName"))
                     .Where(formula & Logs["ObjectID"] == Objects["ID"] & Logs["EventID"] == Events["ID"])
-                    .GetRows();
+                    .GetRows<LoggerRecord>();
                 // 遍历数据
                 foreach (var row in rows) {
-                    // 建立新对象
-                    LoggerRecord obj = new LoggerRecord();
-                    obj.Id = row["ID"].ToLong();
-                    obj.ObjectName = row["ObjectName"];
-                    obj.EventName = row["EventName"];
-                    obj.TypeName = ((LoggerTypes)(row["TypeID"].ToInteger())).ToString();
-                    obj.Detail = row["Detail"];
-                    obj.Time = eggs.Time.GetTime(row["LogTime"].ToLong());
-                    records.Add(obj);
+                    //obj.Id = row["ID"].ToLong();
+                    //obj.ObjectName = row["ObjectName"];
+                    //obj.EventName = row["EventName"];
+                    //obj.TypeName = ((LoggerTypes)(row["TypeID"].ToInteger())).ToString();
+                    //obj.Detail = row["Detail"];
+                    row.Time = eggs.Time.GetTime(row.LogTime);
+                    //records.Add(obj);
                 }
+                return rows;
             }
-            return records;
+            
         }
 
         /// <summary>
@@ -176,9 +152,9 @@ namespace egg.SqliteLog {
         /// </summary>
         /// <param name="startTime"></param>
         /// <returns></returns>
-        public List<LoggerRecord> GetRecords(long startTime) {
+        public Orm.Rows<LoggerRecord> GetRecords(long startTime) {
             // 定义表对象
-            var Logs = OrmMapper.Table("Logs");
+            var Logs = Orm.Table.CreateTableDefine<Orms.Logs>();
             return GetRecords(Logs["LogTime"] >= startTime);
         }
 
@@ -188,9 +164,9 @@ namespace egg.SqliteLog {
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public List<LoggerRecord> GetRecords(long startTime, long endTime) {
+        public Orm.Rows<LoggerRecord> GetRecords(long startTime, long endTime) {
             // 定义表对象
-            var Logs = OrmMapper.Table("Logs");
+            var Logs = Orm.Table.CreateTableDefine<Orms.Logs>();
             return GetRecords(Logs["LogTime"] >= startTime & Logs["LogTime"] <= endTime);
         }
 
@@ -201,9 +177,9 @@ namespace egg.SqliteLog {
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public List<LoggerRecord> GetRecords(long objId, long startTime, long endTime) {
+        public Orm.Rows<LoggerRecord> GetRecords(long objId, long startTime, long endTime) {
             // 定义表对象
-            var Logs = OrmMapper.Table("Logs");
+            var Logs = Orm.Table.CreateTableDefine<Orms.Logs>();
             return GetRecords(Logs["ObjectID"] == objId & Logs["LogTime"] >= startTime & Logs["LogTime"] <= endTime);
         }
 
@@ -214,10 +190,10 @@ namespace egg.SqliteLog {
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public List<LoggerRecord> GetRecords(string objName, long startTime, long endTime) {
+        public Orm.Rows<LoggerRecord> GetRecords(string objName, long startTime, long endTime) {
             // 定义表对象
-            var Logs = OrmMapper.Table("Logs");
-            var Objects = OrmMapper.Table("Objects");
+            var Objects = Orm.Table.CreateTableDefine<Orms.Objects>();
+            var Logs = Orm.Table.CreateTableDefine<Orms.Logs>();
             return GetRecords(Objects["Name"] == objName & Logs["LogTime"] >= startTime & Logs["LogTime"] <= endTime);
         }
 
@@ -229,9 +205,9 @@ namespace egg.SqliteLog {
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public List<LoggerRecord> GetRecords(long objId, long evtId, long startTime, long endTime) {
+        public Orm.Rows<LoggerRecord> GetRecords(long objId, long evtId, long startTime, long endTime) {
             // 定义表对象
-            var Logs = OrmMapper.Table("Logs");
+            var Logs = Orm.Table.CreateTableDefine<Orms.Logs>();
             return GetRecords(Logs["ObjectID"] == objId & Logs["EventID"] == evtId & Logs["LogTime"] >= startTime & Logs["LogTime"] <= endTime);
         }
 
@@ -243,11 +219,11 @@ namespace egg.SqliteLog {
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public List<LoggerRecord> GetRecords(long objId, string evtName, long startTime, long endTime) {
+        public Orm.Rows<LoggerRecord> GetRecords(long objId, string evtName, long startTime, long endTime) {
             // 定义表对象
-            var Logs = OrmMapper.Table("Logs");
-            var Objects = OrmMapper.Table("Objects");
-            var Events = OrmMapper.Table("Events");
+            var Objects = Orm.Table.CreateTableDefine<Orms.Objects>();
+            var Events = Orm.Table.CreateTableDefine<Orms.Events>();
+            var Logs = Orm.Table.CreateTableDefine<Orms.Logs>();
             return GetRecords(Logs["ObjectID"] == objId & Events["Name"] == evtName & Logs["LogTime"] >= startTime & Logs["LogTime"] <= endTime);
         }
 
@@ -259,11 +235,11 @@ namespace egg.SqliteLog {
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public List<LoggerRecord> GetRecords(string objName, string evtName, long startTime, long endTime) {
+        public Orm.Rows<LoggerRecord> GetRecords(string objName, string evtName, long startTime, long endTime) {
             // 定义表对象
-            var Logs = OrmMapper.Table("Logs");
-            var Objects = OrmMapper.Table("Objects");
-            var Events = OrmMapper.Table("Events");
+            var Objects = Orm.Table.CreateTableDefine<Orms.Objects>();
+            var Events = Orm.Table.CreateTableDefine<Orms.Events>();
+            var Logs = Orm.Table.CreateTableDefine<Orms.Logs>();
             return GetRecords(Objects["Name"] == objName & Events["Name"] == evtName & Logs["LogTime"] >= startTime & Logs["LogTime"] <= endTime);
         }
 
@@ -274,9 +250,9 @@ namespace egg.SqliteLog {
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public List<LoggerRecord> GetRecords(LoggerTypes tp, long startTime, long endTime) {
+        public Orm.Rows<LoggerRecord> GetRecords(LoggerTypes tp, long startTime, long endTime) {
             // 定义表对象
-            var Logs = OrmMapper.Table("Logs");
+            var Logs = Orm.Table.CreateTableDefine<Orms.Logs>();
             return GetRecords(Logs["TypeID"] == (int)tp & Logs["LogTime"] >= startTime & Logs["LogTime"] <= endTime);
         }
 
@@ -288,9 +264,9 @@ namespace egg.SqliteLog {
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public List<LoggerRecord> GetRecords(long evtId, LoggerTypes tp, long startTime, long endTime) {
+        public Orm.Rows<LoggerRecord> GetRecords(long evtId, LoggerTypes tp, long startTime, long endTime) {
             // 定义表对象
-            var Logs = OrmMapper.Table("Logs");
+            var Logs = Orm.Table.CreateTableDefine<Orms.Logs>();
             return GetRecords(Logs["EventID"] == evtId & Logs["TypeID"] == (int)tp & Logs["LogTime"] >= startTime & Logs["LogTime"] <= endTime);
         }
 
@@ -303,10 +279,10 @@ namespace egg.SqliteLog {
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public List<LoggerRecord> GetRecords(long objId, string evtName, LoggerTypes tp, long startTime, long endTime) {
+        public Orm.Rows<LoggerRecord> GetRecords(long objId, string evtName, LoggerTypes tp, long startTime, long endTime) {
             // 定义表对象
-            var Logs = OrmMapper.Table("Logs");
-            var Events = OrmMapper.Table("Events");
+            var Events = Orm.Table.CreateTableDefine<Orms.Events>();
+            var Logs = Orm.Table.CreateTableDefine<Orms.Logs>();
             return GetRecords(Logs["ObjectID"] == objId & Events["Name"] == evtName & Logs["TypeID"] == (int)tp & Logs["LogTime"] >= startTime & Logs["LogTime"] <= endTime);
         }
 
@@ -319,11 +295,11 @@ namespace egg.SqliteLog {
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public List<LoggerRecord> GetRecords(string objName, string evtName, LoggerTypes tp, long startTime, long endTime) {
+        public Orm.Rows<LoggerRecord> GetRecords(string objName, string evtName, LoggerTypes tp, long startTime, long endTime) {
             // 定义表对象
-            var Logs = OrmMapper.Table("Logs");
-            var Objects = OrmMapper.Table("Objects");
-            var Events = OrmMapper.Table("Events");
+            var Objects = Orm.Table.CreateTableDefine<Orms.Objects>();
+            var Events = Orm.Table.CreateTableDefine<Orms.Events>();
+            var Logs = Orm.Table.CreateTableDefine<Orms.Logs>();
             return GetRecords(Objects["Name"] == objName & Events["Name"] == evtName & Logs["TypeID"] == (int)tp & Logs["LogTime"] >= startTime & Logs["LogTime"] <= endTime);
         }
 
@@ -342,7 +318,7 @@ namespace egg.SqliteLog {
             // 定义数据库
             var db = this.Database;
             // 定义表对象
-            var Logs = OrmMapper.Table("Logs");
+            var Logs = Orm.Table.CreateTableDefine<Orms.Logs>();
             using (egg.db.Connection dbc = new egg.db.Connection(db)) {
                 var rowInsert = new Row();
                 rowInsert["ObjectID"] = $"{objId}";

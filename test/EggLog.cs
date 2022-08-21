@@ -5,8 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace test {
-    internal static class EggLog {
-
+    public static class EggLog { 
         internal static void Test() {
             Random random = new Random();
             using (egg.SqliteLog.Logger logger = new egg.SqliteLog.Logger("X:\\a.dlog")) {
@@ -19,7 +18,7 @@ namespace test {
                     var log = logs[i];
                     Console.WriteLine();
                     Console.WriteLine($"=====[{i}]=====");
-                    Console.WriteLine($"Id:{log.Id}");
+                    Console.WriteLine($"Id:{log.ID}");
                     Console.WriteLine($"Object:{log.ObjectName}");
                     Console.WriteLine($"Event:{log.EventName}");
                     Console.WriteLine($"Type:{log.TypeName}");

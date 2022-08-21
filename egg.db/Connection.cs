@@ -1,5 +1,7 @@
-﻿using egg.db.SqlStatements;
+﻿using egg.db.Orm;
+using egg.db.SqlStatements;
 using System;
+using System.Reflection;
 
 namespace egg.db {
 
@@ -43,21 +45,6 @@ namespace egg.db {
             this.ConnectionString = db.ToString();
             dbc = db.CreateConnection();
             if (dbc == null) throw new Exception($"连接管理器尚未支持\"{db.Type.ToString()}\"数据库");
-            //switch (db.Type) {
-            //    case DatabaseTypes.Microsoft_SQL_Server:
-            //        dbc = new Connectiones.MicrosoftSqlServer();
-            //        break;
-            //    case DatabaseTypes.MySQL:
-            //        dbc = new Connectiones.MySqlOrMariaDB();
-            //        break;
-            //    case DatabaseTypes.SQLite:
-            //        dbc = new Connectiones.Sqlite();
-            //        break;
-            //    case DatabaseTypes.PostgreSQL:
-            //        dbc = new Connectiones.PostgreSql();
-            //        break;
-            //    default: throw new Exception($"连接管理器尚未支持\"{db.Type.ToString()}\"数据库");
-            //}
         }
 
         /// <summary>
@@ -86,6 +73,23 @@ namespace egg.db {
             }
         }
 
+
+        /// <summary>
+        /// 获取数据列表
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public Rows<T> GetRows<T>(string sql) where T : Orm.Row, new() {
+            //throw new NotImplementedException();
+            if (!dbc.IsOpen) dbc.Open(this.ConnectionString);
+            try {
+                return dbc.GetRows<T>(sql);
+            } catch (Exception ex) {
+                throw new Exception(ex.Message + " => SQL:" + sql, ex);
+            }
+        }
+
         /// <summary>
         /// 获取单行数据
         /// </summary>
@@ -95,6 +99,22 @@ namespace egg.db {
             if (!dbc.IsOpen) dbc.Open(this.ConnectionString);
             try {
                 return dbc.GetRow(sql);
+            } catch (Exception ex) {
+                throw new Exception(ex.Message + " => SQL:" + sql, ex);
+            }
+        }
+
+        /// <summary>
+        /// 获取单行数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public T GetRow<T>(string sql) where T : Orm.Row, new() {
+            if (!dbc.IsOpen) dbc.Open(this.ConnectionString);
+            try {
+                return dbc.GetRow<T>(sql);
             } catch (Exception ex) {
                 throw new Exception(ex.Message + " => SQL:" + sql, ex);
             }
@@ -144,11 +164,10 @@ namespace egg.db {
         /// <summary>
         /// 生成一个插入语句
         /// </summary>
-        /// <param name="table"></param>
-        /// <param name="rowOperator"></param>
+        /// <param name="row"></param>
         /// <returns></returns>
-        public Insert Insert(SqlUnits.Table table, RowOperator rowOperator) {
-            return new Insert(this, table, rowOperator.GetRow());
+        public Insert Insert(Orm.Row row) {
+            return new Insert(this, row);
         }
 
         /// <summary>
@@ -160,17 +179,6 @@ namespace egg.db {
         /// <returns></returns>
         public Update Update(SqlUnits.Table table, Row row, SqlUnits.TableField keyField = null) {
             return new Update(this, table, row, keyField);
-        }
-
-        /// <summary>
-        /// 生成一个更新语句
-        /// </summary>
-        /// <param name="table">表对象</param>
-        /// <param name="rowOperator">数据行对象</param>
-        /// <param name="keyField">更新键字段</param>
-        /// <returns></returns>
-        public Update Update(SqlUnits.Table table, RowOperator rowOperator, SqlUnits.TableField keyField = null) {
-            return new Update(this, table, rowOperator.GetRow(), keyField);
         }
 
         /// <summary>
@@ -294,6 +302,29 @@ namespace egg.db {
         /// <summary>
         /// 检测数据表是否存在
         /// </summary>
+        /// <param name="row"></param>
+        public void CheckTable(Orm.Row row) {
+            CheckTable(row.GetType());
+        }
+
+        /// <summary>
+        /// 检测数据表是否存在
+        /// </summary>
+        /// <param name="tp"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public bool CheckTable(Type tp) {
+            TableAttribute[] tables = (TableAttribute[])tp.GetCustomAttributes(typeof(TableAttribute), false);
+            if (tables.Length <= 0) throw new Exception("该对象没有包含表格定义");
+            var table = tables[tables.Length - 1];
+            string tabName = table.Name;
+            if (tabName.IsEmpty()) tabName = tp.Name;
+            return CheckTable(tabName);
+        }
+
+        /// <summary>
+        /// 检测数据表是否存在
+        /// </summary>
         /// <param name="tabName"></param>
         /// <returns></returns>
         public bool CheckTable(string tabName) {
@@ -323,6 +354,78 @@ namespace egg.db {
             }
 
             return res;
+        }
+
+        /// <summary>
+        /// 创建数据表
+        /// </summary>
+        /// <param name="row"></param>
+        public void CreateTable(Orm.Row row) {
+            CreateTable(row.GetType());
+        }
+
+        /// <summary>
+        /// 创建数据表
+        /// </summary>
+        /// <param name="tp"></param>
+        /// <returns></returns>
+        public void CreateTable(Type tp) {
+            string sql = "";
+            string szFields = "";
+            // 获取表相关的设定
+            TableAttribute[] tables = (TableAttribute[])tp.GetCustomAttributes(typeof(TableAttribute), false);
+            if (tables.Length <= 0) throw new Exception("该对象没有包含表格定义");
+            var table = tables[tables.Length - 1];
+            string tabName = table.Name;
+            if (tabName.IsEmpty()) tabName = tp.Name;
+            // 获取所有字段设定
+            PropertyInfo[] pros = tp.GetProperties();
+            for (int i = 0; i < pros.Length; i++) {
+                // 获取字段相关设定
+                var pro = pros[i];
+                var fields = (FieldAttribute[])pro.GetCustomAttributes(typeof(FieldAttribute), false);
+                // 拼接Sql
+                if (fields.Length > 0) {
+                    var field = fields[fields.Length - 1];
+                    if (field.IsRealField) {
+                        if (field.Name.IsEmpty()) field.Name = pro.Name;
+                        szFields += $",{field.ToSqlString(this.DatabaseType)}";
+                    }
+                }
+            }
+            // 生成完整Sql
+            switch (db.Type) {
+                case DatabaseTypes.Microsoft_SQL_Server:
+                    sql = $"CREATE TABLE [{tabName}](";
+                    sql += "[ID] numeric(18,0) identity(1,1) primary key";
+                    sql += szFields;
+                    sql += ")";
+                    break;
+                case DatabaseTypes.MySQL:
+                    sql = $"CREATE TABLE `{tabName}`(";
+                    sql += "`ID` int not null primary key Auto_increment";
+                    sql += szFields;
+                    sql += ")";
+                    break;
+                case DatabaseTypes.PostgreSQL:
+                    sql = $"CREATE TABLE \"{tabName}\"(";
+                    sql += "\"ID\" serial PRIMARY KEY";
+                    sql += szFields;
+                    sql += ")";
+                    break;
+                //case DatabaseTypes.Microsoft_Office_Access:
+                //case DatabaseTypes.Microsoft_Office_Access_v12:
+                case DatabaseTypes.SQLite:
+                case DatabaseTypes.SQLite_3:
+                    sql = $"CREATE TABLE [{tabName}](";
+                    sql += "[ID] INTEGER PRIMARY KEY AUTOINCREMENT";
+                    sql += szFields;
+                    sql += ")";
+                    break;
+                default: throw new Exception($"连接管理器尚未支持\"{db.Type.ToString()}\"数据库");
+            }
+            // 执行Sql
+            Exec(sql);
         }
 
         /// <summary>
@@ -434,7 +537,7 @@ namespace egg.db {
         /// <param name="tabName"></param>
         /// <param name="fidName"></param>
         /// <returns></returns>
-        public bool CheckTableFiled(string tabName, string fidName) {
+        public bool CheckTableField(string tabName, string fidName) {
             bool res = false;
 
             switch (db.Type) {
@@ -464,12 +567,133 @@ namespace egg.db {
         }
 
         /// <summary>
+        /// 更新数据表
+        /// </summary>
+        /// <param name="row"></param>
+        public void UpdateTableFields(Orm.Row row) {
+            UpdateTableFields(row.GetType());
+        }
+
+        /// <summary>
+        /// 更新数据表
+        /// </summary>
+        /// <param name="tp"></param>
+        /// <returns></returns>
+        public void UpdateTableFields(Type tp) {
+            // 获取表相关的设定
+            TableAttribute[] tables = (TableAttribute[])tp.GetCustomAttributes(typeof(TableAttribute), false);
+            if (tables.Length <= 0) throw new Exception("该对象没有包含表格定义");
+            var table = tables[tables.Length - 1];
+            string tabName = table.Name;
+            if (tabName.IsEmpty()) tabName = tp.Name;
+            // 获取所有字段设定
+            PropertyInfo[] pros = tp.GetProperties();
+            for (int i = 0; i < pros.Length; i++) {
+                // 获取字段相关设定
+                var pro = pros[i];
+                var fields = (FieldAttribute[])pro.GetCustomAttributes(typeof(FieldAttribute), false);
+                // 拼接Sql
+                if (fields.Length > 0) {
+                    var field = fields[fields.Length - 1];
+                    if (field.IsRealField) {
+                        if (field.Name.IsEmpty()) field.Name = pro.Name;
+                        // 判断字段是否存在
+                        if (!CheckTableField(tabName, field.Name)) {
+                            AddTableField(tabName, field);
+                            SetTableFieldDefault(tabName, field);
+                        } else {
+                            try { UpdateTableField(tabName, field.Name, field); } catch { }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// 添加字段
         /// </summary>
         /// <param name="tabName"></param>
         /// <param name="fid"></param>
         /// <returns></returns>
-        public void AddTableFiled(string tabName, SqlUnits.FieldDefine fid) {
+        public void AddTableField(string tabName, FieldAttribute fid) {
+            string sql = "";
+            switch (db.Type) {
+                case DatabaseTypes.Microsoft_Office_Access:
+                case DatabaseTypes.Microsoft_Office_Access_v12:
+                case DatabaseTypes.Microsoft_SQL_Server:
+                case DatabaseTypes.SQLite:
+                case DatabaseTypes.SQLite_3:
+                    sql = $"ALTER TABLE [{tabName}] ADD {fid.ToSqlString(this.DatabaseType)}";
+                    Exec(sql);
+                    break;
+                case DatabaseTypes.MySQL:
+                    sql = $"ALTER TABLE `{tabName}` ADD {fid.ToSqlString(this.DatabaseType)}";
+                    Exec(sql);
+                    break;
+                case DatabaseTypes.PostgreSQL:
+                    sql = $"ALTER TABLE \"{tabName}\" ADD COLUMN {fid.ToSqlString(this.DatabaseType)}";
+                    Exec(sql);
+                    break;
+                default: throw new Exception($"连接管理器尚未支持\"{db.Type.ToString()}\"数据库");
+            }
+        }
+
+        /// <summary>
+        /// 添加字段
+        /// </summary>
+        /// <param name="tabName"></param>
+        /// <param name="fid"></param>
+        /// <returns></returns>
+        public void SetTableFieldDefault(string tabName, FieldAttribute fid) {
+            string sql = "";
+            // 获取默认字符串
+            string defaultValue = fid.DefaultValue.ToString();
+            switch (db.Type) {
+                case DatabaseTypes.MySQL:
+                    defaultValue = defaultValue.Replace("'", "\\'");
+                    break;
+                case DatabaseTypes.Microsoft_Office_Access:
+                case DatabaseTypes.Microsoft_Office_Access_v12:
+                case DatabaseTypes.Microsoft_SQL_Server:
+                case DatabaseTypes.SQLite:
+                case DatabaseTypes.SQLite_3:
+                case DatabaseTypes.PostgreSQL:
+                    defaultValue = defaultValue.Replace("'", "''");
+                    break;
+                default:
+                    throw new Exception($"尚未支持数据库 {db.Type.ToString()} 中的字符串转义。");
+            }
+            // 更新数据
+            switch (db.Type) {
+                case DatabaseTypes.Microsoft_Office_Access:
+                case DatabaseTypes.Microsoft_Office_Access_v12:
+                case DatabaseTypes.Microsoft_SQL_Server:
+                case DatabaseTypes.SQLite:
+                case DatabaseTypes.SQLite_3:
+                    sql = $"Update [{tabName}] set [{fid.Name}]='{defaultValue}' where [{fid.Name}] is null";
+                    Exec(sql);
+                    break;
+                case DatabaseTypes.MySQL:
+                    sql = $"Update `{tabName}` set `{fid.Name}`='{defaultValue}' where `{fid.Name}` is null";
+                    Exec(sql);
+                    break;
+                case DatabaseTypes.PostgreSQL:
+                    sql = $"Update \"{tabName}\" set \"{fid.Name}\"='{defaultValue}' where \"{fid.Name}\" is null";
+                    sql = $"ALTER TABLE \"{tabName}\" ADD COLUMN {fid.ToSqlString(this.DatabaseType)}";
+                    Exec(sql);
+                    break;
+                default: throw new Exception($"连接管理器尚未支持\"{db.Type.ToString()}\"数据库");
+            }
+        }
+
+
+        /// <summary>
+        /// 添加字段
+        /// </summary>
+        /// <param name="tabName"></param>
+        /// <param name="fid"></param>
+        /// <returns></returns>
+        public void AddTableField(string tabName, SqlUnits.FieldDefine fid) {
             string sql = "";
             switch (db.Type) {
                 case DatabaseTypes.Microsoft_Office_Access:
@@ -499,7 +723,50 @@ namespace egg.db {
         /// <param name="fidName"></param>
         /// <param name="fid"></param>
         /// <returns></returns>
-        public void UpdateTableFiled(string tabName, string fidName, SqlUnits.FieldDefine fid) {
+        public void UpdateTableField(string tabName, string fidName, FieldAttribute fid) {
+            //string sql = "";
+            string stp = fid.GetTypeString(this.DatabaseType);
+            switch (db.Type) {
+                case DatabaseTypes.Microsoft_SQL_Server:
+                    Exec($"ALTER TABLE [{tabName}] ALTER COLUMN [{fidName}] {stp}");
+                    //重命名
+                    if (fid.Name != "" && fid.Name != fidName) {
+                        Exec($"ALTER TABLE [{tabName}] RENAME COLUMN [{fidName}] TO [{fid.Name}]");
+                    }
+                    break;
+                case DatabaseTypes.MySQL:
+                    //带重命名
+                    if (fid.Name != "" && fid.Name != fidName) {
+                        Exec($"ALTER TABLE `{tabName}` CHANGE `{fidName}` `{fid.Name}` {stp}");
+                    } else {
+                        Exec($"ALTER TABLE `{tabName}` MODIFY `{fidName}` {stp}");
+                    }
+                    break;
+                case DatabaseTypes.PostgreSQL:
+                    //带重命名
+                    if (fid.Name != "" && fid.Name != fidName) {
+                        Exec($"ALTER TABLE \"{tabName}\" RENAME \"{fidName}\" TO \"{fid.Name}\"");
+                    } else {
+                        Exec($"ALTER TABLE \"{tabName}\" ALTER COLUMN \"{fidName}\" TYPE {stp}");
+                    }
+                    break;
+                //case DatabaseTypes.Microsoft_Office_Access:
+                //case DatabaseTypes.Microsoft_Office_Access_v12:
+                case DatabaseTypes.SQLite:
+                case DatabaseTypes.SQLite_3:
+                    throw new Exception($"Sqlite数据库不支持修改字段");
+                default: throw new Exception($"连接管理器尚未支持\"{db.Type.ToString()}\"数据库");
+            }
+        }
+
+        /// <summary>
+        /// 修改字段
+        /// </summary>
+        /// <param name="tabName"></param>
+        /// <param name="fidName"></param>
+        /// <param name="fid"></param>
+        /// <returns></returns>
+        public void UpdateTableField(string tabName, string fidName, SqlUnits.FieldDefine fid) {
             //string sql = "";
             string stp = fid.GetTypeString(this.DatabaseType);
             switch (db.Type) {
@@ -541,7 +808,7 @@ namespace egg.db {
         /// <param name="tabName"></param>
         /// <param name="fidName"></param>
         /// <returns></returns>
-        public void DropTableFiled(string tabName, string fidName) {
+        public void DropTableField(string tabName, string fidName) {
             switch (db.Type) {
                 case DatabaseTypes.Microsoft_Office_Access:
                 case DatabaseTypes.Microsoft_Office_Access_v12:
@@ -628,6 +895,5 @@ namespace egg.db {
             dbc.Close();
             dbc = null;
         }
-
     }
 }

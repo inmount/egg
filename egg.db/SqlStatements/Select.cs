@@ -151,6 +151,22 @@ namespace egg.db.SqlStatements {
         }
 
         /// <summary>
+        /// 获取数据列表
+        /// </summary>
+        /// <returns></returns>
+        public Orm.Rows<T> GetRows<T>() where T : Orm.Row, new() {
+            return _dbc.GetRows<T>(this.ToSqlString());
+        }
+
+        /// <summary>
+        /// 获取单行数据
+        /// </summary>
+        /// <returns></returns>
+        public T GetRow<T>() where T : Orm.Row, new() {
+            return _dbc.GetRow<T>(this.ToSqlString());
+        }
+
+        /// <summary>
         /// 获取标准SQL字符串
         /// </summary>
         /// <param name="tp"></param>

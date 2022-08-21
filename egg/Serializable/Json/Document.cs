@@ -12,7 +12,7 @@ namespace egg.Serializable.Json {
         /// <summary>
         /// 获取根节点
         /// </summary>
-        public Node RootNode { get; private set; }
+        public Node RootNode { get; set; }
 
         /// <summary>
         /// 对象实例化

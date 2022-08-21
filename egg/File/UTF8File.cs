@@ -52,6 +52,32 @@ namespace egg.File {
         /// 读取文件内容
         /// </summary>
         /// <param name="path"></param>
+        /// <param name="create"></param>
+        /// <returns></returns>
+        public new static Span<byte> ReadAllBytes(string path, bool create) {
+
+            // 判断是否为自动创建
+            if (create) {
+                if (!System.IO.File.Exists(path)) {
+                    using (var file = new egg.File.BinaryFile(path, FileMode.OpenOrCreate)) {
+                        if (WriteWithBoom) file.Write(new byte[] { 0xEF, 0xBB, 0xBF });
+                    }
+                }
+            }
+
+            byte[] res = BinaryFile.ReadAllBytes(path, false);
+            if (res.Length >= 3) {
+                if (res[0] == 0xEF && res[1] == 0xBB && res[2] == 0xBF) {
+                    return new Span<byte>(res, 3, res.Length - 3);
+                }
+            }
+            return new Span<byte>(res, 0, res.Length);
+        }
+
+        /// <summary>
+        /// 读取文件内容
+        /// </summary>
+        /// <param name="path"></param>
         /// <returns></returns>
         public static string ReadAllText(string path) {
             return ReadAllText(path, false);
@@ -67,6 +93,18 @@ namespace egg.File {
                 if (WriteWithBoom) file.Write(new byte[] { 0xEF, 0xBB, 0xBF });
                 byte[] res = System.Text.Encoding.UTF8.GetBytes(cnt);
                 file.Write(res);
+            }
+        }
+
+        /// <summary>
+        /// 将内容写入文件
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="cnt"></param>
+        public new static void WriteAllBytes(string path, byte[] cnt) {
+            using (var file = new egg.File.UTF8File(path, FileMode.Create)) {
+                if (WriteWithBoom) file.Write(new byte[] { 0xEF, 0xBB, 0xBF });
+                file.Write(cnt);
             }
         }
 

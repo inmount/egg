@@ -20,6 +20,28 @@ namespace egg.Serializable.Json {
         }
 
         /// <summary>
+        /// 添加一个节点
+        /// </summary>
+        /// <param name="node"></param>
+        public void Add(Node node) {
+            // 添加新的对象
+            this.Objects.Add(node);
+            nodes.Add(node);
+        }
+
+        /// <summary>
+        /// 删除一个节点
+        /// </summary>
+        /// <param name="index"></param>
+        public void RemoveAt(int index) {
+            // 清理对象
+            Node old = nodes[index];
+            this.Objects.RemoveAt(old.BoId);
+            // 删除节点
+            nodes.RemoveAt(index);
+        }
+
+        /// <summary>
         /// 获取数量
         /// </summary>
         /// <returns></returns>

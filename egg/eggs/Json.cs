@@ -80,6 +80,7 @@ namespace eggs {
             for (int i = 0; i < json.Length; i++) {
                 col++;
                 char chr = json[i];
+                //Debug.WriteLine($"[{i}]{(byte)chr}/0x{((byte)chr).ToString("X2").PadLeft(2, '0')}/{pt}/{sb.Length}");
                 switch (chr) {
                     case '{':
                         #region [=====处理左大括号=====]

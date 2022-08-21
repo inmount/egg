@@ -1,4 +1,5 @@
-﻿using System;
+﻿using egg.db.Orm;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -32,11 +33,25 @@ namespace egg.db {
         Rows GetRows(string sql);
 
         /// <summary>
+        /// 获取数据列表
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        Orm.Rows<T> GetRows<T>(string sql) where T : Orm.Row, new();
+
+        /// <summary>
         /// 获取单行数据
         /// </summary>
         /// <param name="sql">Generic Database Manipulation Language</param>
         /// <returns></returns>
         Row GetRow(string sql);
+
+        /// <summary>
+        /// 获取单行数据
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        T GetRow<T>(string sql) where T : Orm.Row, new();
 
         /// <summary>
         /// 执行语句

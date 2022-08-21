@@ -6,9 +6,9 @@
     <Authors>Egg Studio</Authors>
     <Description>Egg套件中专门服务于CloudDB的组件</Description>
     <PackageIcon>logo.png</PackageIcon>
-    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <Version>1.0.2206.2</Version>
+    <Version>1.1.2207.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="egg" Version="12.4.2206.43" />
+    <PackageReference Include="egg" Version="12.5.2207.46" />
     <PackageReference Include="egg.Jttp" Version="12.3.2206.19" />
   </ItemGroup>
 

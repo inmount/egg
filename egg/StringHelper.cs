@@ -77,6 +77,26 @@ namespace egg {
         }
 
         /// <summary>
+        /// 是否为一个字节型数字
+        /// </summary>
+        public static bool IsByte(this string sz) {
+            byte val = 0;
+            if (byte.TryParse(sz, out val)) {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 获取字节型数据
+        /// </summary>
+        public static byte ToByte(this string sz) {
+            byte res = 0;
+            byte.TryParse(sz, out res);
+            return res;
+        }
+
+        /// <summary>
         /// 是否为一个整型数字
         /// </summary>
         public static bool IsInteger(this string sz) {
@@ -114,6 +134,16 @@ namespace egg {
             long res = 0;
             long.TryParse(sz, out res);
             return res;
+        }
+
+        /// <summary>
+        /// 是否为真描述
+        /// </summary>
+        public static bool IsTrue(this string sz) {
+            // 数字情况下，大于0为真
+            if (sz.IsDouble()) return sz.ToDouble() > 0;
+            // 字符串情况下判断是否为true描述
+            return sz.ToLower() == "true";
         }
 
         /// <summary>

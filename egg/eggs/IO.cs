@@ -80,8 +80,8 @@ namespace eggs {
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static egg.File.SerializableFile<egg.Serializable.Config.Document> OpenConfigDocument(string path) {
-            return new egg.File.SerializableFile<egg.Serializable.Config.Document>(path);
+        public static egg.File.UTF8SerializableFile<egg.Serializable.Config.Document> OpenConfigDocument(string path) {
+            return new egg.File.UTF8SerializableFile<egg.Serializable.Config.Document>(path);
         }
 
         /// <summary>
@@ -89,8 +89,8 @@ namespace eggs {
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static egg.File.SerializableFile<egg.Serializable.Json.Document> OpenJsonDocument(string path) {
-            return new egg.File.SerializableFile<egg.Serializable.Json.Document>(path);
+        public static egg.File.UTF8SerializableFile<egg.Serializable.Json.Document> OpenJsonDocument(string path) {
+            return new egg.File.UTF8SerializableFile<egg.Serializable.Json.Document>(path);
         }
 
         /// <summary>
@@ -98,8 +98,8 @@ namespace eggs {
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static egg.File.SerializableFile<egg.Serializable.Xml.XmlDocument> OpenXmlDocument(string path) {
-            return new egg.File.SerializableFile<egg.Serializable.Xml.XmlDocument>(path);
+        public static egg.File.UTF8SerializableFile<egg.Serializable.Xml.XmlDocument> OpenXmlDocument(string path) {
+            return new egg.File.UTF8SerializableFile<egg.Serializable.Xml.XmlDocument>(path);
         }
 
         /// <summary>
@@ -107,8 +107,8 @@ namespace eggs {
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static egg.File.SerializableFile<egg.Serializable.Html.HtmlDocument> OpenHtmlDocument(string path) {
-            return new egg.File.SerializableFile<egg.Serializable.Html.HtmlDocument>(path);
+        public static egg.File.UTF8SerializableFile<egg.Serializable.Html.HtmlDocument> OpenHtmlDocument(string path) {
+            return new egg.File.UTF8SerializableFile<egg.Serializable.Html.HtmlDocument>(path);
         }
 
         /// <summary>
@@ -116,8 +116,8 @@ namespace eggs {
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static egg.File.SerializableFile<egg.Serializable.Markdown.Document> OpenMarkdownDocument(string path) {
-            return new egg.File.SerializableFile<egg.Serializable.Markdown.Document>(path);
+        public static egg.File.UTF8SerializableFile<egg.Serializable.Markdown.Document> OpenMarkdownDocument(string path) {
+            return new egg.File.UTF8SerializableFile<egg.Serializable.Markdown.Document>(path);
         }
     }
 

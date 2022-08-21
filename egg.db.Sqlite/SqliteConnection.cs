@@ -87,6 +87,33 @@ namespace egg.db {
         }
 
         /// <summary>
+        /// 执行标准的SQL语句并返回列表
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public Orm.Rows<T> GetRows<T>(string sql) where T : Orm.Row, new() {
+            Orm.Rows<T> ls = new Orm.Rows<T>();
+            using (Microsoft.Data.Sqlite.SqliteCommand sqlCommand = new Microsoft.Data.Sqlite.SqliteCommand(sql, dbc)) {
+                using (Microsoft.Data.Sqlite.SqliteDataReader reader = sqlCommand.ExecuteReader(System.Data.CommandBehavior.Default)) {
+
+                    while (reader.Read()) {
+                        T row = new T();
+                        for (int i = 0; i < reader.FieldCount; i++) {
+                            //item.Set(SqlReader.GetName(i), SqlReader[i].ToString());
+                            string szName = reader.GetName(i);
+                            row[szName] = reader[i].ToString();
+                        }
+                        ls.Add(row);
+                    }
+                    reader.Close();
+                }
+            }
+            return ls;
+        }
+
+        /// <summary>
         /// 执行标准的SQL语句并返回单行数据
         /// </summary>
         /// <param name="sql"></param>
@@ -94,6 +121,31 @@ namespace egg.db {
         public Row GetRow(string sql) {
             //throw new NotImplementedException();
             Row row = new Row();
+            using (Microsoft.Data.Sqlite.SqliteCommand sqlCommand = new Microsoft.Data.Sqlite.SqliteCommand(sql, dbc)) {
+                using (Microsoft.Data.Sqlite.SqliteDataReader reader = sqlCommand.ExecuteReader(System.Data.CommandBehavior.Default)) {
+
+                    if (reader.Read()) {
+                        for (int i = 0; i < reader.FieldCount; i++) {
+                            //item.Set(SqlReader.GetName(i), SqlReader[i].ToString());
+                            string szName = reader.GetName(i);
+                            row[szName] = reader[i].ToString();
+                        }
+                    }
+
+                    reader.Close();
+                }
+            }
+            return row;
+        }
+
+        /// <summary>
+        /// 执行标准的SQL语句并返回单行数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public T GetRow<T>(string sql) where T : Orm.Row, new() {
+            T row = new T();
             using (Microsoft.Data.Sqlite.SqliteCommand sqlCommand = new Microsoft.Data.Sqlite.SqliteCommand(sql, dbc)) {
                 using (Microsoft.Data.Sqlite.SqliteDataReader reader = sqlCommand.ExecuteReader(System.Data.CommandBehavior.Default)) {
 

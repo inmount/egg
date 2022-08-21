@@ -87,7 +87,7 @@ namespace egg.db {
     /// <summary>
     /// 数据行
     /// </summary>
-    public class Row : KeyStrings, IDynamicMetaObjectProvider {
+    public class Row : KeyValues, IDynamicMetaObjectProvider {
 
         /// <summary>
         /// 获取或设置值
@@ -140,7 +140,7 @@ namespace egg.db {
         /// 返回默认值
         /// </summary>
         /// <returns></returns>
-        protected override string OnReturnDefaultValue() {
+        protected override Values.Value OnReturnDefaultValue() {
             return "";
         }
 

@@ -77,7 +77,7 @@ namespace egg.db.SqlStatements {
                     //cols += $" = '{_row[key]}'";
                     switch (tp) {
                         case DatabaseTypes.MySQL:
-                            cols += $" = '{_row[key].Replace("'", "\'")}'";
+                            cols += $" = '{_row[key].ToString().Replace("'", "\'")}'";
                             break;
                         //return $"'{_value.Replace("'", "\'")}'";
                         case DatabaseTypes.Microsoft_Office_Access:
@@ -86,7 +86,7 @@ namespace egg.db.SqlStatements {
                         case DatabaseTypes.SQLite:
                         case DatabaseTypes.SQLite_3:
                         case DatabaseTypes.PostgreSQL:
-                            cols += $" = '{_row[key].Replace("'", "''")}'";
+                            cols += $" = '{_row[key].ToString().Replace("'", "''")}'";
                             break;
                         //return $"'{_value.Replace("'", "''")}'";
                         default:
@@ -103,7 +103,7 @@ namespace egg.db.SqlStatements {
                     res += field.ToSqlString(tp);
                     switch (tp) {
                         case DatabaseTypes.MySQL:
-                            res += $" = '{_row[keyCol].Replace("'", "\'")}'";
+                            res += $" = '{_row[keyCol].ToString().Replace("'", "\'")}'";
                             break;
                         //return $"'{_value.Replace("'", "\'")}'";
                         case DatabaseTypes.Microsoft_Office_Access:
@@ -112,7 +112,7 @@ namespace egg.db.SqlStatements {
                         case DatabaseTypes.SQLite:
                         case DatabaseTypes.SQLite_3:
                         case DatabaseTypes.PostgreSQL:
-                            res += $" = '{_row[keyCol].Replace("'", "''")}'";
+                            res += $" = '{_row[keyCol].ToString().Replace("'", "''")}'";
                             break;
                         //return $"'{_value.Replace("'", "''")}'";
                         default:

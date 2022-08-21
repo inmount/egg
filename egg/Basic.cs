@@ -16,7 +16,7 @@ namespace egg {
         /// <summary>
         /// 继承函数，获取字符串表现形式
         /// </summary>
-        protected virtual string OnParseString() { return base.ToString(); }
+        protected virtual string OnParseString() { throw new NotImplementedException(); }
 
         /// <summary>
         /// 获取字符串表示形式
