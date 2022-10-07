@@ -6,14 +6,38 @@ namespace egg.Console {
 
     /// <summary>
     /// E格式参数集合
+    /// 详细格式 --key:value
     /// </summary>
-    public class EParams : egg.KeyStrings {
+    public class EParams : egg.KeyStrings, IParams {
+
+        /// <summary>
+        /// 对象实例化
+        /// </summary>
+        public EParams() {}
 
         /// <summary>
         /// 对象实例化
         /// </summary>
         /// <param name="args"></param>
         public EParams(string[] args = null) {
+            this.SetParams(args);
+        }
+
+        /// <summary>
+        /// 获取参数值
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public string GetParam(string key) {
+            return this[key];
+        }
+
+        /// <summary>
+        /// 设置命令行参数
+        /// </summary>
+        /// <param name="args"></param>
+        public void SetParams(string[] args) {
             // 获取参数
             for (int i = 0; i < args.Length; i++) {
                 string str = args[i];
@@ -32,6 +56,15 @@ namespace egg.Console {
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// 设置命令行参数
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void SetParam(string key, string value) {
+            this[key] = value;
         }
 
         /// <summary>
@@ -55,6 +88,5 @@ namespace egg.Console {
             }
             return sb.ToString();
         }
-
     }
 }

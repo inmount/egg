@@ -6,7 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\egg.Configure\egg.Configure.csproj" />
     <ProjectReference Include="..\egg.SqliteLog\egg.SqliteLog.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="setting.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

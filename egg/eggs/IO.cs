@@ -42,6 +42,51 @@ namespace eggs {
         }
 
         /// <summary>
+        /// 获取操作系统的规范路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string GetOSPath(string path) {
+            if (OS.IsWindows) {
+                return path.Replace("/", "\\");
+            }
+            return path.Replace("\\", "/");
+        }
+
+        /// <summary>
+        /// 获取闭合路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string GetClosedPath(string path) {
+            path = GetOSPath(path);
+            if (OS.IsWindows) {
+                if (path.EndsWith("\\")) return path;
+                return path + "\\";
+            }
+            if (path.EndsWith("/")) return path;
+            return path + "/";
+        }
+
+        /// <summary>
+        /// 获取执行目录下的文件
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string GetExecutionPath(string path) {
+            return Assembly.ExecutionDirectory + GetOSPath(path);
+        }
+
+        /// <summary>
+        /// 获取执行目录下的文件
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string GetWorkPath(string path) {
+            return Assembly.WorkingDirectory + GetOSPath(path);
+        }
+
+        /// <summary>
         /// 获取所属文件
         /// </summary>
         /// <param name="path"></param>

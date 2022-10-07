@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace test {
-    public static class EggLog { 
+    public static class EggLog {
         internal static void Test() {
             Random random = new Random();
             using (egg.SqliteLog.Logger logger = new egg.SqliteLog.Logger("X:\\a.dlog")) {

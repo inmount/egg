@@ -17,7 +17,7 @@ namespace eggs {
         /// <param name="args"></param>
         /// <returns></returns>
         public static egg.Console.Arguments GetConsoleArgs(string[] args) {
-            return new egg.Console.Arguments(args);
+            return eggs.Assembly.GetParams<egg.Console.Arguments>(args);
         }
 
     }

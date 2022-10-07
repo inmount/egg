@@ -9,8 +9,14 @@ namespace egg {
     /// </summary>
     public class Time : egg.BasicObject {
 
+        // 变量定义
         private DateTime val;
         private int gnTimeZone;
+
+        /// <summary>
+        /// 获取关联的时间对象
+        /// </summary>
+        public DateTime DateTime { get { return val; } }
 
         /// <summary>
         /// 对象实例化
@@ -48,6 +54,7 @@ namespace egg {
 
         }
 
+        // 初始化
         private void Init() {
 
             // 计算时区

@@ -6,20 +6,37 @@ namespace egg.Console {
 
     /// <summary>
     /// 参数集合
+    /// 详细格式1：/key value
+    /// 详细格式2：-key value
     /// </summary>
-    public class Arguments : egg.KeyList<string> {
+    public class Arguments : egg.KeyStrings, IParams {
+
+        private string[] _tags;
 
         /// <summary>
         /// 对象实例化
         /// </summary>
-        /// <param name="args"></param>
-        /// <param name="tags"></param>
-        public Arguments(string[] args = null, string[] tags = null) {
+        public Arguments() {
+            _tags = new string[] { "-", "/" };
+        }
 
+        /// <summary>
+        /// 获取参数值
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public string GetParam(string key) {
+            return this[key];
+        }
+
+        /// <summary>
+        /// 设置命令行参数
+        /// </summary>
+        /// <param name="args"></param>
+        public void SetParams(string[] args) {
             string sign = null;
             string value = null;
-            if (eggs.Object.IsNull(tags)) tags = new string[] { "-", "/" };
-
+            string[] tags = _tags;
             // 获取参数
             for (int i = 0; i < args.Length; i++) {
                 string argSign = args[i];
@@ -52,8 +69,15 @@ namespace egg.Console {
                 this[sign] = value;
                 value = null;
             }
-
         }
 
+        /// <summary>
+        /// 设置参数值
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        void IParams.SetParam(string key, string value) {
+            this[key] = value;
+        }
     }
 }
