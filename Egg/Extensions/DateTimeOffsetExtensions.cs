@@ -20,5 +20,25 @@ namespace Egg {
             return dt.ToString("yyyy-MM-dd HH:mm:ss");
         }
 
+        /// <summary>
+        /// 获取yyyy-MM-dd格式时间表示字符串
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static string ToDateString(this DateTimeOffset dt)
+        {
+            return dt.ToString("yyyy-MM-dd");
+        }
+
+        /// <summary>
+        /// 获取HH:mm:ss格式时间表示字符串
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static string ToTimeString(this DateTimeOffset dt)
+        {
+            return dt.ToString("HH:mm:ss");
+        }
+
     }
 }

@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg", "Egg\Egg.csproj", "{E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{1CC81882-1AFA-4220-9F53-0458792CBD2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egg.Test.Console", "Egg.Test\Egg.Test.Console\Egg.Test.Console.csproj", "{B288D716-81CC-4B18-8287-1CD4F906C532}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.Test.Console", "Egg.Test\Egg.Test.Console\Egg.Test.Console.csproj", "{B288D716-81CC-4B18-8287-1CD4F906C532}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egg.Log", "Egg.Logger\Egg.Log.csproj", "{0E01037D-7F6C-4C78-913B-3633F0464BC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{B288D716-81CC-4B18-8287-1CD4F906C532}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B288D716-81CC-4B18-8287-1CD4F906C532}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B288D716-81CC-4B18-8287-1CD4F906C532}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E01037D-7F6C-4C78-913B-3633F0464BC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E01037D-7F6C-4C78-913B-3633F0464BC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E01037D-7F6C-4C78-913B-3633F0464BC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E01037D-7F6C-4C78-913B-3633F0464BC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
