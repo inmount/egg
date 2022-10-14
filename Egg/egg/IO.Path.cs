@@ -4,12 +4,14 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Egg;
 
-namespace egg {
+namespace egg
+{
 
     /// <summary>
     /// 输入输出相关函数
     /// </summary>
-    public static partial class IO {
+    public static partial class IO
+    {
 
         /// <summary>
         /// 获取操作系统的标准路径格式
@@ -18,7 +20,8 @@ namespace egg {
         /// <returns></returns>
         public static string GetOSPathFormat(string path)
         {
-            if (OS.IsWindows) {
+            if (OS.IsWindows)
+            {
                 return path.Replace("/", "\\");
             }
             return path.Replace("\\", "/");
@@ -32,7 +35,8 @@ namespace egg {
         public static string GetClosedPath(string path)
         {
             path = GetOSPathFormat(path);
-            if (OS.IsWindows) {
+            if (OS.IsWindows)
+            {
                 if (path.EndsWith("\\")) return path;
                 return path + "\\";
             }
@@ -68,9 +72,12 @@ namespace egg {
         /// <returns></returns>
         public static string[] GetFiles(string path, [Optional] string pattern)
         {
-            if (pattern.IsNullOrEmpty()) {
+            if (pattern.IsEmpty())
+            {
                 return System.IO.Directory.GetFiles(path);
-            } else {
+            }
+            else
+            {
                 return System.IO.Directory.GetFiles(path, pattern);
             }
         }
