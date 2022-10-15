@@ -16,13 +16,7 @@ namespace SqliteEFCore.DbContexts
 
         public CoreDbContext(DbContextOptions options) : base(options)
         {
-            //_connStr = connStr;
         }
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    //optionsBuilder.UseSqlite(_connStr);
-        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

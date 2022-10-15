@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Xml.Linq;
 using System.Security.Cryptography;
+using Egg.EFCore.Sqlite;
 
 namespace Egg.EFCore
 {
@@ -29,10 +30,8 @@ namespace Egg.EFCore
         /// <returns></returns>
         public async Task<bool> EnsureCreated(DbContext context)
         {
-            //throw new NotImplementedException();
-
-            // 连接数据库
-            using (System.Data.Common.DbConnection conn = context.Database.GetDbConnection())
+            // 获取数据库连接
+            System.Data.Common.DbConnection conn = context.Database.GetDbConnection();
             {
                 using (var comm = conn.CreateCommand())
                 {

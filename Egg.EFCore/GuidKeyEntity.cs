@@ -20,6 +20,7 @@ namespace Egg.EFCore
         /// </summary>
         //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
+        [Column(TypeName = "varchar(50)")]
         public override string Id { get => base.Id; set => base.Id = value; }
 
         /// <summary>

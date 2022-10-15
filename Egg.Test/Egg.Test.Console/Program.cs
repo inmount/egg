@@ -7,7 +7,9 @@ using Egg.Log.Loggers;
 using Egg.Test.Console;
 using Egg.Test.Console.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using SqliteEFCore.DbContexts;
+using System.Data;
 
 // 初始化日志管理器
 egg.Logger
@@ -40,19 +42,27 @@ var ts2 = dt2 - now;
 Console.WriteLine(ts2);
 
 var optionsBuilder = new DbContextOptionsBuilder<CoreDbContext>();
-optionsBuilder.UseSqlite($"Data Source=D:\\core.db");
+//optionsBuilder.UseSqlite($"Data Source=D:\\core.db");
+optionsBuilder.UseNpgsql(Consts.Connect_String);
 var context = new CoreDbContext(optionsBuilder.Options);
-egg.Logger.Info(context.Database.ProviderName, "DbContext");
-egg.Logger.Info(context.GetDbType(), "DbContext");
-egg.Logger.Info(context.Peoples.ToQueryString(), "DbContext");
-egg.Logger.Info("EnsureCreatedSqlite:" + context.EnsureCreatedSqlite(), "DbContext");
-egg.Logger.Info(context.Database.GetDbConnection().DataSource, "DbContext");
+//egg.Logger.Info(context.Database.ProviderName, "DbContext");
+//egg.Logger.Info(context.GetDbType(), "DbContext");
+//egg.Logger.Info(context.Peoples.ToQueryString(), "DbContext");
+//egg.Logger.Info("EnsureCreated:" + context.EnsureCreatedSqlite(), "Sqlite");
+egg.Logger.Info("EnsureCreated:" + context.EnsureCreatedPostgreSQL(), "PostgreSQL");
+//egg.Logger.Info(context.Database.GetDbConnection().DataSource, "DbContext");
 
-SqliteCreater creater = new SqliteCreater();
-//egg.Logger.Info(creater.GetEnsureCreatedSql(context), "DbContext");
+//SqliteCreater sqlite = new SqliteCreater();
+//egg.Logger.Info(sqlite.GetEnsureCreatedSql(context), "DbContext");
 
-var list = from p in context.People2s
-           select p;
+//PostgreSQLCreater postgreSQL = new PostgreSQLCreater();
+//egg.Logger.Info(postgreSQL.GetEnsureCreatedSql(context), "DbContext");
+
+var query = from p in context.People2s
+            select p;
+
+Console.WriteLine(query.ToQueryString());
+var list = query.ToList();
 
 foreach (var p in list)
 {

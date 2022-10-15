@@ -12,14 +12,21 @@ namespace Egg.Test.Console.Entities
     /// <summary>
     /// 人类2
     /// </summary>
+    [Table("people2", Schema = "public")]
     public class People2 : GuidKeyEntity
     {
 
         /// <summary>
         /// 姓名
         /// </summary>
-        [Column("name", TypeName = "text")]
+        [Column("name", TypeName = "varchar(100)")]
         public virtual string? Name { get; set; }
+
+        /// <summary>
+        /// 姓名
+        /// </summary>
+        [Column("name_1", TypeName = "varchar")]
+        public virtual string? Name1 { get; set; }
 
         /// <summary>
         /// 年龄
@@ -30,6 +37,12 @@ namespace Egg.Test.Console.Entities
         /// 年龄
         /// </summary>
         public virtual int Age { get; set; }
+
+        /// <summary>
+        /// 年龄
+        /// </summary>
+        [Column("age_1", TypeName = "varchar")]
+        public virtual int Age1 { get; set; }
 
         /// <summary>
         /// 性别

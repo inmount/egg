@@ -1,12 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Version>16.0.2210.3</Version>
     <Authors>Egg Studio</Authors>
-    <Description>一套服务于EFCore的辅助开发组件</Description>
+    <Description>一套服务于EFCore PostgreSql数据库的辅助开发组件</Description>
     <PackageIcon>logo.png</PackageIcon>
     <RepositoryUrl>https://github.com/inmount/egg</RepositoryUrl>
   </PropertyGroup>
@@ -19,11 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.17" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Egg\Egg.csproj" />
+    <ProjectReference Include="..\Egg.EFCore\Egg.EFCore.csproj" />
   </ItemGroup>
 
 </Project>

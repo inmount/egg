@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Threading.Tasks;
 
 namespace Egg.EFCore
 {
@@ -8,6 +9,7 @@ namespace Egg.EFCore
     /// </summary>
     public static class DbContextExtensions
     {
+
         /// <summary>
         /// 创建
         /// </summary>

@@ -14,7 +14,8 @@ namespace Egg.Test.Console.DbContexts
         public CoreDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<CoreDbContext>();
-            optionsBuilder.UseSqlite($"D:\\core.db");
+            //optionsBuilder.UseSqlite($"D:\\core.db");
+            optionsBuilder.UseNpgsql(Consts.Connect_String);
 
             return new CoreDbContext(optionsBuilder.Options);
         }
