@@ -5,6 +5,7 @@
 | 组件 | .Net版本 | 描述 |
 | ---- | ----- | ---- |
 | egg | .Net Standard 2.1 | 基础组件 |
+| Egg.BarCode | .Net Standard 2.1 | 条码组件 |
 | Egg.EFCore | .Net Standard 2.1 | EFCore组件 |
 | Egg.EFCore.PostgreSQL | .Net Standard 2.1 | PostgreSQL组件 |
 | Egg.EFCore.Sqlite | .Net Standard 2.1 | Sqlite组件 |

@@ -3,11 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
+    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Version>16.0.2210.5</Version>
     <Authors>Egg Studio</Authors>
-    <Description>一套日志开发套件</Description>
-    <PackageIcon>logo.png</PackageIcon>
+    <Description>一套用于生成条码的开发组件</Description>
     <PackageProjectUrl>https://github.com/inmount/egg</PackageProjectUrl>
+    <PackageIcon>logo.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>

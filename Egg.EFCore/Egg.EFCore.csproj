@@ -4,11 +4,12 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <Version>16.0.2210.3</Version>
+    <Version>16.0.2210.5</Version>
     <Authors>Egg Studio</Authors>
     <Description>一套服务于EFCore的辅助开发组件</Description>
     <PackageIcon>logo.png</PackageIcon>
     <RepositoryUrl>https://github.com/inmount/egg</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/inmount/egg</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>

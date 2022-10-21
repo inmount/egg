@@ -2,22 +2,49 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Egg.Log.LoggerCollection;
 
-namespace egg {
+namespace egg
+{
 
     /// <summary>
     /// 日志管理器
     /// </summary>
-    public static class Logger {
+    public static class Logger
+    {
 
         private static LoggerCollection? _loggers;
+
+        /// <summary>
+        /// 注册一个日志委托
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        public static LoggerCollection Reg(LogMessageHandle log)
+        {
+            _loggers = _loggers ?? new LoggerCollection();
+            _loggers.AddHandle(log);
+            return _loggers;
+        }
+
+        /// <summary>
+        /// 注册一个日志委托
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        public static LoggerCollection Reg(LogEntityHandle log)
+        {
+            _loggers = _loggers ?? new LoggerCollection();
+            _loggers.AddHandle(log);
+            return _loggers;
+        }
 
         /// <summary>
         /// 使用一个日志管理器
         /// </summary>
         /// <param name="logger"></param>
         /// <returns></returns>
-        public static LoggerCollection Use(ILogable logger)
+        public static LoggerCollection Reg(ILogable logger)
         {
             _loggers = _loggers ?? new LoggerCollection();
             _loggers.Add(logger);
@@ -46,7 +73,8 @@ namespace egg {
         /// <param name="evt"></param>
         public static void Debug(string message, string evt = "default")
         {
-            _loggers?.Log(new LogEntity() {
+            _loggers?.Log(new LogEntity()
+            {
                 Event = evt,
                 Level = LogLevel.Debug,
                 Message = message
@@ -60,7 +88,8 @@ namespace egg {
         /// <param name="evt"></param>
         public static void Info(string message, string evt = "default")
         {
-            _loggers?.Log(new LogEntity() {
+            _loggers?.Log(new LogEntity()
+            {
                 Event = evt,
                 Level = LogLevel.Info,
                 Message = message
@@ -74,7 +103,8 @@ namespace egg {
         /// <param name="evt"></param>
         public static void Warn(string message, string evt = "default")
         {
-            _loggers?.Log(new LogEntity() {
+            _loggers?.Log(new LogEntity()
+            {
                 Event = evt,
                 Level = LogLevel.Warn,
                 Message = message
@@ -88,7 +118,8 @@ namespace egg {
         /// <param name="evt"></param>
         public static void Error(string message, string evt = "default")
         {
-            _loggers?.Log(new LogEntity() {
+            _loggers?.Log(new LogEntity()
+            {
                 Event = evt,
                 Level = LogLevel.Error,
                 Message = message
@@ -102,7 +133,8 @@ namespace egg {
         /// <param name="evt"></param>
         public static void Fatal(string message, string evt = "default")
         {
-            _loggers?.Log(new LogEntity() {
+            _loggers?.Log(new LogEntity()
+            {
                 Event = evt,
                 Level = LogLevel.Fatal,
                 Message = message

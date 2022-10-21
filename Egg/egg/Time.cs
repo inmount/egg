@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace egg {
+namespace egg
+{
 
     /// <summary>
     /// 时间快捷操作类
     /// </summary>
-    public static class Time {
+    public static class Time
+    {
 
         /// <summary>
         /// 获取当前时间
@@ -17,9 +19,16 @@ namespace egg {
         /// <summary>
         /// 从字符串加载时间
         /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static DateTimeOffset Parse(DateTime dt) { return (DateTimeOffset)(DateTime.SpecifyKind(dt, DateTimeKind.Utc)); }
+
+        /// <summary>
+        /// 从字符串加载时间
+        /// </summary>
         /// <param name="sz"></param>
         /// <returns></returns>
-        public static DateTimeOffset Parse(string sz) { return DateTimeOffset.Parse(sz); }
+        public static DateTimeOffset Parse(string sz) { return Parse(DateTime.Parse(sz)); }
 
         /// <summary>
         /// 从时间戳加载时间

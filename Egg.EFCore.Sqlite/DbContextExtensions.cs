@@ -22,6 +22,7 @@ namespace Egg.EFCore.Sqlite
         /// 执行SQL语句
         /// </summary>
         /// <param name="context"></param>
+        /// <param name="sql"></param>
         /// <returns></returns>
         public static async Task<int> ExecuteNonQueryAsync(this DbContext context, string sql)
         {
@@ -47,6 +48,7 @@ namespace Egg.EFCore.Sqlite
         /// 执行SQL语句
         /// </summary>
         /// <param name="context"></param>
+        /// <param name="sql"></param>
         /// <returns></returns>
         public static int ExecuteNonQuery(this DbContext context, string sql)
         {
