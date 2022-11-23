@@ -12,7 +12,7 @@ namespace Egg.EFCore
     /// </summary>
     /// <typeparam name="TClass"></typeparam>
     /// <typeparam name="TId"></typeparam>
-    public interface IRepositoryBase<TClass, TId> where TClass : IEntityBase<TId>
+    public interface IRepository<TClass, TId> where TClass : IEntity<TId>
     {
 
         /// <summary>

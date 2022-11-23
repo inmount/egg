@@ -12,7 +12,7 @@ namespace Egg.EFCore
     /// <summary>
     /// 带主键的实例
     /// </summary>
-    public class Entity<TId> : IEntityBase<TId>
+    public class Entity<TId> : IEntity<TId>
     {
         /// <summary>
         /// 唯一标识

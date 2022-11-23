@@ -11,7 +11,7 @@ namespace Egg.EFCore
     /// <summary>
     /// 带主键的实例
     /// </summary>
-    public interface IEntityBase<TId>
+    public interface IEntity<TId>
     {
         /// <summary>
         /// 唯一标识

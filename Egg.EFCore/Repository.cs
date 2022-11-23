@@ -10,7 +10,7 @@ namespace Egg.EFCore
     /// <summary>
     /// 数据仓库
     /// </summary>
-    public class RepositoryBase<TClass, TId> : IRepositoryBase<TClass, TId> where TClass : class, IEntityBase<TId>
+    public class Repository<TClass, TId> : IRepository<TClass, TId> where TClass : class, IEntity<TId>
     {
 
         /// <summary>
@@ -27,10 +27,10 @@ namespace Egg.EFCore
         /// 对象实例化
         /// </summary>
         /// <param name="context"></param>
-        public RepositoryBase(DbContext context)
+        public Repository(DbContext context)
         {
             Context = context;
-            DbSet = Context.Set<TClass>();
+            DbSet = context.Set<TClass>();
         }
 
         /// <summary>

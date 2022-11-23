@@ -176,6 +176,20 @@ namespace Egg
         }
 
         /// <summary>
+        /// 转为字节数组
+        /// </summary>
+        public static string? ToString(this byte[] bytes, Encoding encoding)
+        {
+            if (bytes is null) return null;
+            return encoding.GetString(bytes);
+        }
+
+        /// <summary>
+        /// 转为字节数组
+        /// </summary>
+        public static string? ToUtf8String(this byte[] bytes) => bytes.ToString(Encoding.UTF8);
+
+        /// <summary>
         /// 是否为一个标准的IPv4字符串
         /// </summary>
         public static bool IsIPv4(this string sz)

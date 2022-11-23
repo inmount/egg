@@ -22,7 +22,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.EFCore.PostgreSQL", "Egg.EFCore.PostgreSQL\Egg.EFCore.PostgreSQL.csproj", "{B0A74D3E-4843-4662-986E-C0A9CB9B72D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egg.BarCode", "Egg.BarCode\Egg.BarCode.csproj", "{7904F92D-DC5F-40EB-821D-BF4AC67546C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.BarCode", "Egg.BarCode\Egg.BarCode.csproj", "{7904F92D-DC5F-40EB-821D-BF4AC67546C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egg.VirtualDisk", "Egg.VirtualDisk\Egg.VirtualDisk.csproj", "{7F0DF78F-EABD-49FE-8E45-2BC39ED5ECE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egg.Security", "Egg.Security\Egg.Security.csproj", "{48F0404F-5BC7-4FFA-B5D4-6376F6A6C59E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,6 +62,14 @@ Global
 		{7904F92D-DC5F-40EB-821D-BF4AC67546C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7904F92D-DC5F-40EB-821D-BF4AC67546C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7904F92D-DC5F-40EB-821D-BF4AC67546C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F0DF78F-EABD-49FE-8E45-2BC39ED5ECE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F0DF78F-EABD-49FE-8E45-2BC39ED5ECE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F0DF78F-EABD-49FE-8E45-2BC39ED5ECE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F0DF78F-EABD-49FE-8E45-2BC39ED5ECE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48F0404F-5BC7-4FFA-B5D4-6376F6A6C59E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48F0404F-5BC7-4FFA-B5D4-6376F6A6C59E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48F0404F-5BC7-4FFA-B5D4-6376F6A6C59E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48F0404F-5BC7-4FFA-B5D4-6376F6A6C59E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

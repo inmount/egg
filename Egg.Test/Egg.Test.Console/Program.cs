@@ -23,8 +23,6 @@ egg.Logger
     .Use<ConsoleLogger>()
     .Use<VsLogger>();
 
-Console.WriteLine("Hello, World!");
-
 Rules rules = new Rules();
 rules.Use(new FixedString("XS-"))
     .Use(new DateTimeRule("yyyyMMdd"))
@@ -67,38 +65,33 @@ egg.Logger.Debug("a=" + obj1?.a);
 egg.Logger.Info("obj2=" + obj2?.IsNull());
 egg.Logger.Warn("obj3.a=" + obj3?.a, "ClsTestObject");
 
-var now = egg.Time.Now;
-var day30 = now.AddDays(30);
-egg.Logger.Error(now.ToDateTimeString());
-egg.Logger.Fatal("" + now.ToUnixTimeSeconds());
-var now2 = egg.Time.Parse(now.ToUnixTimeSeconds());
-Console.WriteLine(now2.ToDateTimeString());
-var ts = day30 - now;
-Console.WriteLine(ts);
-var dt2 = egg.Time.Parse(day30.ToUnixTimeSeconds());
-Console.WriteLine(dt2.ToDateTimeString());
-var ts2 = dt2 - now;
-Console.WriteLine(ts2);
+byte bb = 1 | 2 | 4 | 8;
+egg.Logger.Info($"~{bb}={~bb} => {(bb & ~4)}");
 
-// 调试时间
-egg.Logger.Debug("" + ((DateTimeOffset)DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)).ToDateTimeString(), "Now");
-egg.Logger.Debug("" + ((DateTimeOffset)DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)).ToUnixTimeSeconds(), "Now");
-egg.Logger.Debug("" + ((DateTimeOffset)DateTime.SpecifyKind(DateTime.Parse("2022-10-16 11:29:56"), DateTimeKind.Utc)).ToDateTimeString(), "2022-10-16 11:29:56");
-egg.Logger.Debug("" + ((DateTimeOffset)DateTime.SpecifyKind(DateTime.Parse("2022-10-16 11:29:56"), DateTimeKind.Utc)).ToUnixTimeSeconds(), "2022-10-16 11:29:56");
-egg.Logger.Debug("" + ((DateTimeOffset)DateTime.Parse("2022-10-16 11:29:56")).ToUnixTimeSeconds(), "2022-10-16 11:29:56");
-egg.Logger.Debug("" + (egg.Time.Parse("2022-10-16 11:29:56")).ToUnixTimeSeconds(), "egg.Time.Parse");
+Random rand = new Random();
+for (int i = 0; i < 100; i++)
+{
+    var num = rand.NextDouble();
+    string sha512 = num.ToString().GetSha512();
+    egg.Logger.Info($"{num} -> [{sha512.Length}]{sha512}");
+}
 
-var optionsBuilder = new DbContextOptionsBuilder<CoreDbContext>();
+// 测试EFCore
+//Egg.Test.Console.EFCore.Test.Run();
+
+// 测试VirtualDisk
+Egg.Test.Console.VirtualDisk.Test.Run();
+
+//var optionsBuilder = new DbContextOptionsBuilder<CoreDbContext>();
 //optionsBuilder.UseSqlite($"Data Source=D:\\core.db");
-//var optionsBuilder = new DbContextOptionsBuilder<DbContext>();
-optionsBuilder.UseNpgsql(Consts.Connect_String);
-var context = new CoreDbContext(optionsBuilder.Options);
-var people2Repository = new RepositoryBase<People2, string>(context);
+
+//var context = new DbContext(optionsBuilder.Options);
+//var people2Repository = new RepositoryBase<People2, string>(context);
 //egg.Logger.Info(context.Database.ProviderName, "DbContext");
 //egg.Logger.Info(context.GetDbType(), "DbContext");
 //egg.Logger.Info(context.Peoples.ToQueryString(), "DbContext");
 //egg.Logger.Info("EnsureCreated:" + context.EnsureCreatedSqlite(), "Sqlite");
-egg.Logger.Info("EnsureCreated:" + context.EnsureCreatedPostgreSQL(), "PostgreSQL");
+//egg.Logger.Info("EnsureCreated:" + context.EnsureCreatedPostgreSQL(), "PostgreSQL");
 //egg.Logger.Info(context.Database.GetDbConnection().DataSource, "DbContext");
 
 //SqliteCreater sqlite = new SqliteCreater();
@@ -107,23 +100,23 @@ egg.Logger.Info("EnsureCreated:" + context.EnsureCreatedPostgreSQL(), "PostgreSQ
 //PostgreSQLCreater postgreSQL = new PostgreSQLCreater();
 //egg.Logger.Info(postgreSQL.GetEnsureCreatedSql(context), "DbContext");
 
-var query = from p in people2Repository.Query()
-            select p;
+//var query = from p in people2Repository.Query()
+//            select p;
 
-Console.WriteLine(query.ToQueryString());
-var list = query.ToList();
+//Console.WriteLine(query.ToQueryString());
+//var list = query.ToList();
 
-foreach (var p in list)
-{
-    egg.Logger.Info($"{{id: \"{p.Id}\", Age: {p.Age}, Detail: \"{p.Detail}\"}}", "People");
-}
+//foreach (var p in list)
+//{
+//    egg.Logger.Info($"{{id: \"{p.Id}\", Age: {p.Age}, Detail: \"{p.Detail}\"}}", "People");
+//}
 
-Random rnd = new Random();
-var people2 = new People2()
-{
-    Age = rnd.Next(100),
-    Detail = "OK"
-};
-people2Repository.Insert(people2);
+//Random rnd = new Random();
+//var people2 = new People2()
+//{
+//    Age = rnd.Next(100),
+//    Detail = "OK"
+//};
+//people2Repository.Insert(people2);
 //context.People2s.Add(people);
 //context.SaveChanges();

@@ -14,7 +14,7 @@ namespace Egg.BarCode
         private string _format;
 
         /// <summary>
-        /// 实例化一个
+        /// 日期时间
         /// </summary>
         /// <param name="dt"></param>
         /// <param name="format"></param>
@@ -25,10 +25,8 @@ namespace Egg.BarCode
         }
 
         /// <summary>
-        /// 实例化一个
+        /// 日期时间
         /// </summary>
-        /// <param name="dt"></param>
-        /// <param name="format"></param>
         public DateTimeRule(string format)
         {
             _dateTimeOffset = egg.Time.Now;
