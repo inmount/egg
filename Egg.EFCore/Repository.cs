@@ -13,6 +13,8 @@ namespace Egg.EFCore
     public class Repository<TClass, TId> : IRepository<TClass, TId> where TClass : class, IEntity<TId>
     {
 
+        private Updater<TClass> _updater;
+
         /// <summary>
         /// DB上下文
         /// </summary>
@@ -31,6 +33,7 @@ namespace Egg.EFCore
         {
             Context = context;
             DbSet = context.Set<TClass>();
+            _updater = new Updater<TClass>(context);
         }
 
         /// <summary>
@@ -99,10 +102,13 @@ namespace Egg.EFCore
         /// 获取查询器
         /// </summary>
         /// <returns></returns>
-        public IQueryable<TClass> Query()
-        {
-            return DbSet;
-        }
+        public IQueryable<TClass> Query() => this.DbSet;
+
+        /// <summary>
+        /// 获取更新器
+        /// </summary>
+        /// <returns></returns>
+        public Updater<TClass> Update() => _updater;
 
         /// <summary>
         /// 更新数据

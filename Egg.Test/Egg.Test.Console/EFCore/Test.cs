@@ -24,7 +24,6 @@ namespace Egg.Test.Console.EFCore
 
             var query = from p in people2Repository.Query()
                         select p;
-
             egg.Logger.Info(query.ToQueryString());
             var list = query.ToList();
 
