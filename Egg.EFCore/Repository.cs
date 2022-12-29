@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Egg.EFCore
@@ -12,7 +13,7 @@ namespace Egg.EFCore
     /// </summary>
     public class Repository<TClass, TId> : IRepository<TClass, TId> where TClass : class, IEntity<TId>
     {
-
+        // 私有变量
         private Updater<TClass> _updater;
 
         /// <summary>
@@ -74,7 +75,6 @@ namespace Egg.EFCore
         public async Task InsertAsync(TClass entity)
         {
             await DbSet.AddAsync(entity);
-            Context.SaveChanges();
         }
 
         /// <summary>
@@ -95,7 +95,6 @@ namespace Egg.EFCore
         public async Task InsertListAsync(IEnumerable<TClass> entity)
         {
             await DbSet.AddRangeAsync(entity);
-            await Context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -128,7 +127,7 @@ namespace Egg.EFCore
         public async Task UpdateAsync(TClass entity)
         {
             Context.Entry(entity).State = EntityState.Modified;
-            await Context.SaveChangesAsync();
+            await Task.CompletedTask;
         }
 
         /// <summary>

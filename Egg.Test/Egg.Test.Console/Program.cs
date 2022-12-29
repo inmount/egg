@@ -69,7 +69,7 @@ byte bb = 1 | 2 | 4 | 8;
 egg.Logger.Info($"~{bb}={~bb} => {(bb & ~4)}");
 
 Random rand = new Random();
-for (int i = 0; i < 100; i++)
+for (int i = 0; i < 10; i++)
 {
     var num = rand.NextDouble();
     string sha512 = num.ToString().GetSha512();
@@ -77,10 +77,10 @@ for (int i = 0; i < 100; i++)
 }
 
 // 测试EFCore
-//Egg.Test.Console.EFCore.Test.Run();
+Egg.Test.Console.EFCore.Test.Run();
 
 // 测试VirtualDisk
-Egg.Test.Console.VirtualDisk.Test.Run();
+//Egg.Test.Console.VirtualDisk.Test.Run();
 
 //var optionsBuilder = new DbContextOptionsBuilder<CoreDbContext>();
 //optionsBuilder.UseSqlite($"Data Source=D:\\core.db");

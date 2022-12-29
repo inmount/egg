@@ -32,13 +32,19 @@ namespace Egg.Test.Console.EFCore
                 egg.Logger.Info($"{{id: \"{p.Id}\", Age: {p.Age}, Detail: \"{p.Detail}\"}}", "People");
             }
 
-            Random rnd = new Random();
-            var people2 = new People2()
+            egg.Logger.Info($"Count: {list.Count}", "People");
+
+            using (UnitOfWork uow = new UnitOfWork(dbContext))
             {
-                Age = rnd.Next(100),
-                Detail = "OK"
-            };
-            people2Repository.Insert(people2);
+                Random rnd = new Random();
+                var people2 = new People2()
+                {
+                    Age = rnd.Next(100),
+                    Detail = "OK"
+                };
+                people2Repository.Insert(people2);
+                uow.Complete();
+            }
         }
     }
 }
