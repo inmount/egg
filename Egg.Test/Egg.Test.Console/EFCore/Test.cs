@@ -24,6 +24,10 @@ namespace Egg.Test.Console.EFCore
 
             var query = from p in people2Repository.Query()
                         select p;
+
+            
+            //query.Where()
+
             egg.Logger.Info(query.ToQueryString());
             var list = query.ToList();
 
@@ -43,6 +47,7 @@ namespace Egg.Test.Console.EFCore
                     Detail = "OK"
                 };
                 people2Repository.Insert(people2);
+                people2Repository.Update().Use(d => new { d.Sex, d.Age }).Set(new People2() { Sex = true, Age = 2 }, d => d.flt == 0 && d.Age > 10);
                 uow.Complete();
             }
         }

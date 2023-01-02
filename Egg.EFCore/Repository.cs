@@ -14,7 +14,7 @@ namespace Egg.EFCore
     public class Repository<TClass, TId> : IRepository<TClass, TId> where TClass : class, IEntity<TId>
     {
         // 私有变量
-        private Updater<TClass> _updater;
+        private Updater<TClass, TId> _updater;
 
         /// <summary>
         /// DB上下文
@@ -34,7 +34,7 @@ namespace Egg.EFCore
         {
             Context = context;
             DbSet = context.Set<TClass>();
-            _updater = new Updater<TClass>(context);
+            _updater = new Updater<TClass, TId>(context);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Egg.EFCore
         /// 获取更新器
         /// </summary>
         /// <returns></returns>
-        public Updater<TClass> Update() => _updater;
+        public Updater<TClass, TId> Update() => _updater;
 
         /// <summary>
         /// 更新数据
