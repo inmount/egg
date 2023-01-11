@@ -23,61 +23,61 @@ egg.Logger
     .Use<ConsoleLogger>()
     .Use<VsLogger>();
 
-Rules rules = new Rules();
-rules.Use(new FixedString("XS-"))
-    .Use(new DateTimeRule("yyyyMMdd"))
-    .Use(new FixedString("-"))
-    .Use(new SerialNoRules()
-        .Use(new SerialNoRule() { Min = 1, Max = 105, Space = 4 })
-        .Use(new SerialNoRule() { Min = 106, Step = 2, Space = 4 })
-        )
-    .Use(new FixedString("-"))
-    .Use(new RandomStringRule("1234567890", 4));
+//Rules rules = new Rules();
+//rules.Use(new FixedString("XS-"))
+//    .Use(new DateTimeRule("yyyyMMdd"))
+//    .Use(new FixedString("-"))
+//    .Use(new SerialNoRules()
+//        .Use(new SerialNoRule() { Min = 1, Max = 105, Space = 4 })
+//        .Use(new SerialNoRule() { Min = 106, Step = 2, Space = 4 })
+//        )
+//    .Use(new FixedString("-"))
+//    .Use(new RandomStringRule("1234567890", 4));
 
-// 生成条码
-for (int i = 101; i <= 112; i++)
-{
-    Console.WriteLine(egg.BarCodeGenerator.Generate(rules, i));
-}
+//// 生成条码
+//for (int i = 101; i <= 112; i++)
+//{
+//    Console.WriteLine(egg.BarCodeGenerator.Generate(rules, i));
+//}
 
-RuleCollection rc = new RuleCollection();
-rc.Use("dt", new DateTimeRule("yyyyMMdd"))
-    .Use("sn", new SerialNoRules()
-        .Use(new SerialNoRule() { Min = 1, Max = 105, Space = 4 })
-        .Use(new SerialNoRule() { Min = 106, Step = 2, Space = 4 })
-        );
-People2 p2 = new People2();
-p2.Age = 50;
+//RuleCollection rc = new RuleCollection();
+//rc.Use("dt", new DateTimeRule("yyyyMMdd"))
+//    .Use("sn", new SerialNoRules()
+//        .Use(new SerialNoRule() { Min = 1, Max = 105, Space = 4 })
+//        .Use(new SerialNoRule() { Min = 106, Step = 2, Space = 4 })
+//        );
+//People2 p2 = new People2();
+//p2.Age = 50;
 
-// 生成条码
-for (int i = 101; i <= 112; i++)
-{
-    Console.WriteLine(egg.BarCodeGenerator.Generate("XS$(Age)-$(dt)-$(sn)", rc, i, p2));
-}
+//// 生成条码
+//for (int i = 101; i <= 112; i++)
+//{
+//    Console.WriteLine(egg.BarCodeGenerator.Generate("XS$(Age)-$(dt)-$(sn)", rc, i, p2));
+//}
 
 
-ClsTestObject? obj = null;
-var obj1 = obj ?? new ClsTestObject();
-ClsTestObject? obj2 = null;
-var obj3 = obj2?.ToNotNull<ClsTestObject>();
+//ClsTestObject? obj = null;
+//var obj1 = obj ?? new ClsTestObject();
+//ClsTestObject? obj2 = null;
+//var obj3 = obj2?.ToNotNull<ClsTestObject>();
 
-egg.Logger.Debug("a=" + obj1?.a);
-egg.Logger.Info("obj2=" + obj2?.IsNull());
-egg.Logger.Warn("obj3.a=" + obj3?.a, "ClsTestObject");
+//egg.Logger.Debug("a=" + obj1?.a);
+//egg.Logger.Info("obj2=" + obj2?.IsNull());
+//egg.Logger.Warn("obj3.a=" + obj3?.a, "ClsTestObject");
 
-byte bb = 1 | 2 | 4 | 8;
-egg.Logger.Info($"~{bb}={~bb} => {(bb & ~4)}");
+//byte bb = 1 | 2 | 4 | 8;
+//egg.Logger.Info($"~{bb}={~bb} => {(bb & ~4)}");
 
-Random rand = new Random();
-for (int i = 0; i < 10; i++)
-{
-    var num = rand.NextDouble();
-    string sha512 = num.ToString().GetSha512();
-    egg.Logger.Info($"{num} -> [{sha512.Length}]{sha512}");
-}
+//Random rand = new Random();
+//for (int i = 0; i < 10; i++)
+//{
+//    var num = rand.NextDouble();
+//    string sha512 = num.ToString().GetSha512();
+//    egg.Logger.Info($"{num} -> [{sha512.Length}]{sha512}");
+//}
 
 // 测试EFCore
-Egg.Test.Console.EFCore.Test.Run();
+// Egg.Test.Console.EFCore.Test.Run();
 
 // 测试VirtualDisk
 //Egg.Test.Console.VirtualDisk.Test.Run();
@@ -120,3 +120,6 @@ Egg.Test.Console.EFCore.Test.Run();
 //people2Repository.Insert(people2);
 //context.People2s.Add(people);
 //context.SaveChanges();
+
+// 测试lark
+Egg.Test.Console.Lark.Test.Run();

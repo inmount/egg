@@ -11,6 +11,7 @@ namespace Egg.Lark
     {
         // 是否独立内存
         private readonly bool _singleMemory;
+        private readonly bool _singleFunction;
         // 函数集合
         private Dictionary<string, Func<ScriptVariables, object?>> _funcs;
         // 入口函数
@@ -27,8 +28,26 @@ namespace Egg.Lark
         /// <param name="script">脚本内容</param>
         public ScriptEngine(string script)
         {
+            _funcs = new Dictionary<string, Func<ScriptVariables, object?>>();
             _singleMemory = true;
+            _singleFunction = true;
             this.Memory = new ScriptMemory();
+            _scriptFunction = ScriptParser.Parse(script);
+        }
+
+        /// <summary>
+        /// 脚本引擎
+        /// </summary>
+        /// <param name="script"></param>
+        /// <param name="funcs"></param>
+        public ScriptEngine(string script, ScriptFunctions funcs)
+        {
+            _funcs = new Dictionary<string, Func<ScriptVariables, object?>>();
+            _singleMemory = true;
+            _singleFunction = true;
+            this.Memory = new ScriptMemory();
+            _scriptFunction = ScriptParser.Parse(script);
+            foreach (var func in funcs) _funcs[func.Key] = func.Value;
         }
 
         /// <summary>
@@ -38,8 +57,85 @@ namespace Egg.Lark
         /// <param name="memory"></param>
         public ScriptEngine(string script, ScriptMemory memory)
         {
+            _funcs = new Dictionary<string, Func<ScriptVariables, object?>>();
             _singleMemory = false;
+            _singleFunction = true;
             this.Memory = memory;
+            _scriptFunction = ScriptParser.Parse(script);
+        }
+
+        /// <summary>
+        /// 脚本引擎
+        /// </summary>
+        /// <param name="script"></param>
+        /// <param name="funcs"></param>
+        /// <param name="memory"></param>
+        public ScriptEngine(string script, ScriptFunctions funcs, ScriptMemory memory)
+        {
+            _funcs = new Dictionary<string, Func<ScriptVariables, object?>>();
+            _singleMemory = false;
+            _singleFunction = true;
+            this.Memory = memory;
+            _scriptFunction = ScriptParser.Parse(script);
+            foreach (var func in funcs) _funcs[func.Key] = func.Value;
+        }
+
+        /// <summary>
+        /// 脚本引擎
+        /// </summary>
+        /// <param name="scriptFunction">主函数</param>
+        public ScriptEngine(ScriptFunction scriptFunction)
+        {
+            _funcs = new Dictionary<string, Func<ScriptVariables, object?>>();
+            _singleMemory = true;
+            _singleFunction = false;
+            this.Memory = new ScriptMemory();
+            _scriptFunction = scriptFunction;
+        }
+
+        /// <summary>
+        /// 脚本引擎
+        /// </summary>
+        /// <param name="script"></param>
+        /// <param name="funcs"></param>
+        public ScriptEngine(ScriptFunction scriptFunction, ScriptFunctions funcs)
+        {
+            _funcs = new Dictionary<string, Func<ScriptVariables, object?>>();
+            _singleMemory = true;
+            _singleFunction = false;
+            this.Memory = new ScriptMemory();
+            _scriptFunction = scriptFunction;
+            foreach (var func in funcs) _funcs[func.Key] = func.Value;
+        }
+
+        /// <summary>
+        /// 脚本引擎
+        /// </summary>
+        /// <param name="func"></param>
+        /// <param name="memory"></param>
+        public ScriptEngine(ScriptFunction scriptFunction, ScriptMemory memory)
+        {
+            _funcs = new Dictionary<string, Func<ScriptVariables, object?>>();
+            _singleMemory = false;
+            _singleFunction = false;
+            this.Memory = memory;
+            _scriptFunction = scriptFunction;
+        }
+
+        /// <summary>
+        /// 脚本引擎
+        /// </summary>
+        /// <param name="script"></param>
+        /// <param name="funcs"></param>
+        /// <param name="memory"></param>
+        public ScriptEngine(ScriptFunction scriptFunction, ScriptFunctions funcs, ScriptMemory memory)
+        {
+            _funcs = new Dictionary<string, Func<ScriptVariables, object?>>();
+            _singleMemory = false;
+            _singleFunction = false;
+            this.Memory = memory;
+            _scriptFunction = scriptFunction;
+            foreach (var func in funcs) _funcs[func.Key] = func.Value;
         }
 
         /// <summary>
@@ -84,7 +180,7 @@ namespace Egg.Lark
         /// </summary>
         public void Execute()
         {
-            _scriptFunction.Execute();
+            _scriptFunction.Execute(this);
         }
 
         /// <summary>
@@ -94,6 +190,7 @@ namespace Egg.Lark
         public void Dispose()
         {
             if (_singleMemory) this.Memory.Dispose();
+            if (_singleFunction) _scriptFunction.Dispose();
             GC.SuppressFinalize(this);
         }
     }

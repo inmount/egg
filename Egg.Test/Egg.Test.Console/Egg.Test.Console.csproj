@@ -19,6 +19,7 @@
     <ProjectReference Include="..\..\Egg.BarCode\Egg.BarCode.csproj" />
     <ProjectReference Include="..\..\Egg.EFCore.PostgreSQL\Egg.EFCore.PostgreSQL.csproj" />
     <ProjectReference Include="..\..\Egg.EFCore.Sqlite\Egg.EFCore.Sqlite.csproj" />
+    <ProjectReference Include="..\..\Egg.Lark\Egg.Lark.csproj" />
     <ProjectReference Include="..\..\Egg.Logger\Egg.Log.csproj" />
     <ProjectReference Include="..\..\Egg.VirtualDisk\Egg.VirtualDisk.csproj" />
   </ItemGroup>
