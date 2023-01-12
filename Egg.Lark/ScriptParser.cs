@@ -7,11 +7,44 @@ using Egg;
 
 namespace Egg.Lark
 {
+    // 算式解析信息
+    internal class ParseFormulaInfo
+    {
+        /// <summary>
+        /// 操作类型
+        /// </summary>
+        public string Type { get; set; }
+        /// <summary>
+        /// 操作值
+        /// </summary>
+        public object Value { get; set; }
+    }
+
     /// <summary>
     /// 脚本解析器
     /// </summary>
     public static class ScriptParser
     {
+        private static ScriptFunction CreateFormulaFunction(string name, object arg1, object arg2)
+        {
+            ScriptFunction func = new ScriptFunction() { Name = name };
+            func.Parameters.Add(arg1);
+            func.Parameters.Add(arg2);
+            return func;
+        }
+
+        /// <summary>
+        /// 解析算式脚本
+        /// </summary>
+        /// <param name="script"></param>
+        /// <returns></returns>
+        public static ScriptFunction ParseFormula(string script)
+        {
+            List<ParseFormulaInfo> infos = new List<ParseFormulaInfo>();
+            // 计算乘法和除法
+            return new ScriptFunction();
+        }
+
         /// <summary>
         /// 解析脚本
         /// </summary>
