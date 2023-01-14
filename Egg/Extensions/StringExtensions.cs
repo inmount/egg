@@ -18,8 +18,9 @@ namespace Egg
         /// </summary>
         /// <param name="sz"></param>
         /// <returns></returns>
-        public static int GetSize(this string sz)
+        public static int GetSize(this string? sz)
         {
+            if (sz is null) return 0;
             if (sz.IsEmpty()) return 0;
             return sz.Length;
         }
@@ -27,7 +28,7 @@ namespace Egg
         /// <summary>
         /// 是否内容为空
         /// </summary>
-        public static bool IsEmpty(this string sz)
+        public static bool IsEmpty(this string? sz)
         {
             return string.IsNullOrWhiteSpace(sz);
         }
@@ -35,7 +36,7 @@ namespace Egg
         /// <summary>
         /// 是否为一个双精度数字
         /// </summary>
-        public static bool IsDouble(this string sz)
+        public static bool IsDouble(this string? sz)
         {
             double val = 0;
             if (double.TryParse(sz, out val))
@@ -48,7 +49,7 @@ namespace Egg
         /// <summary>
         /// 获取双精度数据
         /// </summary>
-        public static double ToDouble(this string sz)
+        public static double ToDouble(this string? sz)
         {
             double res = 0;
             double.TryParse(sz, out res);
@@ -58,7 +59,7 @@ namespace Egg
         /// <summary>
         /// 是否为一个单精度数字
         /// </summary>
-        public static bool IsFloat(this string sz)
+        public static bool IsFloat(this string? sz)
         {
             float val = 0;
             if (float.TryParse(sz, out val))
@@ -71,7 +72,7 @@ namespace Egg
         /// <summary>
         /// 获取单精度数据
         /// </summary>
-        public static float ToFloat(this string sz)
+        public static float ToFloat(this string? sz)
         {
             float res = 0;
             float.TryParse(sz, out res);
@@ -81,7 +82,7 @@ namespace Egg
         /// <summary>
         /// 是否为一个字节型数字
         /// </summary>
-        public static bool IsByte(this string sz)
+        public static bool IsByte(this string? sz)
         {
             byte val = 0;
             if (byte.TryParse(sz, out val))
@@ -94,7 +95,7 @@ namespace Egg
         /// <summary>
         /// 获取字节型数据
         /// </summary>
-        public static byte ToByte(this string sz)
+        public static byte ToByte(this string? sz)
         {
             byte res = 0;
             byte.TryParse(sz, out res);
@@ -104,7 +105,7 @@ namespace Egg
         /// <summary>
         /// 是否为一个整型数字
         /// </summary>
-        public static bool IsInteger(this string sz)
+        public static bool IsInteger(this string? sz)
         {
             int val = 0;
             if (int.TryParse(sz, out val))
@@ -117,7 +118,7 @@ namespace Egg
         /// <summary>
         /// 获取整型数据
         /// </summary>
-        public static int ToInteger(this string sz)
+        public static int ToInteger(this string? sz)
         {
             int res = 0;
             int.TryParse(sz, out res);
@@ -127,7 +128,7 @@ namespace Egg
         /// <summary>
         /// 是否为一个长整型数字
         /// </summary>
-        public static bool IsLong(this string sz)
+        public static bool IsLong(this string? sz)
         {
             long val = 0;
             if (long.TryParse(sz, out val))
@@ -140,7 +141,7 @@ namespace Egg
         /// <summary>
         /// 获取长整形数据
         /// </summary>
-        public static long ToLong(this string sz)
+        public static long ToLong(this string? sz)
         {
             long res = 0;
             long.TryParse(sz, out res);
@@ -150,7 +151,7 @@ namespace Egg
         /// <summary>
         /// 是否为真描述
         /// </summary>
-        public static bool IsTrue(this string sz)
+        public static bool IsTrue(this string? sz)
         {
             // 数字情况下，大于0为真
             if (sz.IsDouble()) return sz.ToDouble() > 0;
@@ -161,7 +162,7 @@ namespace Egg
         /// <summary>
         /// 转为UTF-8数组
         /// </summary>
-        public static byte[] ToUtf8Bytes(this string sz)
+        public static byte[] ToUtf8Bytes(this string? sz)
         {
             return sz.ToBytes(Encoding.UTF8);
         }
@@ -169,7 +170,7 @@ namespace Egg
         /// <summary>
         /// 转为字节数组
         /// </summary>
-        public static byte[] ToBytes(this string sz, Encoding encoding)
+        public static byte[] ToBytes(this string? sz, Encoding encoding)
         {
             if (sz.IsEmpty()) return new byte[0];
             return encoding.GetBytes(sz);
@@ -192,8 +193,10 @@ namespace Egg
         /// <summary>
         /// 是否为一个标准的IPv4字符串
         /// </summary>
-        public static bool IsIPv4(this string sz)
+        public static bool IsIPv4(this string? sz)
         {
+            if (sz is null) return false;
+            if (sz.IsEmpty()) return false;
             string[] parts = sz.Split('.');
             if (parts.Length != 4) return false;
 
@@ -208,8 +211,10 @@ namespace Egg
         /// <summary>
         /// 使用Unicode进行字符串编码
         /// </summary>
-        public static string GetUnicodeCoding(this string sz)
+        public static string GetUnicodeCoding(this string? sz)
         {
+            if (sz is null) return "";
+            if (sz.IsEmpty()) return "";
             char[] charbuffers = sz.ToCharArray();
             byte[] buffer;
             StringBuilder sb = new StringBuilder();
@@ -224,11 +229,11 @@ namespace Egg
         /// <summary>
         /// 使用Unicode进行字符串解码
         /// </summary>
-        public static string GetUnicodeDecoding(this string sz)
+        public static string GetUnicodeDecoding(this string? sz)
         {
             StringBuilder sb = new StringBuilder();
-            string src = sz;
-            int len = sz.Length / 6;
+            string src = sz ?? "";
+            int len = sz.GetSize() / 6;
             for (int i = 0; i <= len - 1; i++)
             {
                 string str = "";
@@ -245,7 +250,7 @@ namespace Egg
         /// <summary>
         /// 获取字符串的MD5值
         /// </summary>
-        public static string GetMD5(this string sz)
+        public static string GetMD5(this string? sz)
         {
             System.Text.Encoding MyEnc = System.Text.Encoding.UTF8;
             Byte[] StrByte = MyEnc.GetBytes(sz);
@@ -266,7 +271,7 @@ namespace Egg
         /// <summary>
         /// 获取字符串的sha1值
         /// </summary>
-        public static string GetSha1(this string sz)
+        public static string GetSha1(this string? sz)
         {
             SHA1 sha1 = new SHA1CryptoServiceProvider();
             byte[] bytes_sha1_in = UTF8Encoding.Default.GetBytes(sz);
@@ -279,7 +284,7 @@ namespace Egg
         /// <summary>
         /// 获取字符串的sha256值
         /// </summary>
-        public static string GetSha256(this string sz)
+        public static string GetSha256(this string? sz)
         {
             var sha = new SHA256CryptoServiceProvider();
             byte[] bytes_in = UTF8Encoding.Default.GetBytes(sz);
@@ -292,7 +297,7 @@ namespace Egg
         /// <summary>
         /// 获取字符串的sha512值
         /// </summary>
-        public static string GetSha512(this string sz)
+        public static string GetSha512(this string? sz)
         {
             var sha = new SHA512CryptoServiceProvider();
             byte[] bytes_in = UTF8Encoding.Default.GetBytes(sz);
@@ -307,15 +312,22 @@ namespace Egg
          */
 
         // 比较两个字符串大小
-        private static int SortCompare(string s1, string s2)
+        private static int SortCompare(string? s1, string? s2)
         {
-            int len = s1.Length;
-            if (len < s2.Length) len = s2.Length;
+            if (s1 is null)
+            {
+                if (s2 is null) return 0;
+                return -1;
+            }
+            if (s2 is null) return 1;
+            int len1 = s1.GetSize();
+            int len2 = s2.GetSize();
+            int len = len1;
+            if (len < len2) len = len2;
             for (int i = 0; i < len; i++)
             {
-                if (i >= s1.Length) return -1;
-                if (i >= s2.Length) return 1;
-
+                if (i >= len1) return -1;
+                if (i >= len2) return 1;
                 if (s1[i] > s2[i]) return 1;
                 if (s1[i] < s2[i]) return -1;
             }
@@ -328,7 +340,7 @@ namespace Egg
         /// <param name="sz"></param>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static bool SortBefore(this string sz, string str)
+        public static bool SortBefore(this string? sz, string? str)
         {
             return SortCompare(sz, str) < 0;
         }
@@ -339,7 +351,7 @@ namespace Egg
         /// <param name="sz"></param>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static bool SortAfter(this string sz, string str)
+        public static bool SortAfter(this string? sz, string? str)
         {
             return SortCompare(sz, str) > 0;
         }
