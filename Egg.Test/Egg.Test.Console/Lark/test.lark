@@ -12,4 +12,21 @@
     let(sum, 0)
     for(i, 1, 100, 1, let(sum, !(sum + i)))
     print($(sum))
+    # foreach 列表循环 #
+    let(list, create_list())
+    let(list[0], "a")
+    let(list[1], "b")
+    foreach(item, list, print(item))
+    # foreach 对象循环 #
+    let(obj, create_object())
+    let(obj.c, "cc")
+    let(obj.d, "dd")
+    foreach(item, obj, print($(item.Key, "=", item.Value)))
+    # 效率测试 #
+    let(tick1, get_tick())
+    let(sum, 0)
+    for(i, 0.01, 10000.0, 0.01, let(sum, !(sum + i)))
+    print($(sum))
+    let(tick2, get_tick())
+    print($("百万次运算耗时", !(tick2 - tick1), "毫秒"))
 )

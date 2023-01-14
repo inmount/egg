@@ -44,5 +44,23 @@ namespace Egg.Test.Console.Lark
         {
             return value1 <= value2;
         }
+
+        [Func]
+        public LarkList CreateList()
+        {
+            return new LarkList();
+        }
+
+        [Func]
+        public LarkObject CreateObject()
+        {
+            return new LarkObject();
+        }
+
+        [Func]
+        public int GetTick()
+        {
+            return Environment.TickCount;
+        }
     }
 }

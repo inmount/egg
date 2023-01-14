@@ -89,7 +89,7 @@ namespace Egg.Lark
                         {
                             ps[i] = args[i];
                         }
-                        var obj = type.Assembly.CreateInstance(type.FullName);
+                        var obj = Activator.CreateInstance(type);
                         return method.Invoke(obj, ps);
                     });
                 }

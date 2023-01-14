@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Globalization;
 using System.Text;
 
@@ -66,7 +69,7 @@ namespace Egg.Lark
         private object? GetValue(ScriptEngine engine, object? obj)
         {
             // 返回变量值
-            if (obj is ScriptVariable) return engine.Memory[((ScriptVariable)obj).Name];
+            if (obj is ScriptVariable) return engine.Memory.Get(((ScriptVariable)obj).Name);
             // 返回函数执行结果
             if (obj is ScriptFunction) return ((ScriptFunction)obj).Execute(engine);
             // 直接返回类型
@@ -172,7 +175,7 @@ namespace Egg.Lark
                     }
                     else throw new ScriptException($"函数'{this.Name}'的首参数必须是变量");
                     // 设置变量
-                    engine.Memory[letVariableName] = GetValue(engine, this.Parameters[1]);
+                    engine.Memory.Set(letVariableName, GetValue(engine, this.Parameters[1]));
                     #endregion
                     return null;
                 case "if":
@@ -206,7 +209,7 @@ namespace Egg.Lark
                     if (forVariable is ScriptVariable)
                     {
                         forVariableName = ((ScriptVariable)forVariable).Name;
-                        if (!engine.Memory.ContainsKey(forVariableName)) engine.Memory[forVariableName] = null;
+                        if (!engine.Memory.ContainsKey(forVariableName)) engine.Memory.Set(forVariableName, null);
                     }
                     else throw new ScriptException($"函数'{this.Name}'的首参数必须是变量");
                     var forStart = GetValue<double>(engine, this.Parameters[1]);
@@ -220,6 +223,48 @@ namespace Egg.Lark
                         engine.Memory[forVariableName] = dblValue;
                         if (forFunc != null) FuncInvoke(engine, forFunc);
                     }
+                    #endregion
+                    return null;
+                case "foreach":
+                    #region [=====循环函数执行=====]
+                    if (this.Parameters.Count < 2) throw new ScriptException($"函数'{this.Name}'缺少必要参数");
+                    forVariable = this.Parameters[0];
+                    if (forVariable is ScriptVariable)
+                    {
+                        forVariableName = ((ScriptVariable)forVariable).Name;
+                        if (!engine.Memory.ContainsKey(forVariableName)) engine.Memory.Set(forVariableName, null);
+                    }
+                    else throw new ScriptException($"函数'{this.Name}'的首参数必须是变量");
+                    var forList = GetValue(engine, this.Parameters[1]);
+                    if (forList is null) throw new ScriptException($"函数'{this.Name}'缺少列表对象");
+                    var listType = forList.GetType();
+                    string listFullName = listType.Namespace + "." + listType.Name;
+                    forFunc = null;
+                    if (this.Parameters.Count > 2) forFunc = this.Parameters[2];
+                    if (ScriptMemory.IsList(listType)) // 处理列表
+                    {
+                        var listItem = listType.GetProperty("Item");
+                        var listCount = listType.GetProperty("Count");
+                        int listCountValue = (int)listCount.GetValue(forList);
+                        for (var i = 0; i < listCountValue; i++)
+                        {
+                            // 设置循环变量
+                            engine.Memory.Set(forVariableName, listItem.GetValue(forList, new object[] { i }));
+                            if (forFunc != null) FuncInvoke(engine, forFunc);
+                        }
+                    }
+                    else if (ScriptMemory.IsDictionary(listType)) // 处理字典
+                    {
+                        var objTypeEnumerator = listType.GetMethod("GetEnumerator");
+                        IDictionaryEnumerator objEnumerator = (IDictionaryEnumerator)objTypeEnumerator.Invoke(forList, new object[] { });
+                        while (objEnumerator.MoveNext())
+                        {
+                            // 设置循环变量
+                            engine.Memory.Set(forVariableName, objEnumerator.Current);
+                            if (forFunc != null) FuncInvoke(engine, forFunc);
+                        }
+                    }
+                    else throw new ScriptException($"函数'{this.Name}'缺少可列表的对象");
                     #endregion
                     return null;
                 case "equal":
