@@ -1,0 +1,15 @@
+@(
+    # while 循环 #
+    let(num, 100)
+    let(a, 1)
+    let(sum, 0)
+    while(small_equal(a, num), @(
+        let(sum, !(sum + a))
+        let(a, !(a + 1))
+    ))
+    print($(sum))
+    # for循环 #
+    let(sum, 0)
+    for(i, 1, 100, 1, let(sum, !(sum + i)))
+    print($(sum))
+)

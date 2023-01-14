@@ -24,4 +24,10 @@
     <ProjectReference Include="..\..\Egg.VirtualDisk\Egg.VirtualDisk.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Lark\test.lark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

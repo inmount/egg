@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using Egg;
 
@@ -25,6 +26,7 @@ namespace Egg.Lark
     /// </summary>
     public static class ScriptParser
     {
+        // 创建算式
         private static ScriptFunction CreateFormulaFunction(string name, object arg1, object arg2)
         {
             ScriptFunction func = new ScriptFunction() { Name = name };
@@ -33,16 +35,132 @@ namespace Egg.Lark
             return func;
         }
 
+        // 获取值定义
+        private static object GetValue(string str)
+        {
+            if (str.Length > 1)
+            {
+                if (str.StartsWith("\"") && str.EndsWith("\"")) return str.Substring(1, str.Length - 2);
+                if (str.StartsWith("(") && str.EndsWith(")")) return ParseFormula(str.Substring(1, str.Length - 2));
+            }
+            if (double.TryParse(str, out double value)) return value;
+            return new ScriptVariable() { Name = str };
+        }
+
+        // 获取算式信息
+        private static ParseFormulaInfo GetFormulaInfo(StringBuilder sb)
+        {
+            ParseFormulaInfo parseFormulaInfo;
+            switch (sb[0])
+            {
+                case '+':
+                case '-':
+                case '*':
+                case '/':
+                    parseFormulaInfo = new ParseFormulaInfo()
+                    {
+                        Type = sb[0].ToString(),
+                        Value = GetValue(sb.ToString(1, sb.Length - 1))
+                    };
+                    break;
+                default:
+                    parseFormulaInfo = new ParseFormulaInfo()
+                    {
+                        Type = "",
+                        Value = GetValue(sb.ToString())
+                    };
+                    break;
+            }
+            sb.Clear();
+            return parseFormulaInfo;
+        }
+
         /// <summary>
         /// 解析算式脚本
         /// </summary>
         /// <param name="script"></param>
         /// <returns></returns>
-        public static ScriptFunction ParseFormula(string script)
+        public static object ParseFormula(string script)
         {
+            // 调试输出
+            Debug.WriteLine($"-> 解析算式: \n{script}");
             List<ParseFormulaInfo> infos = new List<ParseFormulaInfo>();
+            // 临时存储
+            StringBuilder sb = new StringBuilder();
+            int sign = 0;
+            for (int i = 0; i < script.Length; i++)
+            {
+                char chr = script[i];
+                switch (chr)
+                {
+                    case '(': sign++; sb.Append(chr); break;
+                    case ')':
+                        sign--;
+                        if (sign < 0) throw new Exception($"意外的'{chr}'字符。");
+                        sb.Append(chr);
+                        break;
+                    case '+':
+                    case '-':
+                    case '*':
+                    case '/':
+                        if (sign > 0) { sb.Append(chr); break; }
+                        if (sb.Length <= 0) throw new Exception($"意外的'{chr}'字符。");
+                        infos.Add(GetFormulaInfo(sb));
+                        sb.Append(chr);
+                        break;
+                    default:
+                        sb.Append(chr);
+                        break;
+                }
+            }
+            if (sb.Length <= 0) throw new Exception($"算式不完整。");
+            infos.Add(GetFormulaInfo(sb));
             // 计算乘法和除法
-            return new ScriptFunction();
+            int index = 1;
+            while (index < infos.Count)
+            {
+                var infoBefore = infos[index - 1];
+                var info = infos[index];
+                switch (info.Type)
+                {
+                    case "*":
+                    case "/":
+                        infos[index - 1] = new ParseFormulaInfo()
+                        {
+                            Type = infoBefore.Type,
+                            Value = CreateFormulaFunction(info.Type, infoBefore.Value, info.Value),
+                        };
+                        infos.Remove(info);
+                        break;
+                    default:
+                        index++;
+                        break;
+                }
+            }
+            // 计算加法和减法
+            index = 1;
+            while (index < infos.Count)
+            {
+                var infoBefore = infos[index - 1];
+                var info = infos[index];
+                switch (info.Type)
+                {
+                    case "+":
+                    case "-":
+                        infos[index - 1] = new ParseFormulaInfo()
+                        {
+                            Type = infoBefore.Type,
+                            Value = CreateFormulaFunction(info.Type, infoBefore.Value, info.Value),
+                        };
+                        infos.Remove(info);
+                        break;
+                    default:
+                        index++;
+                        break;
+                }
+            }
+            if (infos.Count != 1) throw new Exception($"算式解析失败。");
+            return infos[0].Value;
         }
 
         /// <summary>
@@ -87,6 +205,7 @@ namespace Egg.Lark
                             #region [=====双引号：字符串=====]
                             if (inNote) break;
                             if (isFinish) throw new Exception($"意外的字符'{chr}'。");
+                            if (sign > 1) { sb.Append(chr); break; }
                             if (inString)
                             {
                                 if (isEscape)
@@ -109,6 +228,7 @@ namespace Egg.Lark
                             #region [=====反斜杠：转义=====]
                             if (inNote) break;
                             if (isFinish) throw new Exception($"意外的字符'{chr}'。");
+                            if (sign > 1) { sb.Append(chr); break; }
                             if (!inString) throw new Exception($"意外的字符'{chr}'。");
                             if (isEscape)
                             {
@@ -166,12 +286,16 @@ namespace Egg.Lark
                             if (isEscape) throw new Exception($"意外的字符'{chr}'。");
                             if (inString) { sb.Append(chr); break; }
                             sign--;
+                            if (sign < 0) throw new Exception($"意外的'{chr}'字符。");
                             if (sign > 0) { sb.Append(chr); break; }
                             if (sb.Length > 0)
                             {
                                 // 优先处理混合运算语法糖
                                 if (func.Name == "!")
                                 {
+                                    if (sb.Length < 2) throw new Exception($"意外的'{chr}'字符。");
+                                    func.Parameters.Add(ParseFormula(sb.ToString()));
+                                    sb.Clear();
                                     break;
                                 }
                                 // 添加字符串
@@ -254,6 +378,7 @@ namespace Egg.Lark
                         case '\r': break;
                         case '\n':
                             if (inNote) { line++; site = 0; inNote = false; break; }
+                            if (sign > 1) { sb.Append(chr); break; }
                             if (sign > 0)
                             {
                                 if (sb.Length > 0)
@@ -263,6 +388,7 @@ namespace Egg.Lark
                                         if (sb[0] == '"' && sb[sb.Length - 1] == '"')
                                         {
                                             func.Parameters.Add(sb.ToString(1, sb.Length - 2));
+                                            line++; site = 0;
                                             // 清理字符缓存
                                             sb.Clear();
                                             break;
@@ -286,10 +412,13 @@ namespace Egg.Lark
                                             func.Parameters.Add(new ScriptVariable() { Name = arg });
                                         }
                                     }
+                                    sb.Clear();
                                 }
+                                line++; site = 0;
                                 break;
                             }
                             if (sb.Length > 0) throw new Exception($"意外的换行符。");
+                            line++; site = 0;
                             break;
                         default:
                             if (inNote) break;

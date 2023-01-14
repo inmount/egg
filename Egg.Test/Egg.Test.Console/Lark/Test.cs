@@ -11,18 +11,21 @@ namespace Egg.Test.Console.Lark
     {
         public static void Run()
         {
-            var func = ScriptParser.Parse(@"
-                @(
-                    let(a, $(""1+2="", +(1, 2))),
-                    let(b, *(c, 4)),
-                )
-            ");
-            using (Egg.Lark.ScriptEngine engine = new Egg.Lark.ScriptEngine(func))
+            string path = egg.IO.GetExecutionPath("Lark/test.lark");
+            string script = egg.IO.ReadUtf8FileContent(path);
+            //System.Console.WriteLine(script);
+            var func = ScriptParser.Parse(script);
+            System.Console.WriteLine(func.ToString());
+            using (ScriptFunctions funcs = new ScriptFunctions())
             {
-                engine.Memory["c"] = 3.0;
-                engine.Execute();
-                System.Console.WriteLine($"[Lark] a = {engine.Memory["a"]}");
-                System.Console.WriteLine($"[Lark] b = {engine.Memory["b"]}");
+                funcs.Reg<TestFuntion>();
+                using (Egg.Lark.ScriptEngine engine = new Egg.Lark.ScriptEngine(func, funcs))
+                {
+                    engine.Memory["c"] = 3;
+                    engine.Execute();
+                    //System.Console.WriteLine($"[Lark] a = {engine.Memory["a"]}");
+                    //System.Console.WriteLine($"[Lark] b = {engine.Memory["b"]}");
+                }
             }
         }
     }
