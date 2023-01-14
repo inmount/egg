@@ -153,6 +153,7 @@ namespace Egg
         /// </summary>
         public static bool IsTrue(this string? sz)
         {
+            if (sz is null) return false;
             // 数字情况下，大于0为真
             if (sz.IsDouble()) return sz.ToDouble() > 0;
             // 字符串情况下判断是否为true描述
