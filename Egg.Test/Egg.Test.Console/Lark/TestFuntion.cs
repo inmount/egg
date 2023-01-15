@@ -62,5 +62,21 @@ namespace Egg.Test.Console.Lark
         {
             return Environment.TickCount;
         }
+
+        [Func]
+        public double Repeat100()
+        {
+            double sum = 0;
+            for (double i = 0.01; i <= 10000.0; i += 0.01) sum += i;
+            return sum;
+        }
+
+        [Func]
+        public double Repeat1000()
+        {
+            double sum = 0;
+            for (double i = 0.01; i <= 100000.0; i += 0.01) sum += i;
+            return sum;
+        }
     }
 }

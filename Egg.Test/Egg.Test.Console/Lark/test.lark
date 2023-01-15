@@ -25,8 +25,14 @@
     # 效率测试 #
     let(tick1, get_tick())
     let(sum, 0)
-    for(i, 0.01, 10000.0, 0.01, let(sum, !(sum + i)))
-    print($(sum))
+    for(i, 0.01, 100000.0, 0.01, let(sum, !(sum + i)))
+    print($("Lark=", sum))
     let(tick2, get_tick())
-    print($("百万次运算耗时", !(tick2 - tick1), "毫秒"))
+    print($("千万次浮点运算脚本耗时", !(tick2 - tick1), "毫秒"))
+    # 函数效率测试 #
+    let(tick1, get_tick())
+    let(sum, repeat1000())
+    print($("Dll=", sum))
+    let(tick2, get_tick())
+    print($("千万次浮点运算Dll耗时", !(tick2 - tick1), "毫秒"))
 )

@@ -15,7 +15,7 @@ namespace Egg.Test.Console.Lark
             string script = egg.IO.ReadUtf8FileContent(path);
             //System.Console.WriteLine(script);
             var func = ScriptParser.Parse(script);
-            System.Console.WriteLine(func.ToString());
+            //System.Console.WriteLine(func.ToString());
             using (ScriptFunctions funcs = new ScriptFunctions())
             {
                 funcs.Reg<TestFuntion>();
