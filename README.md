@@ -4,6 +4,10 @@
 
 A comprehensive auxiliary development kit based on .Net Standard 2.1.
 
+![license](https://img.shields.io/github/license/inmount/egg)
+![codeSize](https://img.shields.io/github/languages/code-size/inmount/egg)
+![lastCommit](https://img.shields.io/github/last-commit/inmount/egg)
+
 ## 支持框架
 
 | 组件 | .Net版本 | 描述 |
