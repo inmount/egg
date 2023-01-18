@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <Version>16.1.2301.9</Version>
+    <Version>16.1.2301.10</Version>
     <Authors>Egg Studio</Authors>
     <Description>一套服务于EFCore的辅助开发组件</Description>
     <PackageIcon>logo.png</PackageIcon>

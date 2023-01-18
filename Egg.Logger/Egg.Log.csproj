@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
-    <Version>16.1.2301.9</Version>
+    <Version>16.1.2301.10</Version>
     <Authors>Egg Studio</Authors>
     <Description>一套日志开发套件</Description>
     <PackageIcon>logo.png</PackageIcon>

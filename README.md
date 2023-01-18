@@ -27,6 +27,12 @@ A comprehensive auxiliary development kit based on .Net Standard 2.1.
 
 ## 更新说明
 
+### v16.1.2301.10
+
++ 优化了百灵鸟脚本组件的扩展性
+
+于 2023-01-18 升级
+
 ### v16.1.2301.9
 
 + 优化了百灵鸟脚本组件的扩展性
