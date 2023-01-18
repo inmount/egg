@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlTypes;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
@@ -51,25 +53,102 @@ namespace Egg.Lark
             return false;
         }
 
-        // 获取值
-        private T GetValue<T>(ScriptEngine engine, object? obj)
+        // 获取变量值
+        private object? GetVariableValue(ScriptEngine engine, ScriptVariable obj)
         {
-            // 返回变量值
-            if (obj is ScriptVariable) return engine.Memory.Get<T>(((ScriptVariable)obj).Name);
-            // 返回函数执行结果
-            if (obj is ScriptFunction) obj = ((ScriptFunction)obj).Execute(engine);
-            // 为空判断
-            if (obj == null) throw new ScriptException($"变量值为空");
-            if (typeof(T) == typeof(double)) return (T)(object)Convert.ToDouble(obj);
-            // 直接返回类型
-            return (T)obj;
+            // 处理特殊名称
+            if (obj.Name == "null") return null;
+            if (obj.Name == "true") return true;
+            if (obj.Name == "false") return false;
+            return engine.Memory.Get(obj.Name);
+        }
+
+        // 获取值
+        private T GetValue<T>(ScriptEngine engine, object? obj) where T : struct
+        {
+            TryGetValue(engine, obj, out T? value);
+            if (value is null) throw new Exception("对象值为空");
+            return value.Value;
+        }
+
+        // 获取值
+        private T? GetValueOrNull<T>(ScriptEngine engine, object? obj) where T : class
+        {
+            TryGetValue(engine, obj, out T? value);
+            return value;
+        }
+
+        // 获取值
+        private bool TryGetValue<T>(ScriptEngine engine, object? obj, out T? value) where T : struct
+        {
+            value = default(T);
+            try
+            {
+                // 返回变量值
+                if (obj is ScriptVariable)
+                {
+                    var varValue = GetVariableValue(engine, (ScriptVariable)obj);
+                    if (varValue is null) return false;
+                    value = (T)varValue;
+                    return true;
+                }
+                // 返回函数执行结果
+                if (obj is ScriptFunction) obj = ((ScriptFunction)obj).Execute(engine);
+                // 为空判断
+                if (obj == null) throw new ScriptException($"变量值为空");
+                if (typeof(T) == typeof(double))
+                {
+                    value = (T)(object)Convert.ToDouble(obj);
+                    return true;
+                }
+                // 直接返回类型
+                value = (T)obj;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // 获取值
+        private bool TryGetValue<T>(ScriptEngine engine, object? obj, out T? value) where T : class
+        {
+            value = null;
+            try
+            {
+                // 返回变量值
+                if (obj is ScriptVariable)
+                {
+                    var varValue = GetVariableValue(engine, (ScriptVariable)obj);
+                    if (varValue is null) return false;
+                    value = (T)varValue;
+                    return true;
+                }
+                // 返回函数执行结果
+                if (obj is ScriptFunction) obj = ((ScriptFunction)obj).Execute(engine);
+                // 为空判断
+                if (obj == null) throw new ScriptException($"变量值为空");
+                if (typeof(T) == typeof(double))
+                {
+                    value = (T)(object)Convert.ToDouble(obj);
+                    return true;
+                }
+                // 直接返回类型
+                value = (T)obj;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         // 获取值
         private object? GetValue(ScriptEngine engine, object? obj)
         {
             // 返回变量值
-            if (obj is ScriptVariable) return engine.Memory.Get(((ScriptVariable)obj).Name);
+            if (obj is ScriptVariable) return GetVariableValue(engine, (ScriptVariable)obj);
             // 返回函数执行结果
             if (obj is ScriptFunction) return ((ScriptFunction)obj).Execute(engine);
             // 直接返回类型

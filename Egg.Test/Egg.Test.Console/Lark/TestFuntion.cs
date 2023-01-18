@@ -46,6 +46,12 @@ namespace Egg.Test.Console.Lark
         }
 
         [Func]
+        public bool IsNull(object? val)
+        {
+            return val is null;
+        }
+
+        [Func]
         public LarkList CreateList()
         {
             return new LarkList();

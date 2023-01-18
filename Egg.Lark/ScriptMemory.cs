@@ -116,10 +116,8 @@ namespace Egg.Lark
                 return listItem.GetValue(list, new object[] { listIndex });
             }
             // 普通变量
-            if (!this.ContainsKey(key)) throw new ScriptException($"变量'{key}'不存在");
+            if (!this.ContainsKey(key)) return null;
             var value = this[key];
-            if (value is null) throw new ScriptException($"变量'{key}'值为空");
-            //if (typeof(T) == typeof(double)) return (T)(object)Convert.ToDouble(value);
             return value;
         }
 

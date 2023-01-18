@@ -1,4 +1,13 @@
 @(
+    # 为空测试 #
+    let(obj, null)
+    let(obj2, 1)
+    print($("对象是否为空：", is_null(obj), ",", is_null(obj2)))
+    let(val1, true)
+    let(val2, false)
+    if(val1, print($("对象是真的")), print($("对象是假的")))
+    if(val2, print($("对象是真的")), print($("对象是假的")))
+
     # while 循环 #
     let(num, 100)
     let(a, 1)
@@ -8,20 +17,24 @@
         let(a, !(a + 1))
     ))
     print($(sum))
+
     # for循环 #
     let(sum, 0)
     for(i, 1, 100, 1, let(sum, !(sum + i)))
     print($(sum))
+
     # foreach 列表循环 #
     let(list, create_list())
     let(list[0], "a")
     let(list[1], "b")
     foreach(item, list, print(item))
+
     # foreach 对象循环 #
     let(obj, create_object())
     let(obj.c, "cc")
     let(obj.d, "dd")
     foreach(item, obj, print($(item.Key, "=", item.Value)))
+    
     # 效率测试 #
     let(tick1, get_tick())
     let(sum, 0)
@@ -29,6 +42,7 @@
     print($("Lark=", sum))
     let(tick2, get_tick())
     print($("千万次浮点运算脚本耗时", !(tick2 - tick1), "毫秒"))
+
     # 函数效率测试 #
     let(tick1, get_tick())
     let(sum, repeat1000())
