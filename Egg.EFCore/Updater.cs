@@ -32,6 +32,11 @@ namespace Egg.EFCore
         public string TableName { get; }
 
         /// <summary>
+        /// 获取架构名
+        /// </summary>
+        public string? SchemaName { get; }
+
+        /// <summary>
         /// 定义属性集合
         /// </summary>
         public List<UpdaterProperty> Properties { get; }
@@ -56,9 +61,9 @@ namespace Egg.EFCore
             if (table != null)
             {
                 if (!table.Name.IsEmpty()) this.TableName = table.Name;
-                if (!table.Schema.IsEmpty()) this.TableName = table.Schema + "." + this.TableName;
+                this.SchemaName = table.Schema;
             }
-            var pros = tp.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            var pros = tp.GetProperties(BindingFlags.Instance | BindingFlags.Public);
             for (int i = 0; i < pros.Length; i++) this.Properties.Add(new UpdaterProperty(pros[i]));
         }
 
@@ -69,13 +74,30 @@ namespace Egg.EFCore
         /// <returns></returns>
         public Updater<TClass, TId> Use(Expression<Func<TClass, object?>> selector)
         {
-            var body = (UnaryExpression)selector.Body;
-            var operand = (MemberExpression)body.Operand;
-            var member = operand.Member;
-            var pro = this.Properties.Where(d => d.Name == member.Name).FirstOrDefault();
-            if (pro is null) throw new Exception($"数据对象中不存在'{member.Name}'字段");
-            pro.IsModified = true;
-            return this;
+            var body = selector.Body;
+            if (body is NewExpression)
+            {
+                var bodyNew = (NewExpression)selector.Body;
+                foreach (var member in bodyNew.Members)
+                {
+                    var pro = this.Properties.Where(d => d.Name == member.Name).FirstOrDefault();
+                    if (pro is null) throw new Exception($"数据对象中不存在'{member.Name}'字段");
+                    pro.IsModified = true;
+                }
+                return this;
+            }
+            if (body is UnaryExpression)
+            {
+                var bodyUnary = (UnaryExpression)selector.Body;
+                var operand = (MemberExpression)bodyUnary.Operand;
+                var member = operand.Member;
+                var pro = this.Properties.Where(d => d.Name == member.Name).FirstOrDefault();
+                if (pro is null) throw new Exception($"数据对象中不存在'{member.Name}'字段");
+                pro.IsModified = true;
+                return this;
+            }
+
+            throw new Exception($"不支持的表达式类型: {body}");
         }
 
         /// <summary>
@@ -88,6 +110,63 @@ namespace Egg.EFCore
             return this;
         }
 
+        // 获取sql语句值
+        private string GetSqlExpressionValue(Expression exp)
+        {
+            if (exp is BinaryExpression)
+                return "(" + GetSqlExpression((BinaryExpression)exp) + ")";
+            switch (exp.NodeType)
+            {
+                case ExpressionType.MemberAccess:
+                    var member = (MemberExpression)exp;
+                    return "\"" + member.Member.Name + "\"";
+                case ExpressionType.Constant:
+                    var constant = (ConstantExpression)exp;
+                    if (constant.Value is null) return "null";
+                    if (constant.Value is string) return UpdaterProperty.GetSafetySqlString((string)constant.Value);
+                    return constant.Value.ToString();
+                default:
+                    throw new Exception($"SqlExpressionValue不支持的'{exp.NodeType}'节点类型");
+            }
+        }
+
+        // 获取sql语句
+        private string GetSqlExpression(BinaryExpression exp)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(GetSqlExpressionValue(exp.Left));
+            switch (exp.NodeType)
+            {
+                case ExpressionType.AndAlso:
+                    sb.Append(" and ");
+                    break;
+                case ExpressionType.OrElse:
+                    sb.Append(" or ");
+                    break;
+                case ExpressionType.Equal:
+                    sb.Append(" = ");
+                    break;
+                case ExpressionType.NotEqual:
+                    sb.Append(" <> ");
+                    break;
+                case ExpressionType.GreaterThan:
+                    sb.Append(" > ");
+                    break;
+                case ExpressionType.GreaterThanOrEqual:
+                    sb.Append(" >= ");
+                    break;
+                case ExpressionType.LessThan:
+                    sb.Append(" < ");
+                    break;
+                case ExpressionType.LessThanOrEqual:
+                    sb.Append(" <= ");
+                    break;
+                default: throw new Exception($"SqlExpression不支持的'{exp.NodeType}'节点类型");
+            }
+            sb.Append(GetSqlExpressionValue(exp.Right));
+            return sb.ToString();
+        }
+
         /// <summary>
         /// 设置需要保存的数据
         /// </summary>
@@ -98,7 +177,8 @@ namespace Egg.EFCore
         {
             Console.WriteLine($"Body: {predicate.Body}");
             StringBuilder sb = new StringBuilder();
-            sb.Append($"update \"{this.TableName}\" set ");
+            sb.Append($"update {(this.SchemaName.IsEmpty() ? "" : this.SchemaName + ".")}\"{this.TableName}\" set ");
+            // 处理字段
             StringBuilder sbSet = new StringBuilder();
             foreach (var pro in this.Properties)
             {
@@ -111,6 +191,10 @@ namespace Egg.EFCore
                 sbSet.Append(pro.GetSqlValue(entity));
             }
             sb.Append(sbSet.ToString());
+            // 处理条件
+            var body = (BinaryExpression)predicate.Body;
+            sb.Append(" where ");
+            sb.Append(GetSqlExpression(body));
             sb.AppendLine(";");
             return this;
         }

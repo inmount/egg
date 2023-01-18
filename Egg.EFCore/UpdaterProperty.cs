@@ -37,6 +37,16 @@ namespace Egg.EFCore
         public bool IsNumeric { get; }
 
         /// <summary>
+        /// 获取安全的sql字符串
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string GetSafetySqlString(string str)
+        {
+            return "'" + str.Replace("'", "''") + "'";
+        }
+
+        /// <summary>
         /// 获取Sql中的值
         /// </summary>
         /// <param name="obj"></param>
@@ -45,8 +55,8 @@ namespace Egg.EFCore
         {
             var value = this.PropertyInfo.GetValue(obj);
             if (value is null) return "null";
-            if (IsNumeric) return value.ToString();
-            return "'" + value.ToString() + "'";
+            if (IsNumeric) return value.ToString().ToLower();
+            return GetSafetySqlString(value.ToString());
         }
 
         // 获取类型名称
