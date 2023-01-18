@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Egg.EFCore
+namespace Egg.EFCore.Dbsets
 {
     /// <summary>
     /// 标准仓库接口

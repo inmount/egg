@@ -16,6 +16,7 @@ using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using static Npgsql.Replication.PgOutput.Messages.RelationMessage;
 using Egg.EFCore.Sqlite;
+using Egg.EFCore.Dbsets;
 
 namespace Egg.EFCore
 {

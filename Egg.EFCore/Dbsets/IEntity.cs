@@ -6,19 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Egg.EFCore
+namespace Egg.EFCore.Dbsets
 {
     /// <summary>
     /// 带主键的实例
     /// </summary>
-    public class AutoIncrementKeyEntity : Entity<long> {
-
+    public interface IEntity<TId>
+    {
         /// <summary>
-        /// 自动增长标识
+        /// 唯一标识
         /// </summary>
-        [Key]
-        [AutoIncrement]
-        public override long Id { get => base.Id; set => base.Id = value; }
-
+        TId Id { get; set; }
     }
 }

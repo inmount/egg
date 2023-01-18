@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Egg.EFCore
+namespace Egg.EFCore.Dbsets
 {
     /// <summary>
     /// 数据仓库
@@ -101,7 +101,7 @@ namespace Egg.EFCore
         /// 获取查询器
         /// </summary>
         /// <returns></returns>
-        public IQueryable<TClass> Query() => this.DbSet;
+        public IQueryable<TClass> Query() => DbSet;
 
         /// <summary>
         /// 获取更新器

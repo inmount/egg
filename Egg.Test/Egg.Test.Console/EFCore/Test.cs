@@ -1,4 +1,5 @@
 ﻿using Egg.EFCore;
+using Egg.EFCore.Dbsets;
 using Egg.Test.Console.Entities;
 using Microsoft.EntityFrameworkCore;
 using SqliteEFCore.DbContexts;
@@ -18,14 +19,13 @@ namespace Egg.Test.Console.EFCore
             var optionsBuilder = new DbContextOptionsBuilder<DbContext>();
             optionsBuilder.UseNpgsql(Consts.Connect_String);
             var dbContext = new CoreDbContext(optionsBuilder.Options);
+            var reps = dbContext.GetRepositories();
             //var dbContexts = new RepositoryDbContexts(optionsBuilder.Options);
             //dbContexts.Use<CoreDbContext>();
             var people2Repository = new Repository<People2, string>(dbContext);
 
             var query = from p in people2Repository.Query()
                         select p;
-
-            
             //query.Where()
 
             egg.Logger.Info(query.ToQueryString());

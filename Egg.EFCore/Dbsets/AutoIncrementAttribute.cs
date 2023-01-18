@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Egg.EFCore
+namespace Egg.EFCore.Dbsets
 {
     /// <summary>
     /// 自增长字段
     /// </summary>
-    public class AutoIncrementAttribute : System.Attribute
+    public class AutoIncrementAttribute : Attribute
     {
     }
 }

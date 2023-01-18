@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Runtime.CompilerServices;
+using Egg.EFCore.Dbsets;
 
 namespace Egg.EFCore
 {
