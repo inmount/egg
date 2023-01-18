@@ -320,7 +320,7 @@ namespace Egg.Lark
                                     if (arg.IndexOf('(') >= 0)
                                     {
                                         // 添加函数
-                                        func.Parameters.Add(Parse(arg));
+                                        func.Parameters.Add(Parse(arg, calculateName));
                                     }
                                     else
                                     {
@@ -363,7 +363,7 @@ namespace Egg.Lark
                                     if (arg.IndexOf('(') >= 0)
                                     {
                                         // 添加函数
-                                        func.Parameters.Add(Parse(arg));
+                                        func.Parameters.Add(Parse(arg, calculateName));
                                     }
                                     else
                                     {
@@ -405,7 +405,7 @@ namespace Egg.Lark
                                         if (arg.IndexOf('(') >= 0)
                                         {
                                             // 添加函数
-                                            func.Parameters.Add(Parse(arg));
+                                            func.Parameters.Add(Parse(arg, calculateName));
                                         }
                                         else
                                         {

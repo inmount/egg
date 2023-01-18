@@ -34,10 +34,6 @@ namespace Egg.Lark
         /// </summary>
         public ScriptVariables Parameters { get; }
 
-
-
-
-
         /// <summary>
         /// 执行
         /// </summary>

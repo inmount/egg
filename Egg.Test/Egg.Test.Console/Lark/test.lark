@@ -1,7 +1,6 @@
 @(
     # 为空测试 #
-    let(obj, null)
-    let(obj2, 1)
+    print($("计算结果是", 木))
     print($("对象是否为空：", is_null(obj), ",", is_null(obj2)))
     let(val1, true)
     let(val2, false)
@@ -9,10 +8,9 @@
     if(val2, print($("对象是真的")), print($("对象是假的")))
 
     # while 循环 #
-    let(num, 100)
     let(a, 1)
     let(sum, 0)
-    while(small_equal(a, num), @(
+    while(small_equal(a, 100), @(
         let(sum, !(sum + a))
         let(a, !(a + 1))
     ))

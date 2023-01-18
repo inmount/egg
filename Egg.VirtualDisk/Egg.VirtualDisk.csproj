@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
-    <Version>16.1.2301.10</Version>
+    <Version>16.1.2301.11</Version>
     <Description>一套基于4K存储的虚拟磁盘开发组件</Description>
     <Authors>Egg Studio</Authors>
     <PackageIcon>logo.png</PackageIcon>

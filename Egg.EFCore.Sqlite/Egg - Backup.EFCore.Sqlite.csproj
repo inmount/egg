@@ -3,9 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
-    <Version>16.1.2301.11</Version>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Version>16.1.2301.10</Version>
     <Authors>Egg Studio</Authors>
-    <Description>一套服务于EFCore PostgreSql数据库的辅助开发组件</Description>
+    <Description>一套服务于Sqlite EFCore的辅助开发组件</Description>
     <PackageIcon>logo.png</PackageIcon>
     <RepositoryUrl>https://github.com/inmount/egg</RepositoryUrl>
     <PackageProjectUrl>https://github.com/inmount/egg</PackageProjectUrl>
@@ -20,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.17" />
   </ItemGroup>
 
   <ItemGroup>
