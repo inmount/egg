@@ -9,6 +9,7 @@
     <PackageIcon>logo.png</PackageIcon>
     <RepositoryUrl>https://github.com/inmount/egg</RepositoryUrl>
     <PackageProjectUrl>https://github.com/inmount/egg</PackageProjectUrl>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

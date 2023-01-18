@@ -10,6 +10,7 @@
     <Description>一套用于生成条码的开发组件</Description>
     <PackageProjectUrl>https://github.com/inmount/egg</PackageProjectUrl>
     <PackageIcon>logo.png</PackageIcon>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

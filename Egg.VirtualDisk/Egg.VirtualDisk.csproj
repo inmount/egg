@@ -7,6 +7,7 @@
     <Description>一套基于4K存储的虚拟磁盘开发组件</Description>
     <Authors>Egg Studio</Authors>
     <PackageIcon>logo.png</PackageIcon>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

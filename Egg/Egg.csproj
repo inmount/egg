@@ -11,6 +11,7 @@
     <RepositoryUrl>https://github.com/inmount/egg</RepositoryUrl>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageProjectUrl>https://github.com/inmount/egg</PackageProjectUrl>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
