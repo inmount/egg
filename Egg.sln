@@ -26,9 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.BarCode", "Egg.BarCode\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.VirtualDisk", "Egg.VirtualDisk\Egg.VirtualDisk.csproj", "{7F0DF78F-EABD-49FE-8E45-2BC39ED5ECE4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.Security", "Egg.Security\Egg.Security.csproj", "{48F0404F-5BC7-4FFA-B5D4-6376F6A6C59E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egg.Lark", "Egg.Lark\Egg.Lark.csproj", "{A8BEDD8C-0EC7-4364-804E-2811367740DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.Lark", "Egg.Lark\Egg.Lark.csproj", "{A8BEDD8C-0EC7-4364-804E-2811367740DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,10 +66,6 @@ Global
 		{7F0DF78F-EABD-49FE-8E45-2BC39ED5ECE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F0DF78F-EABD-49FE-8E45-2BC39ED5ECE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F0DF78F-EABD-49FE-8E45-2BC39ED5ECE4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{48F0404F-5BC7-4FFA-B5D4-6376F6A6C59E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{48F0404F-5BC7-4FFA-B5D4-6376F6A6C59E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{48F0404F-5BC7-4FFA-B5D4-6376F6A6C59E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{48F0404F-5BC7-4FFA-B5D4-6376F6A6C59E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A8BEDD8C-0EC7-4364-804E-2811367740DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A8BEDD8C-0EC7-4364-804E-2811367740DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8BEDD8C-0EC7-4364-804E-2811367740DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
