@@ -40,7 +40,7 @@ namespace Egg.Lark
         /// </summary>
         /// <param name="script"></param>
         /// <param name="funcs"></param>
-        public ScriptEngine(string script, ScriptFunctions funcs)
+        public ScriptEngine(string script, ScriptFunctionsBase funcs)
         {
             _funcs = new Dictionary<string, Func<ScriptVariables, object?>>();
             _singleMemory = true;
@@ -71,7 +71,7 @@ namespace Egg.Lark
         /// <param name="script"></param>
         /// <param name="funcs"></param>
         /// <param name="memory"></param>
-        public ScriptEngine(string script, ScriptFunctions funcs, ScriptMemory memory)
+        public ScriptEngine(string script, ScriptFunctionsBase funcs, ScriptMemory memory)
         {
             _funcs = new Dictionary<string, Func<ScriptVariables, object?>>();
             _singleMemory = false;
@@ -100,7 +100,7 @@ namespace Egg.Lark
         /// </summary>
         /// <param name="script"></param>
         /// <param name="funcs"></param>
-        public ScriptEngine(ScriptFunction scriptFunction, ScriptFunctions funcs)
+        public ScriptEngine(ScriptFunction scriptFunction, ScriptFunctionsBase funcs)
         {
             _funcs = new Dictionary<string, Func<ScriptVariables, object?>>();
             _singleMemory = true;
@@ -131,7 +131,7 @@ namespace Egg.Lark
         /// <param name="script"></param>
         /// <param name="funcs"></param>
         /// <param name="memory"></param>
-        public ScriptEngine(ScriptFunction scriptFunction, ScriptFunctions funcs, ScriptMemory memory)
+        public ScriptEngine(ScriptFunction scriptFunction, ScriptFunctionsBase funcs, ScriptMemory memory)
         {
             _funcs = new Dictionary<string, Func<ScriptVariables, object?>>();
             _singleMemory = false;
