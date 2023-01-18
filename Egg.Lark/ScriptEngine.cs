@@ -182,9 +182,9 @@ namespace Egg.Lark
         /// <summary>
         /// 执行脚本
         /// </summary>
-        public void Execute()
+        public object? Execute()
         {
-            _scriptFunction.Execute(this);
+            return _scriptFunction.Execute(this);
         }
 
         /// <summary>

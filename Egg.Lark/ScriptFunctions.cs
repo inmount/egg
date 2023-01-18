@@ -58,7 +58,7 @@ namespace Egg.Lark
         /// <param name="name"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        public ScriptFunctions Reg(string name, Func<ScriptVariables, object> func)
+        public ScriptFunctions Reg(string name, Func<ScriptVariables, object?> func)
         {
             this[name] = func;
             return this;

@@ -78,7 +78,7 @@ namespace Egg.Lark
         /// <summary>
         /// 解析算式脚本
         /// </summary>
-        /// <param name="script"></param>
+        /// <param name="script">脚本文件</param>
         /// <returns></returns>
         public static object ParseFormula(string script)
         {
@@ -166,9 +166,10 @@ namespace Egg.Lark
         /// <summary>
         /// 解析脚本
         /// </summary>
-        /// <param name="script"></param>
+        /// <param name="script">脚本文本</param>
+        /// <param name="calculateName">计算定义名称</param>
         /// <returns></returns>
-        public static ScriptFunction Parse(string script)
+        public static ScriptFunction Parse(string script, string? calculateName = null)
         {
             // 调试输出
             Debug.WriteLine($"-> 解析脚本: \n{script}");
@@ -291,7 +292,7 @@ namespace Egg.Lark
                             if (sb.Length > 0)
                             {
                                 // 优先处理混合运算语法糖
-                                if (func.Name == "!")
+                                if (func.Name == "!" || func.Name == calculateName)
                                 {
                                     if (sb.Length < 2) throw new Exception($"意外的'{chr}'字符。");
                                     func.Parameters.Add(ParseFormula(sb.ToString()));
