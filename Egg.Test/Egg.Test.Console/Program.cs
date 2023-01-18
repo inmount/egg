@@ -77,7 +77,7 @@ egg.Logger
 //}
 
 // 测试EFCore
-// Egg.Test.Console.EFCore.Test.Run();
+Egg.Test.Console.EFCore.Test.Run();
 
 // 测试VirtualDisk
 //Egg.Test.Console.VirtualDisk.Test.Run();
@@ -122,4 +122,4 @@ egg.Logger
 //context.SaveChanges();
 
 // 测试lark
-Egg.Test.Console.Lark.Test.Run();
+// Egg.Test.Console.Lark.Test.Run();

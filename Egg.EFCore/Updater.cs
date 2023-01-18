@@ -8,6 +8,9 @@ using System.Text;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Runtime.CompilerServices;
 using Egg.EFCore.Dbsets;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection;
+using System.Data.Common;
 
 namespace Egg.EFCore
 {
@@ -18,6 +21,16 @@ namespace Egg.EFCore
     /// <typeparam name="TId"></typeparam>
     public class Updater<TClass, TId> where TClass : IEntity<TId>
     {
+        /// <summary>
+        /// 获取表名
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// 获取表名
+        /// </summary>
+        public string TableName { get; }
+
         /// <summary>
         /// 定义属性集合
         /// </summary>
@@ -37,6 +50,14 @@ namespace Egg.EFCore
             this.Properties = new List<UpdaterProperty>();
             // 解析并添加所有的属性定义
             var tp = typeof(TClass);
+            this.Name = tp.Name;
+            this.TableName = tp.Name;
+            var table = tp.GetCustomAttribute<TableAttribute>();
+            if (table != null)
+            {
+                if (!table.Name.IsEmpty()) this.TableName = table.Name;
+                if (!table.Schema.IsEmpty()) this.TableName = table.Schema + "." + this.TableName;
+            }
             var pros = tp.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             for (int i = 0; i < pros.Length; i++) this.Properties.Add(new UpdaterProperty(pros[i]));
         }
@@ -46,9 +67,14 @@ namespace Egg.EFCore
         /// </summary>
         /// <param name="selector"></param>
         /// <returns></returns>
-        public Updater<TClass, TId> Use(Expression<Func<TClass, object>> selector)
+        public Updater<TClass, TId> Use(Expression<Func<TClass, object?>> selector)
         {
-            Console.WriteLine($"Body: {selector.Body}");
+            var body = (UnaryExpression)selector.Body;
+            var operand = (MemberExpression)body.Operand;
+            var member = operand.Member;
+            var pro = this.Properties.Where(d => d.Name == member.Name).FirstOrDefault();
+            if (pro is null) throw new Exception($"数据对象中不存在'{member.Name}'字段");
+            pro.IsModified = true;
             return this;
         }
 
@@ -71,7 +97,23 @@ namespace Egg.EFCore
         public Updater<TClass, TId> Set(TClass entity, Expression<Func<TClass, bool>> predicate)
         {
             Console.WriteLine($"Body: {predicate.Body}");
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"update \"{this.TableName}\" set ");
+            StringBuilder sbSet = new StringBuilder();
+            foreach (var pro in this.Properties)
+            {
+                if (!pro.IsModified) continue;
+                if (sbSet.Length > 0) sbSet.Append(',');
+                sbSet.Append('"');
+                sbSet.Append(pro.ColumnName);
+                sbSet.Append('"');
+                sbSet.Append('=');
+                sbSet.Append(pro.GetSqlValue(entity));
+            }
+            sb.Append(sbSet.ToString());
+            sb.AppendLine(";");
             return this;
         }
+
     }
 }

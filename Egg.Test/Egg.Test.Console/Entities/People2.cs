@@ -36,7 +36,7 @@ namespace Egg.Test.Console.Entities
         /// <summary>
         /// 年龄
         /// </summary>
-        public virtual int Age { get; set; }
+        public virtual decimal Age { get; set; }
 
         /// <summary>
         /// 年龄

@@ -24,6 +24,8 @@ namespace Egg.Test.Console.EFCore
             //dbContexts.Use<CoreDbContext>();
             var people2Repository = new Repository<People2, string>(dbContext);
 
+            people2Repository.Update().Use(d => d.Sex).Set(new People2() { }, d => d.Id != "");
+
             var query = from p in people2Repository.Query()
                         select p;
             //query.Where()
