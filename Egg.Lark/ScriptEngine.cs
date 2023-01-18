@@ -47,6 +47,7 @@ namespace Egg.Lark
             _singleFunction = true;
             this.Memory = new ScriptMemory();
             _scriptFunction = ScriptParser.Parse(script);
+            funcs.SetEngine(this);
             foreach (var func in funcs) _funcs[func.Key] = func.Value;
         }
 
@@ -77,6 +78,7 @@ namespace Egg.Lark
             _singleFunction = true;
             this.Memory = memory;
             _scriptFunction = ScriptParser.Parse(script);
+            funcs.SetEngine(this);
             foreach (var func in funcs) _funcs[func.Key] = func.Value;
         }
 
@@ -105,6 +107,7 @@ namespace Egg.Lark
             _singleFunction = false;
             this.Memory = new ScriptMemory();
             _scriptFunction = scriptFunction;
+            funcs.SetEngine(this);
             foreach (var func in funcs) _funcs[func.Key] = func.Value;
         }
 
@@ -135,6 +138,7 @@ namespace Egg.Lark
             _singleFunction = false;
             this.Memory = memory;
             _scriptFunction = scriptFunction;
+            funcs.SetEngine(this);
             foreach (var func in funcs) _funcs[func.Key] = func.Value;
         }
 

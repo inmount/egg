@@ -9,8 +9,22 @@ namespace Egg.Lark
     /// <summary>
     /// 函数集合
     /// </summary>
-    public class ScriptFunctions : Dictionary<string, Func<ScriptVariables, object?>>, IDisposable
+    public class ScriptFunctions : Dictionary<string, Func<ScriptVariables, object?>>, IDisposable, IScriptFunctionController
     {
+        /// <summary>
+        /// 获取关联引擎
+        /// </summary>
+        public ScriptEngine Engine { get; private set; }
+
+        /// <summary>
+        /// 设置脚本引擎
+        /// </summary>
+        /// <param name="engine"></param>
+        public void SetEngine(ScriptEngine engine)
+        {
+            this.Engine = engine;
+        }
+
         // 获取函数名称
         private string GetFunctionName(string name)
         {
@@ -58,7 +72,7 @@ namespace Egg.Lark
         /// <returns></returns>
         public ScriptFunctions Reg(string name, Action<ScriptVariables> action)
         {
-            this[name] = new Func<ScriptVariables, object?>((args) => { action(args); return null; });
+            this[name] = new Func<ScriptVariables, object?>(args => { action(args); return null; });
             return this;
         }
 
@@ -82,7 +96,7 @@ namespace Egg.Lark
                     funName = (string.IsNullOrWhiteSpace(name) ? "" : name + "_") + funName;
                     var parameters = method.GetParameters();
                     Debug.WriteLine($"[Method] -> {method.ReturnParameter.Name} {funName}({parameters.Length})");
-                    this[funName] = new Func<ScriptVariables, object?>((args) =>
+                    this[funName] = new Func<ScriptVariables, object?>(args =>
                     {
                         object?[] ps = new object[parameters.Length];
                         for (int i = 0; i < ps.Length; i++)
