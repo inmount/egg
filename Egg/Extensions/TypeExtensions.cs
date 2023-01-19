@@ -31,7 +31,6 @@ namespace Egg
         public static bool IsNumeric(this Type? type)
         {
             if (type is null) return false;
-            if (type.BaseType != null) return type.BaseType.IsNumeric();
             string topName = type.GetTopName();
             switch (topName)
             {
@@ -49,6 +48,7 @@ namespace Egg
                 case "System.Boolean":
                     return true;
                 default:
+                    if (type.BaseType != null) return type.BaseType.IsNumeric();
                     return false;
             }
         }

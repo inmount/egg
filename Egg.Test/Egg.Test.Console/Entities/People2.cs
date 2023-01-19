@@ -47,7 +47,6 @@ namespace Egg.Test.Console.Entities
         /// <summary>
         /// 性别
         /// </summary>
-        [Column("sex", TypeName = "bool")]
         public virtual bool? Sex { get; set; }
 
         /// <summary>

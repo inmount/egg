@@ -20,7 +20,7 @@ namespace Egg.EFCore.Dbsets
         /// </summary>
         //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        [Column("id", TypeName = "varchar(50)")]
+        [Column(TypeName = "varchar(50)")]
         public override string Id { get => base.Id; set => base.Id = value; }
 
         /// <summary>

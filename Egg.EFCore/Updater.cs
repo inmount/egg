@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Collections;
+using System.Data.SqlTypes;
 
 namespace Egg.EFCore
 {
@@ -138,24 +139,32 @@ namespace Egg.EFCore
         // 获取Convert函数兼容的sql语句
         private string GetConvertSql(UnaryExpression unary)
         {
-            var operand = (MemberExpression)unary.Operand;
-            var operandValues = GetSqlExpressionValue(operand.Expression);
-            if (operandValues is null) throw new Exception($"容器无数据");
-            var valueInfo = operandValues.GetType().GetField(operand.Member.Name);
-            var value = valueInfo.GetValue(operandValues);
+            object? value = null;
+            if (unary.Operand is UnaryExpression) value = GetSqlExpressionValue(unary.Operand);
+            if (unary.Operand is ConstantExpression) value = GetSqlExpressionValue(unary.Operand);
+            if (value is null)
+            {
+                var operand = (MemberExpression)unary.Operand;
+                var operandValues = GetSqlExpressionValue(operand.Expression);
+                if (operandValues is null) throw new Exception($"容器无数据");
+                var valueInfo = operandValues.GetType().GetField(operand.Member.Name);
+                value = valueInfo.GetValue(operandValues);
+            }
+            if (value is null) return "NULL";
             var type = unary.Type;
-            if (type == typeof(decimal)) return "" + Convert.ToDecimal(value);
-            if (type == typeof(byte)) return "" + Convert.ToByte(value);
-            if (type == typeof(short)) return "" + Convert.ToInt16(value);
-            if (type == typeof(ushort)) return "" + Convert.ToUInt16(value);
-            if (type == typeof(int)) return "" + Convert.ToInt32(value);
-            if (type == typeof(uint)) return "" + Convert.ToUInt32(value);
-            if (type == typeof(long)) return "" + Convert.ToInt64(value);
-            if (type == typeof(ulong)) return "" + Convert.ToUInt64(value);
-            if (type == typeof(float)) return "" + Convert.ToSingle(value);
-            if (type == typeof(double)) return "" + Convert.ToDouble(value);
+            if (type == typeof(decimal) || type == typeof(Nullable<decimal>)) return "" + Convert.ToDecimal(value);
+            if (type == typeof(byte) || type == typeof(Nullable<byte>)) return "" + Convert.ToByte(value);
+            if (type == typeof(short) || type == typeof(Nullable<short>)) return "" + Convert.ToInt16(value);
+            if (type == typeof(ushort) || type == typeof(Nullable<ushort>)) return "" + Convert.ToUInt16(value);
+            if (type == typeof(int) || type == typeof(Nullable<int>)) return "" + Convert.ToInt32(value);
+            if (type == typeof(uint) || type == typeof(Nullable<uint>)) return "" + Convert.ToUInt32(value);
+            if (type == typeof(long) || type == typeof(Nullable<long>)) return "" + Convert.ToInt64(value);
+            if (type == typeof(ulong) || type == typeof(Nullable<ulong>)) return "" + Convert.ToUInt64(value);
+            if (type == typeof(float) || type == typeof(Nullable<float>)) return "" + Convert.ToSingle(value);
+            if (type == typeof(double) || type == typeof(Nullable<double>)) return "" + Convert.ToDouble(value);
             if (type == typeof(string)) return UpdaterProperty.GetSafetySqlString((string)value);
             throw new Exception($"不支持的转换类型'{type.FullName}'");
+            throw new Exception($"不支持的转换对象'{unary.Operand.NodeType}'");
         }
 
         // 获取sql语句值
@@ -174,12 +183,14 @@ namespace Egg.EFCore
                     var constant = (ConstantExpression)exp;
                     if (constant.Value is null) return "NULL";
                     if (constant.Value is string) return UpdaterProperty.GetSafetySqlString((string)constant.Value);
+                    var valueType = constant.Value.GetType();
+                    if (valueType.IsNumeric()) return constant.Value.ToString();
                     return constant.Value;
                 case ExpressionType.Call:
                     var call = (MethodCallExpression)exp;
                     var callMethod = call.Method;
                     if (callMethod.Name == "Contains") return GetContainsSql(call);
-                    return "";
+                    throw new Exception($"SqlExpressionValue不支持的Call类型'{callMethod.Name}'");
                 case ExpressionType.Convert:
                     return GetConvertSql((UnaryExpression)exp);
                 default:

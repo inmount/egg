@@ -15,6 +15,9 @@ namespace Egg.Test.Console.EFCore
     {
         public static async void Run()
         {
+            float? a = null;
+            var at = a.GetType();
+            var ass = at.IsNumeric();
             egg.Logger.Info("Egg.Test.Console.EFCore", "Test");
             var optionsBuilder = new DbContextOptionsBuilder<DbContext>();
             optionsBuilder.UseNpgsql(Consts.Connect_String);
