@@ -26,6 +26,11 @@ namespace Egg.Lark
     /// </summary>
     public static class ScriptParser
     {
+        /// <summary>
+        /// 脚本解析器名称集合
+        /// </summary>
+        public static List<string> ScriptCalculateNames = new List<string>() { "!" };
+
         // 创建算式
         private static ScriptFunction CreateFormulaFunction(string name, object arg1, object arg2)
         {
@@ -167,9 +172,8 @@ namespace Egg.Lark
         /// 解析脚本
         /// </summary>
         /// <param name="script">脚本文本</param>
-        /// <param name="calculateName">计算定义名称</param>
         /// <returns></returns>
-        public static ScriptFunction Parse(string script, string calculateName = "!")
+        public static ScriptFunction Parse(string script)
         {
             // 调试输出
             Debug.WriteLine($"-> 解析脚本: \n{script}");
@@ -292,7 +296,7 @@ namespace Egg.Lark
                             if (sb.Length > 0)
                             {
                                 // 优先处理混合运算语法糖
-                                if (func.Name == calculateName)
+                                if (ScriptCalculateNames.Contains(func.Name))
                                 {
                                     if (sb.Length < 2) throw new Exception($"意外的'{chr}'字符。");
                                     func.Parameters.Add(ParseFormula(sb.ToString()));
@@ -320,7 +324,7 @@ namespace Egg.Lark
                                     if (arg.IndexOf('(') >= 0)
                                     {
                                         // 添加函数
-                                        func.Parameters.Add(Parse(arg, calculateName));
+                                        func.Parameters.Add(Parse(arg));
                                     }
                                     else
                                     {
@@ -363,7 +367,7 @@ namespace Egg.Lark
                                     if (arg.IndexOf('(') >= 0)
                                     {
                                         // 添加函数
-                                        func.Parameters.Add(Parse(arg, calculateName));
+                                        func.Parameters.Add(Parse(arg));
                                     }
                                     else
                                     {
@@ -405,7 +409,7 @@ namespace Egg.Lark
                                         if (arg.IndexOf('(') >= 0)
                                         {
                                             // 添加函数
-                                            func.Parameters.Add(Parse(arg, calculateName));
+                                            func.Parameters.Add(Parse(arg));
                                         }
                                         else
                                         {

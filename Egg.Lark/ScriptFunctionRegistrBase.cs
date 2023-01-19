@@ -5,15 +5,10 @@ using System.Text;
 namespace Egg.Lark
 {
     /// <summary>
-    /// 函数控制器
+    /// 脚本函数注册器基础类
     /// </summary>
-    public abstract class ScriptFunctionController : IScriptFunctionController
+    public abstract class ScriptFunctionRegistrBase : IScriptFunctionRegistr
     {
-        /// <summary>
-        /// 获取关联引擎
-        /// </summary>
-        public ScriptEngine Engine { get; private set; }
-
         /// <summary>
         /// 设置脚本引擎
         /// </summary>
@@ -22,5 +17,10 @@ namespace Egg.Lark
         {
             this.Engine = engine;
         }
+
+        /// <summary>
+        /// 获取关联引擎
+        /// </summary>
+        public ScriptEngine Engine { get; private set; }
     }
 }

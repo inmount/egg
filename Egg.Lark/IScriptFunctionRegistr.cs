@@ -5,9 +5,9 @@ using System.Text;
 namespace Egg.Lark
 {
     /// <summary>
-    /// 脚本函数控制器接口
+    /// 脚本函数注册器接口
     /// </summary>
-    public interface IScriptFunctionController
+    public interface IScriptFunctionRegistr
     {
         /// <summary>
         /// 设置脚本引擎

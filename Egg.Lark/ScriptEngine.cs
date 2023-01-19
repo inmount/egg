@@ -175,7 +175,8 @@ namespace Egg.Lark
         /// <exception cref="ScriptException"></exception>
         public object? Execute(string name, ScriptVariables variables)
         {
-            if (!_funcs.ContainsKey(name)) throw new ScriptException($"函数'{name}'尚未定义");
+            if (!_funcs.ContainsKey(name)) 
+                throw new ScriptException($"函数'{name}'尚未定义");
             return _funcs[name](variables);
         }
 

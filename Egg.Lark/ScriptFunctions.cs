@@ -10,141 +10,6 @@ namespace Egg.Lark
     /// </summary>
     public class ScriptFunctions : ScriptFunctionsBase
     {
-        // 执行对象
-        private void FuncInvoke(ScriptEngine engine, object? func)
-        {
-            // 为空跳出
-            if (func is null) return;
-            // 为函数则执行
-            if (func is ScriptFunction)
-            {
-                ((ScriptFunction)func).Execute(engine);
-                return;
-            }
-            // 抛出异常
-            throw new ScriptException($"不可执行的类型'{func.GetType().FullName}'。");
-        }
-
-        /// <summary>
-        /// 判断是否为数字
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        internal static bool isNumber(object? obj)
-        {
-            if (obj is null) return false;
-            if (obj is byte) return true;
-            if (obj is uint) return true;
-            if (obj is int) return true;
-            if (obj is ulong) return true;
-            if (obj is long) return true;
-            if (obj is float) return true;
-            if (obj is double) return true;
-            if (obj is decimal) return true;
-            return false;
-        }
-
-        // 获取变量值
-        internal static object? GetVariableValue(ScriptEngine engine, ScriptVariable obj)
-        {
-            // 处理特殊名称
-            if (obj.Name == "null") return null;
-            if (obj.Name == "true") return true;
-            if (obj.Name == "false") return false;
-            return engine.Memory.Get(obj.Name);
-        }
-
-        // 获取值
-        internal static T GetValue<T>(ScriptEngine engine, object? obj) where T : struct
-        {
-            TryGetValue(engine, obj, out T? value);
-            if (value is null) throw new Exception("对象值为空");
-            return value.Value;
-        }
-
-        // 获取值
-        internal static T? GetValueOrNull<T>(ScriptEngine engine, object? obj) where T : class
-        {
-            TryGetValue(engine, obj, out T? value);
-            return value;
-        }
-
-        // 获取值
-        internal static bool TryGetValue<T>(ScriptEngine engine, object? obj, out T? value) where T : struct
-        {
-            value = default(T);
-            try
-            {
-                // 返回变量值
-                if (obj is ScriptVariable)
-                {
-                    var varValue = GetVariableValue(engine, (ScriptVariable)obj);
-                    if (varValue is null) return false;
-                    value = (T)varValue;
-                    return true;
-                }
-                // 返回函数执行结果
-                if (obj is ScriptFunction) obj = ((ScriptFunction)obj).Execute(engine);
-                // 为空判断
-                if (obj == null) throw new ScriptException($"变量值为空");
-                if (typeof(T) == typeof(double))
-                {
-                    value = (T)(object)Convert.ToDouble(obj);
-                    return true;
-                }
-                // 直接返回类型
-                value = (T)obj;
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        // 获取值
-        internal static bool TryGetValue<T>(ScriptEngine engine, object? obj, out T? value) where T : class
-        {
-            value = null;
-            try
-            {
-                // 返回变量值
-                if (obj is ScriptVariable)
-                {
-                    var varValue = GetVariableValue(engine, (ScriptVariable)obj);
-                    if (varValue is null) return false;
-                    value = (T)varValue;
-                    return true;
-                }
-                // 返回函数执行结果
-                if (obj is ScriptFunction) obj = ((ScriptFunction)obj).Execute(engine);
-                // 为空判断
-                if (obj == null) throw new ScriptException($"变量值为空");
-                if (typeof(T) == typeof(double))
-                {
-                    value = (T)(object)Convert.ToDouble(obj);
-                    return true;
-                }
-                // 直接返回类型
-                value = (T)obj;
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        // 获取值
-        internal static object? GetValue(ScriptEngine engine, object? obj)
-        {
-            // 返回变量值
-            if (obj is ScriptVariable) return GetVariableValue(engine, (ScriptVariable)obj);
-            // 返回函数执行结果
-            if (obj is ScriptFunction) return ((ScriptFunction)obj).Execute(engine);
-            // 直接返回类型
-            return obj;
-        }
 
         /// <summary>
         /// 标准函数集合
@@ -164,50 +29,6 @@ namespace Egg.Lark
             {
                 if (args.Count < 1) throw new ScriptException($"函数'!'缺少必要参数");
                 return GetValue(this.Engine, args[0]);
-            });
-            // 加
-            base.Reg("+", args =>
-            {
-                if (args.Count < 2) throw new ScriptException($"函数'+'缺少必要参数");
-                double dblValue = GetValue<double>(this.Engine, args[0]);
-                for (int i = 1; i < args.Count; i++)
-                {
-                    dblValue += GetValue<double>(this.Engine, args[i]);
-                }
-                return dblValue;
-            });
-            // 减
-            base.Reg("-", args =>
-            {
-                if (args.Count < 2) throw new ScriptException($"函数'-'缺少必要参数");
-                double dblValue = GetValue<double>(this.Engine, args[0]);
-                for (int i = 1; i < args.Count; i++)
-                {
-                    dblValue -= GetValue<double>(this.Engine, args[i]);
-                }
-                return dblValue;
-            });
-            // 乘
-            base.Reg("*", args =>
-            {
-                if (args.Count < 2) throw new ScriptException($"函数'*'缺少必要参数");
-                double dblValue = GetValue<double>(this.Engine, args[0]);
-                for (int i = 1; i < args.Count; i++)
-                {
-                    dblValue *= GetValue<double>(this.Engine, args[i]);
-                }
-                return dblValue;
-            });
-            // 除
-            base.Reg("/", args =>
-            {
-                if (args.Count < 2) throw new ScriptException($"函数'/'缺少必要参数");
-                double dblValue = GetValue<double>(this.Engine, args[0]);
-                for (int i = 1; i < args.Count; i++)
-                {
-                    dblValue /= GetValue<double>(this.Engine, args[i]);
-                }
-                return dblValue;
             });
             // 字符串
             base.Reg("$", args =>
@@ -253,9 +74,10 @@ namespace Egg.Lark
             base.Reg("while", args =>
             {
                 if (args.Count < 1) throw new ScriptException($"函数'while'缺少必要参数");
+                if (args.Count < 2) return;
                 while (GetValue<bool>(this.Engine, args[0]))
                 {
-                    if (args.Count >= 2) FuncInvoke(this.Engine, args[1]);
+                    FuncInvoke(this.Engine, args[1]);
                 }
             });
             // 规律循环

@@ -8,7 +8,10 @@ using System.Threading.Tasks;
 
 namespace Egg.Test.Console.Lark
 {
-    public class TestFuntion
+    /// <summary>
+    /// 测试函数注册器
+    /// </summary>
+    public class TestFuntion : ScriptFunctionRegistrBase
     {
         private void Print(string content)
         {
@@ -16,6 +19,7 @@ namespace Egg.Test.Console.Lark
         }
 
         [Func("print")]
+        [Func("输出")]
         public void Println(string content)
         {
             System.Console.WriteLine(content);
@@ -83,6 +87,12 @@ namespace Egg.Test.Console.Lark
             double sum = 0;
             for (double i = 0.01; i <= 100000.0; i += 0.01) sum += i;
             return sum;
+        }
+
+        [Func]
+        public void Sleep(double ts)
+        {
+            Thread.Sleep((int)ts);
         }
     }
 }

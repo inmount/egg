@@ -14,9 +14,10 @@ namespace Egg.Test.Console.Lark
             string path = egg.IO.GetExecutionPath("Lark/test.lark");
             string script = egg.IO.ReadUtf8FileContent(path);
             //System.Console.WriteLine(script);
+            ScriptParser.ScriptCalculateNames.Add("计算");
             var func = ScriptParser.Parse(script);
             //System.Console.WriteLine(func.ToString());
-            using (ScriptFunctions funcs = new ScriptFunctions())
+            using (TestFuntions funcs = new TestFuntions())
             {
                 funcs.Reg<TestFuntion>();
                 using (Egg.Lark.ScriptEngine engine = new Egg.Lark.ScriptEngine(func, funcs))

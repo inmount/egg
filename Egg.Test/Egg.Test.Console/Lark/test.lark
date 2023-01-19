@@ -1,6 +1,14 @@
 @(
+   # 效率测试 #
+    let(tick1, get_tick())
+    sleep(1000)
+    let(tick2, get_tick())
+    print($("等待时长：开始 ", tick1, ", 结束 ", tick2, ", 共 ", !(tick2 - tick1), "毫秒"))
+
     # 为空测试 #
-    print($("计算结果是", 木))
+    let(木, 计算(1 + 2))
+    输出($("木=", 木))
+    while(equal(木, 1), @())
     print($("对象是否为空：", is_null(obj), ",", is_null(obj2)))
     let(val1, true)
     let(val2, false)
@@ -39,7 +47,7 @@
     for(i, 0.01, 100000.0, 0.01, let(sum, !(sum + i)))
     print($("Lark=", sum))
     let(tick2, get_tick())
-    print($("千万次浮点运算脚本耗时", !(tick2 - tick1), "毫秒"))
+    print($("千万次浮点运算脚本耗时：开始 ", tick1, ", 结束 ", tick2, ", 共 ", !(tick2 - tick1), "毫秒"))
 
     # 函数效率测试 #
     let(tick1, get_tick())

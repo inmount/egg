@@ -7,6 +7,7 @@ namespace Egg.Lark
     /// <summary>
     /// 函数定义
     /// </summary>
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class FuncAttribute : System.Attribute
     {
         /// <summary>
