@@ -47,6 +47,33 @@ namespace Egg.EFCore
         }
 
         /// <summary>
+        /// 判断是否数字类型类型
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsNumericType(Type type)
+        {
+            string typeFullName = GetTypeName(type);
+            switch (typeFullName)
+            {
+                case "System.Byte":
+                case "System.Decimal":
+                case "System.Single":
+                case "System.Double":
+                case "System.Int16":
+                case "System.Int32":
+                case "System.Int64":
+                case "System.UInt16":
+                case "System.UInt32":
+                case "System.UInt64":
+                case "System.Boolean":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
         /// 获取Sql中的值
         /// </summary>
         /// <param name="obj"></param>
@@ -54,13 +81,17 @@ namespace Egg.EFCore
         public string GetSqlValue(object obj)
         {
             var value = this.PropertyInfo.GetValue(obj);
-            if (value is null) return "null";
-            if (IsNumeric) return value.ToString().ToLower();
+            if (value is null) return "NULL";
+            if (IsNumeric) return value.ToString().ToUpper();
             return GetSafetySqlString(value.ToString());
         }
 
-        // 获取类型名称
-        private string GetTypeName(Type type)
+        /// <summary>
+        /// 获取类型名称
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string GetTypeName(Type type)
         {
             string name = type.Namespace + "." + type.Name;
             // 兼容可空类型

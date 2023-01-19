@@ -13,7 +13,7 @@ namespace Egg.Test.Console.EFCore
 {
     internal static class Test
     {
-        public static void Run()
+        public static async void Run()
         {
             egg.Logger.Info("Egg.Test.Console.EFCore", "Test");
             var optionsBuilder = new DbContextOptionsBuilder<DbContext>();
@@ -24,13 +24,24 @@ namespace Egg.Test.Console.EFCore
             //dbContexts.Use<CoreDbContext>();
             var people2Repository = new Repository<People2, string>(dbContext);
 
-            people2Repository.Update().Use(d => new { d.Sex, d.Age }).Set(new People2()
+            List<string> names = new List<string>()
+            {
+                "aaa","bbb"
+            };
+            int minAge = 10;
+
+            // 更新数据
+            await people2Repository.UpdateAsync(new People2()
             {
                 Age = 18,
-                Sex = true
-            }, d => (d.Id != "" || d.Id != null) && d.Age > 10);
+                Sex = true,
+                Name = "Test",
+            },
+            d => ((d.Id != "111" || d.Id != null) && d.Age > minAge && names.Contains(d.Name ?? "")),
+            d => new { d.Sex, d.Age });
 
             var query = from p in people2Repository.Query()
+                        where (p.Id != "111" || p.Id != null) && p.Age > minAge && names.Contains(p.Name ?? "")
                         select p;
             //query.Where()
 

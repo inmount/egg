@@ -11,6 +11,8 @@ using Egg.EFCore.Dbsets;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 using System.Data.Common;
+using System.Diagnostics;
+using System.Collections;
 
 namespace Egg.EFCore
 {
@@ -110,8 +112,54 @@ namespace Egg.EFCore
             return this;
         }
 
+        // 获取Contains函数兼容的sql语句
+        private string GetContainsSql(MethodCallExpression call)
+        {
+            var callObj = (MemberExpression)call.Object;
+            var callObjValues = GetSqlExpressionValue(callObj.Expression);
+            if (callObjValues is null) throw new Exception($"容器无数据");
+            var listInfo = callObjValues.GetType().GetField(callObj.Member.Name);
+            ICollection list = (ICollection)listInfo.GetValue(callObjValues);
+            StringBuilder sbList = new StringBuilder();
+            sbList.Append('(');
+            foreach (var item in list)
+            {
+                if (sbList.Length > 1) sbList.Append(", ");
+                if (item is null) { sbList.Append("NULL"); continue; }
+                if (item.GetType().IsNumeric()) { sbList.Append(item); continue; }
+                if (item is string) { sbList.Append(UpdaterProperty.GetSafetySqlString((string)item)); continue; }
+                throw new Exception($"不支持的数据类型'{item.GetType().FullName}'");
+            }
+            sbList.Append(')');
+            var arg = GetSqlExpressionValue(call.Arguments[0]);
+            return $"{arg} IN {sbList.ToString()}";
+        }
+
+        // 获取Convert函数兼容的sql语句
+        private string GetConvertSql(UnaryExpression unary)
+        {
+            var operand = (MemberExpression)unary.Operand;
+            var operandValues = GetSqlExpressionValue(operand.Expression);
+            if (operandValues is null) throw new Exception($"容器无数据");
+            var valueInfo = operandValues.GetType().GetField(operand.Member.Name);
+            var value = valueInfo.GetValue(operandValues);
+            var type = unary.Type;
+            if (type == typeof(decimal)) return "" + Convert.ToDecimal(value);
+            if (type == typeof(byte)) return "" + Convert.ToByte(value);
+            if (type == typeof(short)) return "" + Convert.ToInt16(value);
+            if (type == typeof(ushort)) return "" + Convert.ToUInt16(value);
+            if (type == typeof(int)) return "" + Convert.ToInt32(value);
+            if (type == typeof(uint)) return "" + Convert.ToUInt32(value);
+            if (type == typeof(long)) return "" + Convert.ToInt64(value);
+            if (type == typeof(ulong)) return "" + Convert.ToUInt64(value);
+            if (type == typeof(float)) return "" + Convert.ToSingle(value);
+            if (type == typeof(double)) return "" + Convert.ToDouble(value);
+            if (type == typeof(string)) return UpdaterProperty.GetSafetySqlString((string)value);
+            throw new Exception($"不支持的转换类型'{type.FullName}'");
+        }
+
         // 获取sql语句值
-        private string GetSqlExpressionValue(Expression exp)
+        private object? GetSqlExpressionValue(Expression exp)
         {
             if (exp is BinaryExpression)
                 return "(" + GetSqlExpression((BinaryExpression)exp) + ")";
@@ -119,12 +167,21 @@ namespace Egg.EFCore
             {
                 case ExpressionType.MemberAccess:
                     var member = (MemberExpression)exp;
+                    var pro = this.Properties.Where(d => d.Name == member.Member.Name).FirstOrDefault();
+                    if (pro != null) return "\"" + pro.ColumnName + "\"";
                     return "\"" + member.Member.Name + "\"";
                 case ExpressionType.Constant:
                     var constant = (ConstantExpression)exp;
-                    if (constant.Value is null) return "null";
+                    if (constant.Value is null) return "NULL";
                     if (constant.Value is string) return UpdaterProperty.GetSafetySqlString((string)constant.Value);
-                    return constant.Value.ToString();
+                    return constant.Value;
+                case ExpressionType.Call:
+                    var call = (MethodCallExpression)exp;
+                    var callMethod = call.Method;
+                    if (callMethod.Name == "Contains") return GetContainsSql(call);
+                    return "";
+                case ExpressionType.Convert:
+                    return GetConvertSql((UnaryExpression)exp);
                 default:
                     throw new Exception($"SqlExpressionValue不支持的'{exp.NodeType}'节点类型");
             }
@@ -134,20 +191,36 @@ namespace Egg.EFCore
         private string GetSqlExpression(BinaryExpression exp)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(GetSqlExpressionValue(exp.Left));
+            string expLeft = (string)(GetSqlExpressionValue(exp.Left) ?? "");
+            string expRight = (string)(GetSqlExpressionValue(exp.Right) ?? "");
+            sb.Append(expLeft);
             switch (exp.NodeType)
             {
                 case ExpressionType.AndAlso:
-                    sb.Append(" and ");
+                    sb.Append(" AND ");
                     break;
                 case ExpressionType.OrElse:
-                    sb.Append(" or ");
+                    sb.Append(" OR ");
                     break;
                 case ExpressionType.Equal:
-                    sb.Append(" = ");
+                    if (expRight == "NULL")
+                    {
+                        sb.Append(" IS ");
+                    }
+                    else
+                    {
+                        sb.Append(" = ");
+                    }
                     break;
                 case ExpressionType.NotEqual:
-                    sb.Append(" <> ");
+                    if (expRight == "NULL")
+                    {
+                        sb.Append(" IS NOT ");
+                    }
+                    else
+                    {
+                        sb.Append(" <> ");
+                    }
                     break;
                 case ExpressionType.GreaterThan:
                     sb.Append(" > ");
@@ -161,9 +234,11 @@ namespace Egg.EFCore
                 case ExpressionType.LessThanOrEqual:
                     sb.Append(" <= ");
                     break;
+                case ExpressionType.Coalesce:
+                    return $"COALESCE({expLeft}, {expRight})";
                 default: throw new Exception($"SqlExpression不支持的'{exp.NodeType}'节点类型");
             }
-            sb.Append(GetSqlExpressionValue(exp.Right));
+            sb.Append(expRight);
             return sb.ToString();
         }
 
@@ -175,9 +250,9 @@ namespace Egg.EFCore
         /// <returns></returns>
         public Updater<TClass, TId> Set(TClass entity, Expression<Func<TClass, bool>> predicate)
         {
-            Console.WriteLine($"Body: {predicate.Body}");
+            //Console.WriteLine($"Body: {predicate.Body}");
             StringBuilder sb = new StringBuilder();
-            sb.Append($"update {(this.SchemaName.IsEmpty() ? "" : this.SchemaName + ".")}\"{this.TableName}\" set ");
+            sb.Append($"UPDATE {(this.SchemaName.IsEmpty() ? "" : this.SchemaName + ".")}\"{this.TableName}\" SET ");
             // 处理字段
             StringBuilder sbSet = new StringBuilder();
             foreach (var pro in this.Properties)
@@ -193,9 +268,10 @@ namespace Egg.EFCore
             sb.Append(sbSet.ToString());
             // 处理条件
             var body = (BinaryExpression)predicate.Body;
-            sb.Append(" where ");
+            sb.Append(" WHERE ");
             sb.Append(GetSqlExpression(body));
             sb.AppendLine(";");
+            System.Console.WriteLine($"[Sql] {sb.ToString()}");
             return this;
         }
 

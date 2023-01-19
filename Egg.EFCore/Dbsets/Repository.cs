@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -108,6 +109,28 @@ namespace Egg.EFCore.Dbsets
         /// </summary>
         /// <returns></returns>
         public Updater<TClass, TId> Update() => _updater;
+
+        /// <summary>
+        /// 更新数据
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="predicate"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public async Task UpdateAsync(TClass entity, Expression<Func<TClass, bool>> predicate, Expression<Func<TClass, object?>>? selector = null)
+        {
+            var updater = new Updater<TClass, TId>(this.Context);
+            if (selector is null)
+            {
+
+            }
+            else
+            {
+                updater.Use(selector);
+            }
+            updater.Set(entity, predicate);
+            await Task.CompletedTask;
+        }
 
         /// <summary>
         /// 更新数据
