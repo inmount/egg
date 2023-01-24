@@ -3,9 +3,9 @@
 namespace egg
 {
     /// <summary>
-    /// 密钥加密
+    /// 安全助手
     /// </summary>
-    public static class KeyEncryption
+    public static partial class Security
     {
         /// <summary>
         /// Xor加密 - 重复加密即为解密

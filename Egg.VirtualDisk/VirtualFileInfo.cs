@@ -98,7 +98,7 @@ namespace Egg.VirtualDisk
             this.DataLength = new Span<byte>(bytes, Data_Length_Offset, Data_Length_Size).ToLong();
             // 读取名称
             byte[] bsName = new Span<byte>(bytes, Name_Offset, Disk.Name_Size).ToArray();
-            egg.KeyEncryption.XorEncryption(this.DiskInfo.Key, ref bsName);
+            egg.Security.XorEncryption(this.DiskInfo.Key, ref bsName);
             this.Name = Encoding.UTF8.GetString(bsName).Trim('\0');
         }
 
@@ -137,7 +137,7 @@ namespace Egg.VirtualDisk
             byte[] bsNameTemp = Encoding.UTF8.GetBytes(this.Name);
             if (bsNameTemp.Length > Disk.Name_Size) throw new VirtualDiskException($"名称所占字节'{bsName.Length}'超出规定长度'{Disk.Name_Size}'.");
             Array.Copy(bsNameTemp, 0, bsName, 0, bsNameTemp.Length);
-            egg.KeyEncryption.XorEncryption(this.DiskInfo.Key, ref bsName);
+            egg.Security.XorEncryption(this.DiskInfo.Key, ref bsName);
             Array.Copy(bsName, 0, bytes, Name_Offset, bsName.Length);
             return bytes;
         }

@@ -23,6 +23,9 @@ egg.Logger
     .Use<ConsoleLogger>()
     .Use<VsLogger>();
 
+Console.WriteLine(egg.Security.DESEncrypt("qwertyuiop", "12345678"));
+Console.WriteLine(egg.Security.DESDecrypt("1UnHSOMKjAjGkwR2Xgh11g==", "12345678"));
+
 //Rules rules = new Rules();
 //rules.Use(new FixedString("XS-"))
 //    .Use(new DateTimeRule("yyyyMMdd"))
@@ -77,7 +80,7 @@ egg.Logger
 //}
 
 // 测试EFCore
-Egg.Test.Console.EFCore.Test.Run();
+//Egg.Test.Console.EFCore.Test.Run();
 
 // 测试VirtualDisk
 //Egg.Test.Console.VirtualDisk.Test.Run();
