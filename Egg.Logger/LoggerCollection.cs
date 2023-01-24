@@ -85,7 +85,7 @@ namespace Egg.Log
         /// <param name="message"></param>
         public void Log(LogEntity entity)
         {
-            string content = $"*{egg.Time.Now.ToTimeString()}* [{entity.Level.ToString().ToUpper()}] {entity.Event} {entity.Message}";
+            string content = $"*{egg.Time.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}* [{entity.Level.ToString().ToUpper()}] {entity.Event} {entity.Message}";
             // 输出到委托
             for (int i = 0; i < _logMessages.Count; i++)
             {
