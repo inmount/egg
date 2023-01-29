@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Egg.EFCore.Dbsets
+namespace Egg.Data.PostgreSQL
 {
     /// <summary>
-    /// 自增长字段
+    /// PostgreSQL数据库语法供应器
     /// </summary>
-    public class AutoIncrementAttribute : Attribute
+    public class NpgsqlProvider : ISqlProvider
     {
     }
 }

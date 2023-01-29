@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Egg.Data\Egg.Data.csproj" />
     <ProjectReference Include="..\Egg.Logger\Egg.Log.csproj" />
     <ProjectReference Include="..\Egg\Egg.csproj" />
   </ItemGroup>

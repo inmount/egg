@@ -15,7 +15,7 @@ namespace Egg.EFCore.Sqlite
         /// <param name="context"></param>
         public static bool EnsureCreatedPostgreSQL(this DbContext context)
         {
-            return context.EnsureCreated<PostgreSQLCreater>();
+            return context.EnsureCreated<NpgsqlCreater>();
         }
 
         /// <summary>

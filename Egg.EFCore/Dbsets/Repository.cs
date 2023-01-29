@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Egg.Data;
+using Egg.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +37,7 @@ namespace Egg.EFCore.Dbsets
         {
             Context = context;
             DbSet = context.Set<TClass>();
-            _updater = new Updater<TClass, TId>(context);
+            _updater = new Updater<TClass, TId>(context.GetSqlProvider());
         }
 
         /// <summary>
@@ -119,7 +121,7 @@ namespace Egg.EFCore.Dbsets
         /// <returns></returns>
         public async Task UpdateAsync(TClass entity, Expression<Func<TClass, bool>> predicate, Expression<Func<TClass, object?>>? selector = null)
         {
-            var updater = new Updater<TClass, TId>(this.Context);
+            var updater = new Updater<TClass, TId>(this.Context.GetSqlProvider());
             if (selector is null)
             {
 

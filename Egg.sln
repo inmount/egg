@@ -13,20 +13,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.Log", "Egg.Logger\Egg.L
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.EFCore", "Egg.EFCore\Egg.EFCore.csproj", "{6B46BEA1-E0D0-43A1-99D2-121DDAB0033D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.EFCore.Sqlite", "Egg.EFCore.Sqlite\Egg.EFCore.Sqlite.csproj", "{5356AEC6-B78B-4149-B8E5-634E05B2688A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.Data.Sqlite", "Egg.Data.Sqlite\Egg.Data.Sqlite.csproj", "{5356AEC6-B78B-4149-B8E5-634E05B2688A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{527E4D21-A985-4794-8E95-E7280972D7A1}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.EFCore.PostgreSQL", "Egg.EFCore.PostgreSQL\Egg.EFCore.PostgreSQL.csproj", "{B0A74D3E-4843-4662-986E-C0A9CB9B72D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.Data.PostgreSQL", "Egg.Data.PostgreSQL\Egg.Data.PostgreSQL.csproj", "{B0A74D3E-4843-4662-986E-C0A9CB9B72D7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.BarCode", "Egg.BarCode\Egg.BarCode.csproj", "{7904F92D-DC5F-40EB-821D-BF4AC67546C5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.VirtualDisk", "Egg.VirtualDisk\Egg.VirtualDisk.csproj", "{7F0DF78F-EABD-49FE-8E45-2BC39ED5ECE4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.Lark", "Egg.Lark\Egg.Lark.csproj", "{A8BEDD8C-0EC7-4364-804E-2811367740DA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.Data", "Egg.Data\Egg.Data.csproj", "{B06D0BE1-89BF-4057-B3F0-6BC3D540FFE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -70,6 +72,10 @@ Global
 		{A8BEDD8C-0EC7-4364-804E-2811367740DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8BEDD8C-0EC7-4364-804E-2811367740DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8BEDD8C-0EC7-4364-804E-2811367740DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B06D0BE1-89BF-4057-B3F0-6BC3D540FFE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B06D0BE1-89BF-4057-B3F0-6BC3D540FFE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B06D0BE1-89BF-4057-B3F0-6BC3D540FFE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B06D0BE1-89BF-4057-B3F0-6BC3D540FFE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

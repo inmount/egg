@@ -3,7 +3,6 @@
 using Egg;
 using Egg.BarCode;
 using Egg.EFCore;
-using Egg.EFCore.Sqlite;
 using Egg.Log.Loggers;
 using Egg.Test.Console;
 using Egg.Test.Console.Entities;

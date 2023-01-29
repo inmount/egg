@@ -4,17 +4,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 using System.Text;
 
-namespace Egg.EFCore
+namespace Egg.Data
 {
     /// <summary>
-    /// 更新器属性
+    /// 字段属性
     /// </summary>
-    public class UpdaterProperty
+    public class ColumnProperty
     {
         /// <summary>
-        /// 名称
+        /// 变量名称
         /// </summary>
-        public string Name { get; }
+        public string VarName { get; }
 
         /// <summary>
         /// 列名称
@@ -102,10 +102,10 @@ namespace Egg.EFCore
         /// <summary>
         /// 更新器属性
         /// </summary>
-        public UpdaterProperty(PropertyInfo property)
+        public ColumnProperty(PropertyInfo property)
         {
             this.PropertyInfo = property;
-            this.Name = property.Name;
+            this.VarName = property.Name;
             this.ColumnName = property.Name;
             var column = property.GetCustomAttribute<ColumnAttribute>();
             if (column != null)

@@ -1,21 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Linq;
 using System.Text;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Runtime.CompilerServices;
-using Egg.EFCore.Dbsets;
+using Egg.Data.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Collections;
 using System.Data.SqlTypes;
+using Egg;
 
-namespace Egg.EFCore
+namespace Egg.Data
 {
     /// <summary>
     /// 更新器
@@ -42,20 +41,20 @@ namespace Egg.EFCore
         /// <summary>
         /// 定义属性集合
         /// </summary>
-        public List<UpdaterProperty> Properties { get; }
+        public List<ColumnProperty> Properties { get; }
 
         /// <summary>
-        /// DB上下文
+        /// Sql语法供应器
         /// </summary>
-        public DbContext Context { get; }
+        public ISqlProvider SqlProvider { get; }
 
         /// <summary>
         /// 更新器
         /// </summary>
-        public Updater(DbContext context)
+        public Updater(ISqlProvider sqlProvider)
         {
-            this.Context = context;
-            this.Properties = new List<UpdaterProperty>();
+            this.SqlProvider = sqlProvider;
+            this.Properties = new List<ColumnProperty>();
             // 解析并添加所有的属性定义
             var tp = typeof(TClass);
             this.Name = tp.Name;
@@ -67,7 +66,7 @@ namespace Egg.EFCore
                 this.SchemaName = table.Schema;
             }
             var pros = tp.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-            for (int i = 0; i < pros.Length; i++) this.Properties.Add(new UpdaterProperty(pros[i]));
+            for (int i = 0; i < pros.Length; i++) this.Properties.Add(new ColumnProperty(pros[i]));
         }
 
         /// <summary>
@@ -83,7 +82,7 @@ namespace Egg.EFCore
                 var bodyNew = (NewExpression)selector.Body;
                 foreach (var member in bodyNew.Members)
                 {
-                    var pro = this.Properties.Where(d => d.Name == member.Name).FirstOrDefault();
+                    var pro = this.Properties.Where(d => d.VarName == member.Name).FirstOrDefault();
                     if (pro is null) throw new Exception($"数据对象中不存在'{member.Name}'字段");
                     pro.IsModified = true;
                 }
@@ -94,13 +93,23 @@ namespace Egg.EFCore
                 var bodyUnary = (UnaryExpression)selector.Body;
                 var operand = (MemberExpression)bodyUnary.Operand;
                 var member = operand.Member;
-                var pro = this.Properties.Where(d => d.Name == member.Name).FirstOrDefault();
+                var pro = this.Properties.Where(d => d.VarName == member.Name).FirstOrDefault();
                 if (pro is null) throw new Exception($"数据对象中不存在'{member.Name}'字段");
                 pro.IsModified = true;
                 return this;
             }
 
             throw new Exception($"不支持的表达式类型: {body}");
+        }
+
+        /// <summary>
+        /// 更新所有字段
+        /// </summary>
+        /// <returns></returns>
+        public Updater<TClass, TId> UseAll()
+        {
+            foreach (var pro in this.Properties) pro.IsModified = true;
+            return this;
         }
 
         /// <summary>
@@ -128,7 +137,7 @@ namespace Egg.EFCore
                 if (sbList.Length > 1) sbList.Append(", ");
                 if (item is null) { sbList.Append("NULL"); continue; }
                 if (item.GetType().IsNumeric()) { sbList.Append(item); continue; }
-                if (item is string) { sbList.Append(UpdaterProperty.GetSafetySqlString((string)item)); continue; }
+                if (item is string) { sbList.Append(ColumnProperty.GetSafetySqlString((string)item)); continue; }
                 throw new Exception($"不支持的数据类型'{item.GetType().FullName}'");
             }
             sbList.Append(')');
@@ -162,7 +171,7 @@ namespace Egg.EFCore
             if (type == typeof(ulong) || type == typeof(Nullable<ulong>)) return "" + Convert.ToUInt64(value);
             if (type == typeof(float) || type == typeof(Nullable<float>)) return "" + Convert.ToSingle(value);
             if (type == typeof(double) || type == typeof(Nullable<double>)) return "" + Convert.ToDouble(value);
-            if (type == typeof(string)) return UpdaterProperty.GetSafetySqlString((string)value);
+            if (type == typeof(string)) return ColumnProperty.GetSafetySqlString((string)value);
             throw new Exception($"不支持的转换类型'{type.FullName}'");
             throw new Exception($"不支持的转换对象'{unary.Operand.NodeType}'");
         }
@@ -176,13 +185,13 @@ namespace Egg.EFCore
             {
                 case ExpressionType.MemberAccess:
                     var member = (MemberExpression)exp;
-                    var pro = this.Properties.Where(d => d.Name == member.Member.Name).FirstOrDefault();
+                    var pro = this.Properties.Where(d => d.VarName == member.Member.Name).FirstOrDefault();
                     if (pro != null) return "\"" + pro.ColumnName + "\"";
                     return "\"" + member.Member.Name + "\"";
                 case ExpressionType.Constant:
                     var constant = (ConstantExpression)exp;
                     if (constant.Value is null) return "NULL";
-                    if (constant.Value is string) return UpdaterProperty.GetSafetySqlString((string)constant.Value);
+                    if (constant.Value is string) return ColumnProperty.GetSafetySqlString((string)constant.Value);
                     var valueType = constant.Value.GetType();
                     if (valueType.IsNumeric()) return constant.Value.ToString();
                     return constant.Value;

@@ -1,4 +1,5 @@
-﻿using Egg.EFCore.Dbsets;
+﻿using Egg.Data;
+using Egg.EFCore.Dbsets;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -78,10 +79,37 @@ namespace Egg.EFCore
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static string GetDbType(this DbContext context) => context.Database.ProviderName switch
+        public static DatabaseTypes GetDbType(this DbContext context) => context.Database.ProviderName switch
         {
-            var h when h == "Microsoft.EntityFrameworkCore.Sqlite" => "sqlite",
-            _ => context.Database.ProviderName
+            var h when h == "Microsoft.EntityFrameworkCore.Sqlite" => DatabaseTypes.Sqlite,
+            _ => throw new Exception($"不支持的数据库提供商'{context.Database.ProviderName}'")
         };
+
+        /// <summary>
+        /// 获取数据库连接信息
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static IDatabaseConnectionInfo GetDatabaseConnectionInfo(this DbContext context)
+        {
+            var type = context.GetDbType();
+            return type switch
+            {
+                var h when h == DatabaseTypes.PostgreSQL => (IDatabaseConnectionInfo)Activator.CreateInstance(Type.GetType("Egg.Data.PostgreSQL.NpgsqlConnectionInfo")),
+                _ => throw new Exception($"不支持的数据库提供商'{context.Database.ProviderName}'")
+            };
+        }
+
+        /// <summary>
+        /// 获取Sql语句供应器
+        /// </summary>
+        /// <param name="context"></param>
+        public static ISqlProvider GetSqlProvider(this DbContext context)
+        {
+            IDatabaseConnectionInfo info = context.GetDatabaseConnectionInfo();
+            Type type = Type.GetType(info.ProviderName);
+            return (ISqlProvider)Activator.CreateInstance(type);
+        }
     }
 }

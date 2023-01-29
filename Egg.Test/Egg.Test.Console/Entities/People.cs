@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Egg.EFCore.Dbsets;
+using Egg.Data.Entities;
 
 namespace Egg.Test.Console.Entities
 {

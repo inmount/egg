@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Egg.EFCore.Dbsets
+namespace Egg.Data.Entities
 {
     /// <summary>
     /// 带主键的实例

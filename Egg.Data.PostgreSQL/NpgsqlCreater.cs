@@ -17,13 +17,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using static Npgsql.Replication.PgOutput.Messages.RelationMessage;
 using Egg.EFCore.Sqlite;
 using Egg.EFCore.Dbsets;
+using Egg.Data.Entities;
 
 namespace Egg.EFCore
 {
     /// <summary>
-    /// Sqlite创建器
+    /// PostgreSQL数据库创建器
     /// </summary>
-    public class PostgreSQLCreater : IDbCreater
+    public class NpgsqlCreater : IDbCreater
     {
 
         /// <summary>

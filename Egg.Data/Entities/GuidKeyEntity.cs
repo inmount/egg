@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Egg.EFCore.Dbsets
+namespace Egg.Data.Entities
 {
     /// <summary>
     /// 带主键的实例
@@ -18,7 +18,6 @@ namespace Egg.EFCore.Dbsets
         /// <summary>
         /// GUID标识
         /// </summary>
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         [Column(TypeName = "varchar(50)")]
         public override string Id { get => base.Id; set => base.Id = value; }
