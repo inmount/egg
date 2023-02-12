@@ -1,6 +1,5 @@
 ﻿using Egg.Data;
 using Egg.Data.Entities;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,36 +8,22 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Egg.EFCore.Dbsets
+namespace Egg.Data
 {
     /// <summary>
     /// 数据仓库
     /// </summary>
-    public class Repository<TClass, TId> : IRepository<TClass, TId> where TClass : class, IEntity<TId>
+    public class Repository<TClass, TId> where TClass : class, IEntity<TId>
     {
-        // 私有变量
+        // 数据库连接
+        private readonly DatabaseConnection _connection;
+        // 更新器
         private Updater<TClass, TId> _updater;
 
         /// <summary>
-        /// DB上下文
+        /// 数据库连接
         /// </summary>
-        public DbContext? Context { get; }
-
-        /// <summary>
-        /// 实体集合
-        /// </summary>
-        public DbSet<TClass>? DbSet { get; }
-
-        /// <summary>
-        /// 对象实例化
-        /// </summary>
-        /// <param name="context"></param>
-        public Repository(DbContext context)
-        {
-            Context = context;
-            DbSet = context.Set<TClass>();
-            _updater = new Updater<TClass, TId>(new DatabaseConnection(context.GetDatabaseConnectionInfo()));
-        }
+        public DatabaseConnection Connection { get { return _connection; } }
 
         /// <summary>
         /// 对象实例化
@@ -46,8 +31,7 @@ namespace Egg.EFCore.Dbsets
         /// <param name="connection"></param>
         public Repository(DatabaseConnection connection)
         {
-            Context = null;
-            DbSet = null;
+            _connection = connection;
             _updater = new Updater<TClass, TId>(connection);
         }
 
@@ -67,9 +51,9 @@ namespace Egg.EFCore.Dbsets
         /// <returns></returns>
         public async Task DeleteAsync(TId id)
         {
-            if (DbSet is null) throw new DatabaseException($"'DbSet'尚未定义");
-            var entity = await DbSet.FindAsync(id);
-            DbSet.Remove(entity);
+            //var entity = await DbSet.FindAsync(id);
+            //DbSet.Remove(entity);
+            await Task.CompletedTask;
         }
 
         /// <summary>
@@ -89,8 +73,8 @@ namespace Egg.EFCore.Dbsets
         /// <returns></returns>
         public async Task InsertAsync(TClass entity)
         {
-            if (DbSet is null) throw new DatabaseException($"'DbSet'尚未定义");
-            await DbSet.AddAsync(entity);
+            //await DbSet.AddAsync(entity);
+            await Task.CompletedTask;
         }
 
         /// <summary>
@@ -110,18 +94,52 @@ namespace Egg.EFCore.Dbsets
         /// <returns></returns>
         public async Task InsertListAsync(IEnumerable<TClass> entity)
         {
-            if (DbSet is null) throw new DatabaseException($"'DbSet'尚未定义");
-            await DbSet.AddRangeAsync(entity);
+            //await DbSet.AddRangeAsync(entity);
+            await Task.CompletedTask;
         }
 
         /// <summary>
-        /// 获取查询器
+        /// 获取单行数据
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
         /// <returns></returns>
-        public IQueryable<TClass> Query()
+        public TClass GetRow(string sql)
         {
-            if (DbSet is null) throw new DatabaseException($"'DbSet'尚未定义");
-            return DbSet;
+            return _connection.GetRow<TClass>(sql);
+        }
+
+        /// <summary>
+        /// 获取多行数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public List<TClass> GetRows(string sql)
+        {
+            return _connection.GetRows<TClass>(sql);
+        }
+
+        /// <summary>
+        /// 获取单行数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public async Task<TClass> GetRowAsync(string sql)
+        {
+            return await _connection.GetRowAsync<TClass>(sql);
+        }
+
+        /// <summary>
+        /// 获取多行数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public Task<List<TClass>> GetRowsAsync(string sql)
+        {
+            return _connection.GetRowsAsync<TClass>(sql);
         }
 
         /// <summary>
@@ -146,11 +164,10 @@ namespace Egg.EFCore.Dbsets
         /// <returns></returns>
         public async Task UpdateAsync(TClass entity, Expression<Func<TClass, bool>> predicate, Expression<Func<TClass, object?>>? selector = null)
         {
-            if (Context is null) throw new DatabaseException($"'Context'尚未定义");
-            var updater = new Updater<TClass, TId>(this.Context.GetDatabaseConnection());
+            var updater = new Updater<TClass, TId>(_connection);
             if (selector is null)
             {
-
+                updater.UseAll();
             }
             else
             {
@@ -177,8 +194,8 @@ namespace Egg.EFCore.Dbsets
         /// <returns></returns>
         public async Task UpdateAsync(TClass entity)
         {
-            if (Context is null) throw new DatabaseException($"'Context'尚未定义");
-            Context.Entry(entity).State = EntityState.Modified;
+            //Context.Entry(entity).State = EntityState.Modified;
+            //await Task.CompletedTask;
             await Task.CompletedTask;
         }
 
@@ -199,8 +216,8 @@ namespace Egg.EFCore.Dbsets
         /// <returns></returns>
         public async Task<TClass> GetAsync(TId id)
         {
-            if (DbSet is null) throw new DatabaseException($"'DbSet'尚未定义");
-            return await DbSet.FindAsync(id);
+            return await GetRowAsync("");
+            //return await DbSet.FindAsync(id);
         }
     }
 }

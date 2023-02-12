@@ -13,6 +13,8 @@ using System.Diagnostics;
 using System.Collections;
 using System.Data.SqlTypes;
 using Egg;
+using Egg.Data.Extensions;
+using System.Threading.Tasks;
 
 namespace Egg.Data
 {
@@ -24,9 +26,9 @@ namespace Egg.Data
     public class Updater<TClass, TId> where TClass : IEntity<TId>
     {
         /// <summary>
-        /// 获取表名
+        /// 获取类型名称
         /// </summary>
-        public string Name { get; }
+        public string TypeName { get; }
 
         /// <summary>
         /// 获取表名
@@ -44,20 +46,20 @@ namespace Egg.Data
         public List<ColumnProperty> Properties { get; }
 
         /// <summary>
-        /// Sql语法供应器
+        /// 数据库连接器
         /// </summary>
-        public ISqlProvider SqlProvider { get; }
+        public DatabaseConnection Connection { get; }
 
         /// <summary>
         /// 更新器
         /// </summary>
-        public Updater(ISqlProvider sqlProvider)
+        public Updater(DatabaseConnection connection)
         {
-            this.SqlProvider = sqlProvider;
+            this.Connection = connection;
             this.Properties = new List<ColumnProperty>();
             // 解析并添加所有的属性定义
             var tp = typeof(TClass);
-            this.Name = tp.Name;
+            this.TypeName = tp.GetTopName();
             this.TableName = tp.Name;
             var table = tp.GetCustomAttribute<TableAttribute>();
             if (table != null)
@@ -66,7 +68,12 @@ namespace Egg.Data
                 this.SchemaName = table.Schema;
             }
             var pros = tp.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-            for (int i = 0; i < pros.Length; i++) this.Properties.Add(new ColumnProperty(pros[i]));
+            for (int i = 0; i < pros.Length; i++)
+            {
+                var pro = pros[i];
+                // 添加列属性
+                this.Properties.Add(new ColumnProperty(this.Connection.Provider, pro));
+            }
         }
 
         /// <summary>
@@ -112,154 +119,70 @@ namespace Egg.Data
             return this;
         }
 
+        public string GetSqlString(TClass entity, Expression<Func<TClass, bool>> predicate)
+        {
+            // 数据库供应商
+            var provider = Connection.Provider;
+            StringBuilder sb = new StringBuilder();
+            // 拼接表相关字符串
+            sb.Append("UPDATE ");
+            if (this.SchemaName.IsEmpty())
+            {
+                sb.Append(provider.GetNameString(this.TableName));
+            }
+            else
+            {
+                sb.Append(this.SchemaName);
+                sb.Append(".");
+                sb.Append(provider.GetNameString(this.TableName));
+            }
+            sb.Append(" SET ");
+            // 处理字段
+            StringBuilder sbSet = new StringBuilder();
+            foreach (var pro in this.Properties)
+            {
+                if (!pro.IsModified) continue;
+                if (sbSet.Length > 0) sbSet.Append(',');
+                sbSet.Append(provider.GetNameString(pro.ColumnName));
+                sbSet.Append('=');
+                sbSet.Append(pro.GetSqlValue(entity));
+            }
+            sb.Append(sbSet.ToString());
+            // 处理条件
+            var body = (BinaryExpression)predicate.Body;
+            sb.Append(" WHERE ");
+            // 获取表达式SQL
+            using (SqlExpression sqlExpression = new SqlExpression(provider, this.Properties))
+            {
+                sb.Append(sqlExpression.GetSqlString(body));
+            }
+            sb.Append(";");
+            return sb.ToString();
+        }
+
         /// <summary>
         /// 设置需要保存的数据
         /// </summary>
         /// <param name="entity"></param>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public Updater<TClass, TId> Set(TClass entity)
+        public async Task SetAsync(TClass entity, Expression<Func<TClass, bool>> predicate)
         {
-            return this;
+            string sql = GetSqlString(entity, predicate);
+            // 执行更新
+            await this.Connection.ExecuteNonQueryAsync(sql);
         }
 
-        // 获取Contains函数兼容的sql语句
-        private string GetContainsSql(MethodCallExpression call)
+        /// <summary>
+        /// 设置需要保存的数据
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public async Task SetAsync(TClass entity)
         {
-            var callObj = (MemberExpression)call.Object;
-            var callObjValues = GetSqlExpressionValue(callObj.Expression);
-            if (callObjValues is null) throw new Exception($"容器无数据");
-            var listInfo = callObjValues.GetType().GetField(callObj.Member.Name);
-            ICollection list = (ICollection)listInfo.GetValue(callObjValues);
-            StringBuilder sbList = new StringBuilder();
-            sbList.Append('(');
-            foreach (var item in list)
-            {
-                if (sbList.Length > 1) sbList.Append(", ");
-                if (item is null) { sbList.Append("NULL"); continue; }
-                if (item.GetType().IsNumeric()) { sbList.Append(item); continue; }
-                if (item is string) { sbList.Append(ColumnProperty.GetSafetySqlString((string)item)); continue; }
-                throw new Exception($"不支持的数据类型'{item.GetType().FullName}'");
-            }
-            sbList.Append(')');
-            var arg = GetSqlExpressionValue(call.Arguments[0]);
-            return $"{arg} IN {sbList.ToString()}";
-        }
-
-        // 获取Convert函数兼容的sql语句
-        private string GetConvertSql(UnaryExpression unary)
-        {
-            object? value = null;
-            if (unary.Operand is UnaryExpression) value = GetSqlExpressionValue(unary.Operand);
-            if (unary.Operand is ConstantExpression) value = GetSqlExpressionValue(unary.Operand);
-            if (value is null)
-            {
-                var operand = (MemberExpression)unary.Operand;
-                var operandValues = GetSqlExpressionValue(operand.Expression);
-                if (operandValues is null) throw new Exception($"容器无数据");
-                var valueInfo = operandValues.GetType().GetField(operand.Member.Name);
-                value = valueInfo.GetValue(operandValues);
-            }
-            if (value is null) return "NULL";
-            var type = unary.Type;
-            if (type == typeof(decimal) || type == typeof(Nullable<decimal>)) return "" + Convert.ToDecimal(value);
-            if (type == typeof(byte) || type == typeof(Nullable<byte>)) return "" + Convert.ToByte(value);
-            if (type == typeof(short) || type == typeof(Nullable<short>)) return "" + Convert.ToInt16(value);
-            if (type == typeof(ushort) || type == typeof(Nullable<ushort>)) return "" + Convert.ToUInt16(value);
-            if (type == typeof(int) || type == typeof(Nullable<int>)) return "" + Convert.ToInt32(value);
-            if (type == typeof(uint) || type == typeof(Nullable<uint>)) return "" + Convert.ToUInt32(value);
-            if (type == typeof(long) || type == typeof(Nullable<long>)) return "" + Convert.ToInt64(value);
-            if (type == typeof(ulong) || type == typeof(Nullable<ulong>)) return "" + Convert.ToUInt64(value);
-            if (type == typeof(float) || type == typeof(Nullable<float>)) return "" + Convert.ToSingle(value);
-            if (type == typeof(double) || type == typeof(Nullable<double>)) return "" + Convert.ToDouble(value);
-            if (type == typeof(string)) return ColumnProperty.GetSafetySqlString((string)value);
-            throw new Exception($"不支持的转换类型'{type.FullName}'");
-            throw new Exception($"不支持的转换对象'{unary.Operand.NodeType}'");
-        }
-
-        // 获取sql语句值
-        private object? GetSqlExpressionValue(Expression exp)
-        {
-            if (exp is BinaryExpression)
-                return "(" + GetSqlExpression((BinaryExpression)exp) + ")";
-            switch (exp.NodeType)
-            {
-                case ExpressionType.MemberAccess:
-                    var member = (MemberExpression)exp;
-                    var pro = this.Properties.Where(d => d.VarName == member.Member.Name).FirstOrDefault();
-                    if (pro != null) return "\"" + pro.ColumnName + "\"";
-                    return "\"" + member.Member.Name + "\"";
-                case ExpressionType.Constant:
-                    var constant = (ConstantExpression)exp;
-                    if (constant.Value is null) return "NULL";
-                    if (constant.Value is string) return ColumnProperty.GetSafetySqlString((string)constant.Value);
-                    var valueType = constant.Value.GetType();
-                    if (valueType.IsNumeric()) return constant.Value.ToString();
-                    return constant.Value;
-                case ExpressionType.Call:
-                    var call = (MethodCallExpression)exp;
-                    var callMethod = call.Method;
-                    if (callMethod.Name == "Contains") return GetContainsSql(call);
-                    throw new Exception($"SqlExpressionValue不支持的Call类型'{callMethod.Name}'");
-                case ExpressionType.Convert:
-                    return GetConvertSql((UnaryExpression)exp);
-                default:
-                    throw new Exception($"SqlExpressionValue不支持的'{exp.NodeType}'节点类型");
-            }
-        }
-
-        // 获取sql语句
-        private string GetSqlExpression(BinaryExpression exp)
-        {
-            StringBuilder sb = new StringBuilder();
-            string expLeft = (string)(GetSqlExpressionValue(exp.Left) ?? "");
-            string expRight = (string)(GetSqlExpressionValue(exp.Right) ?? "");
-            sb.Append(expLeft);
-            switch (exp.NodeType)
-            {
-                case ExpressionType.AndAlso:
-                    sb.Append(" AND ");
-                    break;
-                case ExpressionType.OrElse:
-                    sb.Append(" OR ");
-                    break;
-                case ExpressionType.Equal:
-                    if (expRight == "NULL")
-                    {
-                        sb.Append(" IS ");
-                    }
-                    else
-                    {
-                        sb.Append(" = ");
-                    }
-                    break;
-                case ExpressionType.NotEqual:
-                    if (expRight == "NULL")
-                    {
-                        sb.Append(" IS NOT ");
-                    }
-                    else
-                    {
-                        sb.Append(" <> ");
-                    }
-                    break;
-                case ExpressionType.GreaterThan:
-                    sb.Append(" > ");
-                    break;
-                case ExpressionType.GreaterThanOrEqual:
-                    sb.Append(" >= ");
-                    break;
-                case ExpressionType.LessThan:
-                    sb.Append(" < ");
-                    break;
-                case ExpressionType.LessThanOrEqual:
-                    sb.Append(" <= ");
-                    break;
-                case ExpressionType.Coalesce:
-                    return $"COALESCE({expLeft}, {expRight})";
-                default: throw new Exception($"SqlExpression不支持的'{exp.NodeType}'节点类型");
-            }
-            sb.Append(expRight);
-            return sb.ToString();
+            // 执行更新
+            await SetAsync(entity, d => Equals(d.Id, entity.Id));
         }
 
         /// <summary>
@@ -270,29 +193,20 @@ namespace Egg.Data
         /// <returns></returns>
         public Updater<TClass, TId> Set(TClass entity, Expression<Func<TClass, bool>> predicate)
         {
-            //Console.WriteLine($"Body: {predicate.Body}");
-            StringBuilder sb = new StringBuilder();
-            sb.Append($"UPDATE {(this.SchemaName.IsEmpty() ? "" : this.SchemaName + ".")}\"{this.TableName}\" SET ");
-            // 处理字段
-            StringBuilder sbSet = new StringBuilder();
-            foreach (var pro in this.Properties)
-            {
-                if (!pro.IsModified) continue;
-                if (sbSet.Length > 0) sbSet.Append(',');
-                sbSet.Append('"');
-                sbSet.Append(pro.ColumnName);
-                sbSet.Append('"');
-                sbSet.Append('=');
-                sbSet.Append(pro.GetSqlValue(entity));
-            }
-            sb.Append(sbSet.ToString());
-            // 处理条件
-            var body = (BinaryExpression)predicate.Body;
-            sb.Append(" WHERE ");
-            sb.Append(GetSqlExpression(body));
-            sb.AppendLine(";");
-            System.Console.WriteLine($"[Sql] {sb.ToString()}");
+            string sql = GetSqlString(entity, predicate);
+            // 执行更新
+            this.Connection.ExecuteNonQuery(sql);
             return this;
+        }
+
+        /// <summary>
+        /// 设置需要保存的数据
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public Updater<TClass, TId> Set(TClass entity)
+        {
+            return Set(entity, d => Equals(d.Id, entity.Id));
         }
 
     }

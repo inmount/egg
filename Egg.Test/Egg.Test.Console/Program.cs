@@ -26,7 +26,10 @@ Console.WriteLine(egg.Security.DESEncrypt("qwertyuiop", "12345678"));
 Console.WriteLine(egg.Security.DESDecrypt("1UnHSOMKjAjGkwR2Xgh11g==", "12345678"));
 
 // 运行测试
-Test.Run();
+// Test.Run();
+
+// 运行Data测试
+Egg.Test.Console.Data.Test.Run();
 
 //Rules rules = new Rules();
 //rules.Use(new FixedString("XS-"))

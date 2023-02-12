@@ -34,7 +34,7 @@ namespace Egg.EFCore
         /// <returns></returns>
         private static object CreateRepositoty(DbContext context, Type entity, Type key)
         {
-            Type tp = typeof(Repository<,>);
+            Type tp = typeof(Dbsets.Repository<,>);
             //指定泛型的具体类型
             Type tpNew = tp.MakeGenericType(new Type[] { entity, key });
             //创建一个list返回
@@ -102,14 +102,25 @@ namespace Egg.EFCore
         }
 
         /// <summary>
+        /// 获取数据库连接
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static DatabaseConnection GetDatabaseConnection(this DbContext context)
+        {
+            return new DatabaseConnection(context.GetDatabaseConnectionInfo());
+        }
+
+        /// <summary>
         /// 获取Sql语句供应器
         /// </summary>
         /// <param name="context"></param>
-        public static ISqlProvider GetSqlProvider(this DbContext context)
+        public static IDatabaseProvider GetSqlProvider(this DbContext context)
         {
             IDatabaseConnectionInfo info = context.GetDatabaseConnectionInfo();
             Type type = Type.GetType(info.ProviderName);
-            return (ISqlProvider)Activator.CreateInstance(type);
+            return (IDatabaseProvider)Activator.CreateInstance(type);
         }
     }
 }

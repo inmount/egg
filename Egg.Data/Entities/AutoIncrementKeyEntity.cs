@@ -17,7 +17,6 @@ namespace Egg.Data.Entities
         /// <summary>
         /// 自动增长标识
         /// </summary>
-        [Key]
         [AutoIncrement]
         public override long Id { get => base.Id; set => base.Id = value; }
 

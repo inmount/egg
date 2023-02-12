@@ -14,6 +14,8 @@ using System.ComponentModel;
 using System.Xml.Linq;
 using System.Security.Cryptography;
 using Egg.EFCore.Sqlite;
+using Egg.Data.Sqlite;
+using Egg.EFCore.Extensions;
 
 namespace Egg.EFCore
 {
@@ -22,6 +24,16 @@ namespace Egg.EFCore
     /// </summary>
     public class SqliteCreater : IDbCreater
     {
+        // 数据库供应商
+        private readonly SqliteProvider _provider;
+
+        /// <summary>
+        /// Sqlite创建器
+        /// </summary>
+        public SqliteCreater()
+        {
+            _provider = new SqliteProvider();
+        }
 
         /// <summary>
         /// 确保数据库创建
@@ -99,7 +111,7 @@ namespace Egg.EFCore
         /// <returns></returns>
         public string GetAddColumnSql(IEntityType table, IMutableProperty column)
         {
-            return $"ALTER TABLE \"{table.GetTableName()}\" ADD COLUMN {GetColumnSql(table, column)};";
+            return $"ALTER TABLE {_provider.GetNameString(table.GetTableName())} ADD COLUMN {GetColumnSql(table, column)};";
         }
 
         /// <summary>
@@ -110,7 +122,7 @@ namespace Egg.EFCore
         /// <returns></returns>
         public string GetAlterColumnSql(IEntityType table, IMutableProperty column)
         {
-            return $"ALTER TABLE \"{table.GetTableName()}\" ALTER COLUMN {GetColumnSql(table, column)};";
+            return $"ALTER TABLE {_provider.GetNameString(table.GetTableName())} ALTER COLUMN {GetColumnSql(table, column)};";
         }
 
         /// <summary>
@@ -124,11 +136,18 @@ namespace Egg.EFCore
         {
             if (column.IsPrimaryKey())
             {
-                return $"\"{column.GetColumnBaseName()}\" {column.GetColumnType()} NOT NULL CONSTRAINT \"PK_{table.GetTableName()}\" PRIMARY KEY{(column.GetColumnType() == "INTEGER" ? " AUTOINCREMENT" : "")}";
+                if (column.IsAutoIncrement())
+                {
+                    return $"{_provider.GetNameString(column.GetColumnBaseName())} {column.GetColumnType()} NOT NULL CONSTRAINT \"PK_{table.GetTableName()}\" PRIMARY KEK AUTOINCREMENT";
+                }
+                else
+                {
+                    return $"{_provider.GetNameString(column.GetColumnBaseName())} {column.GetColumnType()} NOT NULL CONSTRAINT \"PK_{table.GetTableName()}\" PRIMARY KEY";
+                }
             }
             else
             {
-                return $"\"{column.GetColumnBaseName()}\" {column.GetColumnType()} {(column.IsColumnNullable() ? "NULL" : "NOT NULL")}";
+                return $"{_provider.GetNameString(column.GetColumnBaseName())} {column.GetColumnType()} {(column.IsColumnNullable() ? "NULL" : "NOT NULL")}";
             }
         }
 
@@ -143,7 +162,7 @@ namespace Egg.EFCore
             string tableName = table.GetTableName();
             bool isFirst = true;
             // 拼接语句
-            sb.Append($"CREATE TABLE IF NOT EXISTS \"{tableName}\"(\n");
+            sb.Append($"CREATE TABLE IF NOT EXISTS {_provider.GetNameString(tableName)}(\n");
             foreach (IMutableProperty property in table.GetProperties())
             {
                 if (isFirst) { isFirst = false; } else { sb.Append(','); sb.AppendLine(); }

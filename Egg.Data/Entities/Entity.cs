@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Security.Cryptography;
@@ -16,6 +17,8 @@ namespace Egg.Data.Entities
         /// <summary>
         /// 唯一标识
         /// </summary>
+        [Key]
         public virtual TId Id { get; set; }
+
     }
 }

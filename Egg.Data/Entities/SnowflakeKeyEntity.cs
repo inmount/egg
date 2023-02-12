@@ -10,23 +10,22 @@ using System.Threading.Tasks;
 namespace Egg.Data.Entities
 {
     /// <summary>
-    /// 带主键的实例
+    /// 带雪花Id主键的实例
     /// </summary>
-    public class GuidKeyEntity : Entity<string>
+    public class SnowflakeKeyEntity : Entity<long>
     {
 
         /// <summary>
-        /// GUID标识
+        /// 雪花Id
         /// </summary>
-        [Column(TypeName = "varchar(50)")]
-        public override string Id { get => base.Id; set => base.Id = value; }
+        public override long Id { get => base.Id; set => base.Id = value; }
 
         /// <summary>
         /// 对象实例化
         /// </summary>
-        public GuidKeyEntity()
+        public SnowflakeKeyEntity()
         {
-            base.Id = Guid.NewGuid().ToString("N");
+            base.Id = egg.Generator.GetSnowflakeId();
         }
 
     }

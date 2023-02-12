@@ -61,5 +61,10 @@ namespace Egg.Data
         /// 第三代专用
         /// </summary>
         Sqlite3 = 0x0702,
+
+        /// <summary>
+        /// 自定义数据库
+        /// </summary>
+        Custom = 0xffff,
     }
 }

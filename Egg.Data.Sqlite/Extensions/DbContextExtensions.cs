@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Egg.EFCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
-namespace Egg.EFCore.Sqlite
+namespace Egg.Data.Sqlite.Extensions
 {
     /// <summary>
     /// DbContext扩展

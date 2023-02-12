@@ -11,6 +11,9 @@ namespace Egg.Data
     /// </summary>
     public class ColumnProperty
     {
+        // 数据库供应商
+        private readonly IDatabaseProvider _provider;
+
         /// <summary>
         /// 变量名称
         /// </summary>
@@ -35,16 +38,6 @@ namespace Egg.Data
         /// 获取是否为数字
         /// </summary>
         public bool IsNumeric { get; }
-
-        /// <summary>
-        /// 获取安全的sql字符串
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static string GetSafetySqlString(string str)
-        {
-            return "'" + str.Replace("'", "''") + "'";
-        }
 
         /// <summary>
         /// 判断是否数字类型类型
@@ -83,7 +76,7 @@ namespace Egg.Data
             var value = this.PropertyInfo.GetValue(obj);
             if (value is null) return "NULL";
             if (IsNumeric) return value.ToString().ToUpper();
-            return GetSafetySqlString(value.ToString());
+            return _provider.GetValueString(value.ToString());
         }
 
         /// <summary>
@@ -102,8 +95,9 @@ namespace Egg.Data
         /// <summary>
         /// 更新器属性
         /// </summary>
-        public ColumnProperty(PropertyInfo property)
+        public ColumnProperty(IDatabaseProvider provider, PropertyInfo property)
         {
+            _provider = provider;
             this.PropertyInfo = property;
             this.VarName = property.Name;
             this.ColumnName = property.Name;
