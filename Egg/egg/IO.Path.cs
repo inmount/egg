@@ -84,8 +84,7 @@ namespace egg
         public static string GetExecutionPath(string path)
         {
             if (path.IsEmpty()) throw new Exception($"路径不能为空");
-            if (path[0] != '/') throw new Exception($"路径第一个字符必须为'/'");
-            return GetUnclosedPath(Assembly.ExecutionDirectory) + GetOSPathFormat(path);
+            return CombinePath(Assembly.ExecutionDirectory, path);
         }
 
         /// <summary>
@@ -96,8 +95,7 @@ namespace egg
         public static string GetWorkPath(string path)
         {
             if (path.IsEmpty()) throw new Exception($"路径不能为空");
-            if (path[0] != '/') throw new Exception($"路径第一个字符必须为'/'");
-            return GetUnclosedPath(Assembly.WorkingDirectory) + GetOSPathFormat(path);
+            return CombinePath(Assembly.WorkingDirectory, path);
         }
 
         /// <summary>

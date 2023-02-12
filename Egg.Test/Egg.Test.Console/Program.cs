@@ -25,6 +25,9 @@ egg.Logger
 Console.WriteLine(egg.Security.DESEncrypt("qwertyuiop", "12345678"));
 Console.WriteLine(egg.Security.DESDecrypt("1UnHSOMKjAjGkwR2Xgh11g==", "12345678"));
 
+// 运行测试
+Test.Run();
+
 //Rules rules = new Rules();
 //rules.Use(new FixedString("XS-"))
 //    .Use(new DateTimeRule("yyyyMMdd"))
