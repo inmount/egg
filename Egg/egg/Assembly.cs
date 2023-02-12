@@ -6,12 +6,14 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.IO;
 
-namespace egg {
+namespace egg
+{
 
     /// <summary>
     /// 程序集
     /// </summary>
-    public static class Assembly {
+    public static class Assembly
+    {
 
         // 私有变量
         private static string? _executionFilePath = null;
@@ -22,9 +24,12 @@ namespace egg {
         /// <summary>
         /// 获取执行程序信息
         /// </summary>
-        public static FileVersionInfo ExecutionInfo {
-            get {
-                if (_info == null) {
+        public static FileVersionInfo ExecutionInfo
+        {
+            get
+            {
+                if (_info == null)
+                {
                     _info = FileVersionInfo.GetVersionInfo(ExecutionFilePath);
                 }
                 return _info;
@@ -44,9 +49,12 @@ namespace egg {
         /// <summary>
         /// 获取程序版本
         /// </summary>
-        public static string ExecutionFilePath {
-            get {
-                if (string.IsNullOrEmpty(_executionFilePath)) {
+        public static string ExecutionFilePath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_executionFilePath))
+                {
                     _executionFilePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
                 }
                 return _executionFilePath;
@@ -56,9 +64,12 @@ namespace egg {
         /// <summary>
         /// 获取程序目录
         /// </summary>
-        public static string ExecutionDirectory {
-            get {
-                if (string.IsNullOrEmpty(_executionDirectory)) {
+        public static string ExecutionDirectory
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_executionDirectory))
+                {
                     _executionDirectory = IO.GetClosedPath(System.IO.Path.GetDirectoryName(ExecutionFilePath));
                 }
                 return _executionDirectory;
@@ -68,9 +79,12 @@ namespace egg {
         /// <summary>
         /// 获取或设置工作目录
         /// </summary>
-        public static string WorkingDirectory {
-            get {
-                if (string.IsNullOrEmpty(_workingDirectory)) {
+        public static string WorkingDirectory
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_workingDirectory))
+                {
                     _workingDirectory = IO.GetClosedPath(Environment.CurrentDirectory);
                 }
                 return _workingDirectory;
@@ -103,6 +117,23 @@ namespace egg {
             var obj = new T();
             obj.SetParams(args);
             return obj;
+        }
+
+        /// <summary>
+        /// 根据名称查找类型
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Type? FindType(string name)
+        {
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var assembly in assemblies)
+            {
+                var types = assembly.GetTypes();
+                foreach (var type in types)
+                    if (type.FullName == name) return type;
+            }
+            return null;
         }
 
     }
