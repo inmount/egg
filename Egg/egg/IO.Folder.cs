@@ -37,6 +37,24 @@ namespace egg {
             return System.IO.Directory.GetDirectories(path);
         }
 
+        /// <summary>
+        /// 获取所属文件
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="pattern"></param>
+        /// <returns></returns>
+        public static string[] GetFiles(string path, [Optional] string pattern)
+        {
+            if (pattern.IsEmpty())
+            {
+                return System.IO.Directory.GetFiles(path);
+            }
+            else
+            {
+                return System.IO.Directory.GetFiles(path, pattern);
+            }
+        }
+
     }
 
 }

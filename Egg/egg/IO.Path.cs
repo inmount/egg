@@ -12,6 +12,27 @@ namespace egg
     /// </summary>
     public static partial class IO
     {
+        // 路径分隔符
+        private static char? _pathSeparator = null;
+
+        /// <summary>
+        /// 获取路径分隔符
+        /// </summary>
+        public static char GetPathSeparator()
+        {
+            if (_pathSeparator is null)
+            {
+                if (OS.IsWindows)
+                {
+                    _pathSeparator = '\\';
+                }
+                else
+                {
+                    _pathSeparator = '/';
+                }
+            }
+            return _pathSeparator ?? '/';
+        }
 
         /// <summary>
         /// 获取操作系统的标准路径格式
@@ -34,14 +55,25 @@ namespace egg
         /// <returns></returns>
         public static string GetClosedPath(string path)
         {
+            // 获取分隔符
+            var separator = GetPathSeparator();
             path = GetOSPathFormat(path);
-            if (OS.IsWindows)
-            {
-                if (path.EndsWith("\\")) return path;
-                return path + "\\";
-            }
-            if (path.EndsWith("/")) return path;
-            return path + "/";
+            if (path.EndsWith(separator)) return path;
+            return path + separator;
+        }
+
+        /// <summary>
+        /// 获取非闭合路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string GetUnclosedPath(string path)
+        {
+            // 获取分隔符
+            var separator = GetPathSeparator();
+            path = GetOSPathFormat(path);
+            if (path.EndsWith(separator)) return path.Substring(0, path.Length - 1);
+            return path;
         }
 
         /// <summary>
@@ -51,7 +83,9 @@ namespace egg
         /// <returns></returns>
         public static string GetExecutionPath(string path)
         {
-            return Assembly.ExecutionDirectory + GetOSPathFormat(path);
+            if (path.IsEmpty()) throw new Exception($"路径不能为空");
+            if (path[0] != '/') throw new Exception($"路径第一个字符必须为'/'");
+            return GetUnclosedPath(Assembly.ExecutionDirectory) + GetOSPathFormat(path);
         }
 
         /// <summary>
@@ -61,25 +95,20 @@ namespace egg
         /// <returns></returns>
         public static string GetWorkPath(string path)
         {
-            return Assembly.WorkingDirectory + GetOSPathFormat(path);
+            if (path.IsEmpty()) throw new Exception($"路径不能为空");
+            if (path[0] != '/') throw new Exception($"路径第一个字符必须为'/'");
+            return GetUnclosedPath(Assembly.WorkingDirectory) + GetOSPathFormat(path);
         }
 
         /// <summary>
-        /// 获取所属文件
+        /// 合并路径
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="pattern"></param>
+        /// <param name="path1"></param>
+        /// <param name="path2"></param>
         /// <returns></returns>
-        public static string[] GetFiles(string path, [Optional] string pattern)
+        public static string CombinePath(string path1, string path2)
         {
-            if (pattern.IsEmpty())
-            {
-                return System.IO.Directory.GetFiles(path);
-            }
-            else
-            {
-                return System.IO.Directory.GetFiles(path, pattern);
-            }
+            return GetClosedPath(path1) + GetOSPathFormat(path2);
         }
 
     }
