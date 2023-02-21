@@ -25,7 +25,7 @@ namespace egg
             byte[] bytesDESKey = ASCIIEncoding.ASCII.GetBytes(strDESKey);
             //把向量转换成字节数组
             byte[] bytesDESIV = Iv;
-            if (!strDESIV.IsEmpty()) bytesDESIV = ASCIIEncoding.ASCII.GetBytes(strDESIV);
+            if (!strDESIV.IsNullOrWhiteSpace()) bytesDESIV = ASCIIEncoding.ASCII.GetBytes(strDESIV);
             //声明1个新的DES对象
             DESCryptoServiceProvider desEncrypt = new DESCryptoServiceProvider();
             //开辟一块内存流
@@ -61,7 +61,7 @@ namespace egg
             byte[] bytesDESKey = ASCIIEncoding.ASCII.GetBytes(strDESKey);
             //把向量转换成字节数组
             byte[] bytesDESIV = Iv;
-            if (!strDESIV.IsEmpty()) bytesDESIV = ASCIIEncoding.ASCII.GetBytes(strDESIV);
+            if (!strDESIV.IsNullOrWhiteSpace()) bytesDESIV = ASCIIEncoding.ASCII.GetBytes(strDESIV);
             //把密文转换成字节数组
             byte[] bytesCipher = Convert.FromBase64String(strCipher);
             //声明1个新的DES对象

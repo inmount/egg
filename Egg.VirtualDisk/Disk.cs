@@ -154,7 +154,7 @@ namespace Egg.VirtualDisk
         {
             var f = this.FileStream;
             if (f is null) throw new VirtualDiskException("文件流不可用.");
-            if (name.IsEmpty()) throw new VirtualDiskException("名称不能为空.");
+            if (name.IsNullOrWhiteSpace()) throw new VirtualDiskException("名称不能为空.");
             // 判断路径是否已经存在
             if (_paths.Where(d => d.FolderId == folderId && d.Name == name && d.Enable).Any())
                 throw new VirtualDiskException($"名称'{name}'已经存在.");
@@ -213,7 +213,7 @@ namespace Egg.VirtualDisk
         {
             var f = this.FileStream;
             if (f is null) throw new VirtualDiskException("文件流不可用.");
-            if (name.IsEmpty()) throw new VirtualDiskException("名称不能为空.");
+            if (name.IsNullOrWhiteSpace()) throw new VirtualDiskException("名称不能为空.");
             // 判断路径是否已经存在
             if (_paths.Where(d => d.FolderId == folderId && d.Name == name && d.Enable).Any())
                 throw new VirtualDiskException($"名称'{name}'已经存在.");
@@ -306,7 +306,7 @@ namespace Egg.VirtualDisk
         private string GetStandardPath(string path)
         {
             // 判断是否为空
-            if (path.IsEmpty()) throw new VirtualDiskException("路径不能为空.");
+            if (path.IsNullOrWhiteSpace()) throw new VirtualDiskException("路径不能为空.");
             // 将反斜杠转化为斜杠
             path = path.Replace('\\', '/');
             if (path[0] != '/') throw new VirtualDiskException("路径必须以'/'开头.");

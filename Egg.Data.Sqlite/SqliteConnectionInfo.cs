@@ -61,9 +61,9 @@ namespace Egg.Data.Sqlite
                 // 动态拼接连接字符串
                 StringBuilder sb = new StringBuilder();
                 // 设置存储路径
-                if (this.Path.IsEmpty()) throw new DatabaseException($"缺少必要的存储路径配置");
+                if (this.Path.IsNullOrWhiteSpace()) throw new DatabaseException($"缺少必要的存储路径配置");
                 sb.Append($"Data Source={this.Path};");
-                if (!this.Password.IsEmpty())
+                if (!this.Password.IsNullOrWhiteSpace())
                     sb.Append($"Password={this.Password};");
                 return sb.ToString();
             }

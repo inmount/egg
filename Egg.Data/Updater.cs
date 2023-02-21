@@ -64,7 +64,7 @@ namespace Egg.Data
             var table = tp.GetCustomAttribute<TableAttribute>();
             if (table != null)
             {
-                if (!table.Name.IsEmpty()) this.TableName = table.Name;
+                if (!table.Name.IsNullOrWhiteSpace()) this.TableName = table.Name;
                 this.SchemaName = table.Schema;
             }
             var pros = tp.GetProperties(BindingFlags.Instance | BindingFlags.Public);
@@ -126,7 +126,7 @@ namespace Egg.Data
             StringBuilder sb = new StringBuilder();
             // 拼接表相关字符串
             sb.Append("UPDATE ");
-            if (this.SchemaName.IsEmpty())
+            if (this.SchemaName.IsNullOrWhiteSpace())
             {
                 sb.Append(provider.GetNameString(this.TableName));
             }

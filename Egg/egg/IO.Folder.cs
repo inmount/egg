@@ -45,7 +45,7 @@ namespace egg {
         /// <returns></returns>
         public static string[] GetFiles(string path, [Optional] string pattern)
         {
-            if (pattern.IsEmpty())
+            if (pattern.IsNullOrWhiteSpace())
             {
                 return System.IO.Directory.GetFiles(path);
             }

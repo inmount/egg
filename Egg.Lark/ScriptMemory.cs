@@ -80,7 +80,7 @@ namespace Egg.Lark
         /// <exception cref="ScriptException"></exception>
         public object? Get(string key)
         {
-            if (key.IsEmpty()) throw new ScriptException($"变量名称不能为空");
+            if (key.IsNullOrWhiteSpace()) throw new ScriptException($"变量名称不能为空");
             // 兼容对象
             int objIndex = key.IndexOf('.');
             if (objIndex > 0)
@@ -143,7 +143,7 @@ namespace Egg.Lark
         /// <exception cref="ScriptException"></exception>
         public void Set(string key, object? value)
         {
-            if (key.IsEmpty()) throw new ScriptException($"变量名称不能为空");
+            if (key.IsNullOrWhiteSpace()) throw new ScriptException($"变量名称不能为空");
             // 兼容对象
             int objIndex = key.IndexOf('.');
             if (objIndex > 0)

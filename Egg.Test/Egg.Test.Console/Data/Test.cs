@@ -21,6 +21,7 @@ namespace Egg.Test.Console.Data
             };
             using (var conn = new DatabaseConnection(info))
             {
+                
                 var people2Repository = new Egg.Data.Repository<People2, string>(conn);
                 using (UnitOfWork uow = conn.BeginUnitOfWork())
                 {

@@ -89,7 +89,7 @@ namespace Egg.Arguments
             foreach (var item in this)
             {
                 if (sb.Length > 0) sb.Append(' ');
-                if (item.Value.IsEmpty())
+                if (item.Value.IsNullOrWhiteSpace())
                 {
                     sb.Append("--");
                     sb.Append(item.Key);

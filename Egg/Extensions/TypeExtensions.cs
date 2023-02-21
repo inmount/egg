@@ -24,6 +24,17 @@ namespace Egg
         }
 
         /// <summary>
+        /// 获取是否为可空类型
+        /// </summary>
+        /// <param name="type">类型</param>
+        /// <returns></returns>
+        public static bool IsNullable(this Type? type)
+        {
+            if (type is null) return true;
+            return type.GetTopName() == "System.Nullable";
+        }
+
+        /// <summary>
         /// 判断是否为数值类型
         /// </summary>
         /// <param name="type"></param>

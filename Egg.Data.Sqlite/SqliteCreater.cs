@@ -16,6 +16,7 @@ using System.Security.Cryptography;
 using Egg.EFCore.Sqlite;
 using Egg.Data.Sqlite;
 using Egg.EFCore.Extensions;
+using Egg.Data;
 
 namespace Egg.EFCore
 {

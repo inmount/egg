@@ -142,7 +142,7 @@ namespace Egg.Lark
                 foreach (var func in funcs)
                 {
                     string? funName = null;
-                    if (!func.Name.IsEmpty()) funName = func.Name;
+                    if (!func.Name.IsNullOrWhiteSpace()) funName = func.Name;
                     if (string.IsNullOrWhiteSpace(funName))
                         funName = GetFunctionName(method.Name);
                     funName = (string.IsNullOrWhiteSpace(name) ? "" : name + "_") + funName;

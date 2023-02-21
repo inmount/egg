@@ -21,16 +21,24 @@ namespace Egg
         public static int GetSize(this string? sz)
         {
             if (sz is null) return 0;
-            if (sz.IsEmpty()) return 0;
+            if (sz.IsNullOrWhiteSpace()) return 0;
             return sz.Length;
         }
 
         /// <summary>
         /// 是否内容为空
         /// </summary>
-        public static bool IsEmpty(this string? sz)
+        public static bool IsNullOrWhiteSpace(this string? sz)
         {
             return string.IsNullOrWhiteSpace(sz);
+        }
+
+        /// <summary>
+        /// 是否内容为空
+        /// </summary>
+        public static bool IsNullOrEmpty(this string? sz)
+        {
+            return string.IsNullOrEmpty(sz);
         }
 
         /// <summary>
@@ -173,7 +181,7 @@ namespace Egg
         /// </summary>
         public static byte[] ToBytes(this string? sz, Encoding encoding)
         {
-            if (sz.IsEmpty()) return new byte[0];
+            if (sz.IsNullOrWhiteSpace()) return new byte[0];
             return encoding.GetBytes(sz);
         }
 
@@ -197,7 +205,7 @@ namespace Egg
         public static bool IsIPv4(this string? sz)
         {
             if (sz is null) return false;
-            if (sz.IsEmpty()) return false;
+            if (sz.IsNullOrWhiteSpace()) return false;
             string[] parts = sz.Split('.');
             if (parts.Length != 4) return false;
 
@@ -215,7 +223,7 @@ namespace Egg
         public static string GetUnicodeCoding(this string? sz)
         {
             if (sz is null) return "";
-            if (sz.IsEmpty()) return "";
+            if (sz.IsNullOrWhiteSpace()) return "";
             char[] charbuffers = sz.ToCharArray();
             byte[] buffer;
             StringBuilder sb = new StringBuilder();

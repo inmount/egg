@@ -103,7 +103,7 @@ namespace Egg
         {
             // 建立缓存区
             this.Buffer = new List<string>();
-            path = path.IsEmpty() ? egg.Assembly.WorkingDirectory : path;
+            path = path.IsNullOrWhiteSpace() ? egg.Assembly.WorkingDirectory : path;
             this.WorkPath = path ?? string.Empty;
             // 处理标准字符
             _chars = new List<int>();

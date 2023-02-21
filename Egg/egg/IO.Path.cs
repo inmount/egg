@@ -83,7 +83,7 @@ namespace egg
         /// <returns></returns>
         public static string GetExecutionPath(string path)
         {
-            if (path.IsEmpty()) throw new Exception($"路径不能为空");
+            if (path.IsNullOrWhiteSpace()) throw new Exception($"路径不能为空");
             return CombinePath(Assembly.ExecutionDirectory, path);
         }
 
@@ -94,7 +94,7 @@ namespace egg
         /// <returns></returns>
         public static string GetWorkPath(string path)
         {
-            if (path.IsEmpty()) throw new Exception($"路径不能为空");
+            if (path.IsNullOrWhiteSpace()) throw new Exception($"路径不能为空");
             return CombinePath(Assembly.WorkingDirectory, path);
         }
 

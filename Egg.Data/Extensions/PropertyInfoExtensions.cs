@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -24,6 +25,17 @@ namespace Egg.Data.Extensions
         }
 
         /// <summary>
+        /// 是否为可空字段
+        /// </summary>
+        /// <param name="pro"></param>
+        /// <returns></returns>
+        public static bool IsNullable(this PropertyInfo pro)
+        {
+            if (pro.PropertyType.IsNullable()) return true;
+            return pro.GetCustomAttributes<RequiredAttribute>().Any();
+        }
+
+        /// <summary>
         /// 是否含有AutoIncrement特性
         /// </summary>
         /// <param name="pro"></param>
@@ -31,6 +43,22 @@ namespace Egg.Data.Extensions
         public static bool IsAutoIncrement(this PropertyInfo pro)
         {
             return pro.GetCustomAttributes<AutoIncrementAttribute>().Any();
+        }
+
+        /// <summary>
+        /// 获取列属性名称
+        /// </summary>
+        /// <param name="pro"></param>
+        /// <returns></returns>
+        public static string GetColumnAttributeName(this PropertyInfo pro)
+        {
+            string columnName = pro.Name;
+            var columnAttr = pro.GetCustomAttribute<ColumnAttribute>();
+            if (columnAttr != null)
+            {
+                if (!columnAttr.Name.IsNullOrWhiteSpace()) columnName = columnAttr.Name ?? "";
+            }
+            return columnName;
         }
     }
 }
