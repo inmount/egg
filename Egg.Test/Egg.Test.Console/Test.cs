@@ -49,6 +49,11 @@ namespace Egg.Test.Console
             PrintSnowId(snowflake4, 147683396636680192);
             PrintSnowId(snowflake4, 147683396640874496);
             PrintSnowId(snowflake4, 147683396649263104);
+            Encoding encoding = Encoding.GetEncoding("GB2312");
+            string res = egg.Terminal.Execute("ping", "www.baidu.com", encoding);
+            System.Console.WriteLine(res);
+            string res2 = egg.Terminal.Execute("ping", "www.aliyun.com", encoding);
+            System.Console.WriteLine(res2);
             //double value = (double)Activator.CreateInstance(Type.GetType("System.Double"));
             //System.Console.WriteLine(value);
             //snowflake3.TryParse(15404248699244547, out DateTime t, out int mid, out int seq);
