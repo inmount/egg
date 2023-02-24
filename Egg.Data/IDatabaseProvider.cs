@@ -44,6 +44,18 @@ namespace Egg.Data
         /// <param name="connectionString">数据库连接字符串</param>
         IDatabaseConnectionBase GetDatabaseConnection(string connectionString);
 
+        /// <summary>
+        /// 获取事务开始语句
+        /// </summary>
+        /// <returns></returns>
+        string GetTransactionBeginString();
+
+        /// <summary>
+        /// 获取事务结束语句
+        /// </summary>
+        /// <returns></returns>
+        string GetTransactionEndString();
+
         #region [=====自动化=====]
 
         /// <summary>

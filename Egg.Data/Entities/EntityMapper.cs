@@ -61,7 +61,8 @@ namespace Egg.Data.Entities
             {
                 var pro = _properties[i];
                 var value = getValue(pro);
-                if (value != null) pro.SetValue(obj, value);
+                if (value is null) continue;
+                pro.SetValue(obj, value.ConvertTo(pro.PropertyType));
             }
             return (T)obj;
         }

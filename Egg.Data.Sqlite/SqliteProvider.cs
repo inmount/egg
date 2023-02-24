@@ -33,6 +33,24 @@ namespace Egg.Data.Sqlite
             => new SqliteConnectionBase(connectionString);
 
         /// <summary>
+        /// 获取事务开始语句
+        /// </summary>
+        /// <returns></returns>
+        public string GetTransactionBeginString()
+        {
+            return "BEGIN TRANSACTION;";
+        }
+
+        /// <summary>
+        /// 获取事务结束语句
+        /// </summary>
+        /// <returns></returns>
+        public string GetTransactionEndString()
+        {
+            return "END TRANSACTION;";
+        }
+
+        /// <summary>
         /// 获取函数定义字符串
         /// </summary>
         /// <param name="name"></param>
@@ -72,16 +90,16 @@ namespace Egg.Data.Sqlite
             {
                 if (column.IsAutoIncrement())
                 {
-                    return $"{GetNameString(column.GetColumnAttributeName())} INTEGER PRIMARY KEY AUTOINCREMENT";
+                    return $"{GetNameString(column.GetColumnName())} INTEGER PRIMARY KEY AUTOINCREMENT";
                 }
                 else
                 {
-                    return $"{GetNameString(column.GetColumnAttributeName())} {column.GetColumnAttributeType()} NOT NULL PRIMARY KEY";
+                    return $"{GetNameString(column.GetColumnName())} {column.GetColumnAttributeType()} NOT NULL PRIMARY KEY";
                 }
             }
             else
             {
-                return $"{GetNameString(column.GetColumnAttributeName())} {column.GetColumnAttributeType()} {(column.IsNullable() ? "NULL" : "NOT NULL")}";
+                return $"{GetNameString(column.GetColumnName())} {column.GetColumnAttributeType()} {(column.IsNullable() ? "NULL" : "NOT NULL")}";
             }
         }
 
@@ -93,7 +111,7 @@ namespace Egg.Data.Sqlite
         /// <returns></returns>
         public string GetColumnAddSqlString(string tableName, PropertyInfo column)
         {
-            return $"ALTER TABLE {GetNameString(tableName)} ADD {GetNameString(column.GetColumnAttributeName())} {column.GetColumnAttributeType()} {(column.IsNullable() ? "NULL" : "NOT NULL")}";
+            return $"ALTER TABLE {GetNameString(tableName)} ADD {GetNameString(column.GetColumnName())} {column.GetColumnAttributeType()} {(column.IsNullable() ? "NULL" : "NOT NULL")};";
         }
 
         /// <summary>
@@ -105,7 +123,7 @@ namespace Egg.Data.Sqlite
             // 创建表
             Type type = typeof(T);
             string tableName = type.Name;
-            return $"SELECT [name] FROM [sysObjects] WHERE [Name] = '{tableName}' AND [Type] IN ('S', 'U') LIMIT 1";
+            return $"SELECT [name] FROM [sqlite_master] WHERE [name] = '{tableName}' AND [type]='table' LIMIT 1;";
         }
 
         /// <summary>
@@ -115,7 +133,7 @@ namespace Egg.Data.Sqlite
         public string GetColumnExistsSqlString(string tableName, PropertyInfo property)
         {
             // 获取字段信息
-            string columnName = property.GetColumnAttributeName();
+            string columnName = property.GetColumnName();
             return $"SELECT [name] FROM [sqlite_master] WHERE [type]='table'" +
                 $" AND [name] ='{tableName}'" +
                 $" AND ([sql] LIKE '%[{columnName}]%'" +

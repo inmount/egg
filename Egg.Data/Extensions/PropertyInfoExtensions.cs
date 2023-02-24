@@ -50,15 +50,12 @@ namespace Egg.Data.Extensions
         /// </summary>
         /// <param name="pro"></param>
         /// <returns></returns>
-        public static string GetColumnAttributeName(this PropertyInfo pro)
+        public static string GetColumnName(this PropertyInfo pro)
         {
-            string columnName = pro.Name;
             var columnAttr = pro.GetCustomAttribute<ColumnAttribute>();
-            if (columnAttr != null)
-            {
-                if (!columnAttr.Name.IsNullOrWhiteSpace()) columnName = columnAttr.Name ?? "";
-            }
-            return columnName;
+            if (columnAttr is null) return pro.Name;
+            if (columnAttr.Name.IsNullOrWhiteSpace()) return pro.Name;
+            return columnAttr.Name ?? string.Empty;
         }
     }
 }

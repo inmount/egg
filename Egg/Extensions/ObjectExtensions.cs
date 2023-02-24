@@ -73,29 +73,40 @@ namespace Egg
         /// <summary>
         /// 转化对象
         /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static object ConvertTo(this object obj, Type type)
+        {
+            var typeCode = Type.GetTypeCode(type);
+            switch (typeCode)
+            {
+                case TypeCode.Boolean: return Convert.ToBoolean(obj);
+                case TypeCode.Byte: return Convert.ToByte(obj);
+                case TypeCode.Int16: return Convert.ToInt16(obj);
+                case TypeCode.Int32: return Convert.ToInt32(obj);
+                case TypeCode.Int64: return Convert.ToInt64(obj);
+                case TypeCode.UInt16: return Convert.ToUInt16(obj);
+                case TypeCode.UInt32: return Convert.ToUInt32(obj);
+                case TypeCode.UInt64: return Convert.ToUInt64(obj);
+                case TypeCode.Single: return Convert.ToSingle(obj);
+                case TypeCode.Double: return Convert.ToDouble(obj);
+                case TypeCode.Char: return Convert.ToChar(obj);
+                case TypeCode.Decimal: return Convert.ToDecimal(obj);
+                case TypeCode.DateTime: return Convert.ToDateTime(obj);
+                default: return obj;
+            }
+        }
+
+        /// <summary>
+        /// 转化对象
+        /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <returns></returns>
         public static T ConvertTo<T>(this object obj)
         {
-            var typeCode = Type.GetTypeCode(typeof(T));
-            switch (typeCode)
-            {
-                case TypeCode.Boolean: return (T)(object)Convert.ToBoolean(obj);
-                case TypeCode.Byte: return (T)(object)Convert.ToByte(obj);
-                case TypeCode.Int16: return (T)(object)Convert.ToInt16(obj);
-                case TypeCode.Int32: return (T)(object)Convert.ToInt32(obj);
-                case TypeCode.Int64: return (T)(object)Convert.ToInt64(obj);
-                case TypeCode.UInt16: return (T)(object)Convert.ToUInt16(obj);
-                case TypeCode.UInt32: return (T)(object)Convert.ToUInt32(obj);
-                case TypeCode.UInt64: return (T)(object)Convert.ToUInt64(obj);
-                case TypeCode.Single: return (T)(object)Convert.ToSingle(obj);
-                case TypeCode.Double: return (T)(object)Convert.ToDouble(obj);
-                case TypeCode.Char: return (T)(object)Convert.ToChar(obj);
-                case TypeCode.Decimal: return (T)(object)Convert.ToDecimal(obj);
-                case TypeCode.DateTime: return (T)(object)Convert.ToDateTime(obj);
-                default: return (T)obj;
-            }
+            return (T)obj.ConvertTo(typeof(T));
         }
 
     }

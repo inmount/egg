@@ -4,18 +4,20 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 using System.Linq;
+using System.Reflection;
+using Egg.Data.Extensions;
 
 namespace Egg.Data
 {
     /// <summary>
     /// Sql表达式
     /// </summary>
-    public class SqlExpression : IDisposable
+    public class SqlExpression<T> : IDisposable
     {
         // 数据库供应商
         private readonly IDatabaseProvider _provider;
         // 字段集合
-        private readonly List<ColumnProperty> _properties;
+        private readonly List<PropertyInfo> _properties;
 
         /// <summary>
         /// 数据库供应商
@@ -26,10 +28,10 @@ namespace Egg.Data
         /// Sql表达式
         /// </summary>
         /// <param name="provider"></param>
-        public SqlExpression(IDatabaseProvider provider, List<ColumnProperty> properties)
+        public SqlExpression(IDatabaseProvider provider)
         {
             _provider = provider;
-            _properties = properties;
+            _properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
         }
 
         // 获取Contains函数兼容的sql语句
@@ -69,7 +71,6 @@ namespace Egg.Data
                 var valueInfo = operandValues.GetType().GetField(operand.Member.Name);
                 value = valueInfo.GetValue(operandValues);
             }
-            if (value is null) return "NULL";
             switch (value)
             {
                 case null: return "NULL";
@@ -87,8 +88,8 @@ namespace Egg.Data
             {
                 case ExpressionType.MemberAccess: // 获取变量
                     var member = (MemberExpression)exp;
-                    var pro = _properties.Where(d => d.VarName == member.Member.Name).FirstOrDefault();
-                    if (pro != null) return _provider.GetNameString(pro.ColumnName);
+                    var pro = _properties.Where(d => d.Name == member.Member.Name).FirstOrDefault();
+                    if (pro != null) return _provider.GetNameString(pro.GetColumnName());
                     return _provider.GetNameString(member.Member.Name);
                 case ExpressionType.Constant: // 获取Constant函数
                     var constant = (ConstantExpression)exp;

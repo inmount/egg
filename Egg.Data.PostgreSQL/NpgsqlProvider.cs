@@ -50,6 +50,16 @@ namespace Egg.Data.PostgreSQL
             throw new NotImplementedException();
         }
 
+        public string GetTransactionBeginString()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetTransactionEndString()
+        {
+            throw new NotImplementedException();
+        }
+
         public string GetValueString(string value)
         {
             throw new NotImplementedException();

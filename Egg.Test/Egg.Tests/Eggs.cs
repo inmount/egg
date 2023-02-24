@@ -4,6 +4,13 @@ using Xunit.Abstractions;
 
 namespace Egg.Tests
 {
+    public enum TestOut : int
+    {
+        None = 0,
+        OK = 1,
+        Fail = 2,
+    }
+
     public class Eggs
     {
         private readonly ITestOutputHelper _output;
@@ -22,6 +29,16 @@ namespace Egg.Tests
             // 执行方法
             string res = egg.Terminal.Execute("ping", "www.baidu.com", encoding);
             _output.WriteLine(res);
+            // 返回结果
+        }
+
+        [Fact]
+        public void Output_Enum()
+        {
+            // 定义数据
+            var outs = TestOut.OK;
+            // 执行方法
+            _output.WriteLine(outs.ToString());
             // 返回结果
         }
 

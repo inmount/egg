@@ -39,6 +39,8 @@ namespace Egg.Data
         public void Add(string sql)
         {
             if (!_working) throw new DatabaseException($"事务已结束");
+            if (sql.EndsWith("\r\n")) sql = sql.Substring(0, sql.Length - 2);
+            if (sql.EndsWith("\n")) sql = sql.Substring(0, sql.Length - 1);
             _sqlCache.Append(sql);
             if (!sql.EndsWith(";")) _sqlCache.Append(";");
             _sqlCache.AppendLine();
@@ -51,7 +53,9 @@ namespace Egg.Data
         public string GetSqlString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(_sqlCache.ToString());
+            sb.AppendLine(_connection.Provider.GetTransactionBeginString());
+            sb.AppendLine(_sqlCache.ToString());
+            sb.AppendLine(_connection.Provider.GetTransactionEndString());
             return sb.ToString();
         }
 
@@ -62,7 +66,9 @@ namespace Egg.Data
         {
             if (!_working) throw new DatabaseException($"事务已结束");
             // 执行所有脚本
-            _connection.DatabaseConnectionBase.ExecuteNonQuery(GetSqlString());
+            string sql = GetSqlString();
+            if (sql.IsNullOrWhiteSpace()) return;
+            _connection.DatabaseConnectionBase.ExecuteNonQuery(sql);
             _sqlCache.Clear();
             // 结束事务
             this.Exit();
@@ -75,7 +81,9 @@ namespace Egg.Data
         {
             if (!_working) throw new DatabaseException($"事务已结束");
             // 执行所有脚本
-            await _connection.DatabaseConnectionBase.ExecuteNonQueryAsync(GetSqlString());
+            string sql = GetSqlString();
+            if (sql.IsNullOrWhiteSpace()) return;
+            await _connection.DatabaseConnectionBase.ExecuteNonQueryAsync(sql);
             _sqlCache.Clear();
             // 结束事务
             this.Exit();

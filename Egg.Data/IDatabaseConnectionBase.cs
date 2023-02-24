@@ -11,6 +11,11 @@ namespace Egg.Data
     public interface IDatabaseConnectionBase : IDisposable
     {
 
+        /// <summary>
+        /// 是否连接
+        /// </summary>
+        bool IsOpened { get; }
+
         #region [=====数据库基础=====]
 
         /// <summary>

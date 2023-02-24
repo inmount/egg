@@ -36,6 +36,11 @@ namespace Egg.Data
         public UnitOfWork? UnitOfWork { get; internal set; }
 
         /// <summary>
+        /// 是否连接
+        /// </summary>
+        public bool IsOpened => this.DatabaseConnectionBase.IsOpened;
+
+        /// <summary>
         /// 开始一个新的事务单元
         /// </summary>
         /// <returns></returns>
@@ -62,10 +67,10 @@ namespace Egg.Data
             switch (type)
             {
                 case DatabaseTypes.PostgreSQL:
-                    return (IDatabaseProvider)Activator.CreateInstance(Type.GetType("Egg.Data.PostgreSQL.NpgsqlProvider"));
+                    return (IDatabaseProvider)Activator.CreateInstance(egg.Assembly.FindType("Egg.Data.PostgreSQL.NpgsqlProvider"));
                 case DatabaseTypes.Sqlite:
                 case DatabaseTypes.Sqlite3:
-                    return (IDatabaseProvider)Activator.CreateInstance(Type.GetType("Egg.Data.Sqlite.SqliteProvider"));
+                    return (IDatabaseProvider)Activator.CreateInstance(egg.Assembly.FindType("Egg.Data.Sqlite.SqliteProvider"));
                 default: throw new DatabaseException($"不支持的数据库类型\'{type.ToString()}\'");
             }
         }
@@ -254,7 +259,9 @@ namespace Egg.Data
             // 创建表
             string tableName = type.GetTableName();
             // 判断表是否存在，不存在则执行表创建
-            if (!await AnyAsync(this.Provider.GetTableExistsSqlString<T>()))
+            bool tableExists = false;
+            try { tableExists = await AnyAsync(this.Provider.GetTableExistsSqlString<T>()); } catch { }
+            if (!tableExists)
             {
                 // 建立工作单元
                 using (var uow = BeginUnitOfWork())

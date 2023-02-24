@@ -152,7 +152,7 @@ namespace Egg.Data
             var body = (BinaryExpression)predicate.Body;
             sb.Append(" WHERE ");
             // 获取表达式SQL
-            using (SqlExpression sqlExpression = new SqlExpression(provider, this.Properties))
+            using (var sqlExpression = new SqlExpression<TClass>(provider))
             {
                 sb.Append(sqlExpression.GetSqlString(body));
             }
@@ -167,11 +167,7 @@ namespace Egg.Data
         /// <param name="predicate"></param>
         /// <returns></returns>
         public async Task SetAsync(TClass entity, Expression<Func<TClass, bool>> predicate)
-        {
-            string sql = GetSqlString(entity, predicate);
-            // 执行更新
-            await this.Connection.ExecuteNonQueryAsync(sql);
-        }
+            => await this.Connection.ExecuteNonQueryAsync(GetSqlString(entity, predicate));
 
         /// <summary>
         /// 设置需要保存的数据
@@ -180,10 +176,7 @@ namespace Egg.Data
         /// <param name="predicate"></param>
         /// <returns></returns>
         public async Task SetAsync(TClass entity)
-        {
-            // 执行更新
-            await SetAsync(entity, d => Equals(d.Id, entity.Id));
-        }
+            => await SetAsync(entity, d => Equals(d.Id, entity.Id));
 
         /// <summary>
         /// 设置需要保存的数据
@@ -205,9 +198,7 @@ namespace Egg.Data
         /// <param name="entity"></param>
         /// <returns></returns>
         public Updater<TClass, TId> Set(TClass entity)
-        {
-            return Set(entity, d => Equals(d.Id, entity.Id));
-        }
+            => Set(entity, d => Equals(d.Id, entity.Id));
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Egg.Data.Entities;
+using Egg.Data.Extensions;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,11 @@ namespace Egg.Data.Sqlite
         private readonly string _connectionString;
 
         /// <summary>
+        /// 是否连接
+        /// </summary>
+        public bool IsOpened { get; private set; }
+
+        /// <summary>
         /// Sqlite原始连接
         /// </summary>
         public SqliteConnection? SqliteConnection { get { return _dbc; } }
@@ -30,6 +36,7 @@ namespace Egg.Data.Sqlite
         public SqliteConnectionBase(string connectionString)
         {
             _connectionString = connectionString;
+            this.IsOpened = false;
         }
 
         /// <summary>
@@ -39,6 +46,7 @@ namespace Egg.Data.Sqlite
         {
             if (_dbc is null) return;
             try { _dbc.Close(); } catch { };
+            this.IsOpened = false;
         }
 
         /// <summary>
@@ -61,7 +69,7 @@ namespace Egg.Data.Sqlite
         {
             return mapper.Map(pro =>
             {
-                int idx = reader.GetOrdinal(pro.Name);
+                int idx = reader.GetOrdinal(pro.GetColumnName());
                 if (idx >= 0) return reader.GetValue(idx);
                 return null;
             });
@@ -312,10 +320,11 @@ namespace Egg.Data.Sqlite
         /// <exception cref="DatabaseException"></exception>
         public void Open()
         {
+            if (this.IsOpened) throw new DatabaseException($"数据库已存在连接");
             if (_dbc != null) throw new DatabaseException($"数据库已存在连接");
             _dbc = new SqliteConnection(_connectionString);
-
             _dbc.Open();
+            this.IsOpened = true;
         }
 
         /// <summary>

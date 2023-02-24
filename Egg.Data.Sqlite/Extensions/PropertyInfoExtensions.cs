@@ -22,26 +22,28 @@ namespace Egg.Data.Sqlite.Extensions
         public static string GetColumnAttributeType(this PropertyInfo pro)
         {
             var columnAttr = pro.GetCustomAttribute<ColumnAttribute>();
-            if (!columnAttr.TypeName.IsNullOrWhiteSpace()) return columnAttr.TypeName ?? "";
+            if (columnAttr != null)
+                if (!columnAttr.TypeName.IsNullOrWhiteSpace())
+                    return columnAttr.TypeName ?? "";
             var proType = pro.PropertyType;
-            string proTypeName = proType.GetTopName();
-            switch (proTypeName)
+            var proTypeCode = Type.GetTypeCode(proType);
+            switch (proTypeCode)
             {
-                case "System.Byte":
-                case "System.Int16":
-                case "System.Int32":
-                case "System.Int64":
-                case "System.UInt32":
-                case "System.UInt64":
+                case TypeCode.Byte:
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
                     return "INTEGER";
-                case "System.Single":
-                case "System.Double":
-                case "System.Decimal":
+                case TypeCode.Single:
+                case TypeCode.Double:
+                case TypeCode.Decimal:
                     return "REAL";
-                case "System.String":
+                case TypeCode.String:
                     return "TEXT";
                 default:
-                    throw new DatabaseException($"不支持的数据格式'{proTypeName}'");
+                    throw new DatabaseException($"不支持的数据格式'{proTypeCode}'");
             }
         }
     }
