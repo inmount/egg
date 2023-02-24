@@ -48,12 +48,12 @@ namespace Egg.Data
         /// <summary>
         /// 数据库连接器
         /// </summary>
-        public DatabaseConnection Connection { get; }
+        public IDatabaseConnection Connection { get; }
 
         /// <summary>
         /// 更新器
         /// </summary>
-        public Updater(DatabaseConnection connection)
+        public Updater(IDatabaseConnection connection)
         {
             this.Connection = connection;
             this.Properties = new List<ColumnProperty>();

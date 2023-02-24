@@ -70,20 +70,12 @@ namespace Egg.Data
                 value = valueInfo.GetValue(operandValues);
             }
             if (value is null) return "NULL";
-            var type = unary.Type;
-            if (type == typeof(decimal) || type == typeof(decimal?)) return "" + Convert.ToDecimal(value);
-            if (type == typeof(byte) || type == typeof(byte?)) return "" + Convert.ToByte(value);
-            if (type == typeof(short) || type == typeof(short?)) return "" + Convert.ToInt16(value);
-            if (type == typeof(ushort) || type == typeof(ushort?)) return "" + Convert.ToUInt16(value);
-            if (type == typeof(int) || type == typeof(int?)) return "" + Convert.ToInt32(value);
-            if (type == typeof(uint) || type == typeof(uint?)) return "" + Convert.ToUInt32(value);
-            if (type == typeof(long) || type == typeof(long?)) return "" + Convert.ToInt64(value);
-            if (type == typeof(ulong) || type == typeof(ulong?)) return "" + Convert.ToUInt64(value);
-            if (type == typeof(float) || type == typeof(float?)) return "" + Convert.ToSingle(value);
-            if (type == typeof(double) || type == typeof(double?)) return "" + Convert.ToDouble(value);
-            if (type == typeof(string)) return _provider.GetValueString((string)value);
-            throw new Exception($"不支持的转换类型'{type.FullName}'");
-            throw new Exception($"不支持的转换对象'{unary.Operand.NodeType}'");
+            switch (value)
+            {
+                case null: return "NULL";
+                case string sz: return _provider.GetValueString((string)value);
+                default: return Convert.ToString(value);
+            }
         }
 
         // 获取sql语句值

@@ -1,9 +1,12 @@
 ﻿using Egg.Data;
 using Egg.Data.Entities;
+using Egg.Data.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,48 +16,31 @@ namespace Egg.Data
     /// <summary>
     /// 数据仓库
     /// </summary>
-    public class Repository<TClass, TId> where TClass : class, IEntity<TId>
+    public class Repository<TClass, TId> : IRepository<TClass, TId> where TClass : class, IEntity<TId>
     {
         // 数据库连接
-        private readonly DatabaseConnection _connection;
+        private readonly IDatabaseConnection _connection;
+        private readonly IDatabaseProvider _provider;
         // 更新器
         private Updater<TClass, TId> _updater;
 
         /// <summary>
         /// 数据库连接
         /// </summary>
-        public DatabaseConnection Connection { get { return _connection; } }
+        public IDatabaseConnection Connection { get { return _connection; } }
 
         /// <summary>
         /// 对象实例化
         /// </summary>
         /// <param name="connection"></param>
-        public Repository(DatabaseConnection connection)
+        public Repository(IDatabaseConnection connection)
         {
             _connection = connection;
+            _provider = connection.Provider;
             _updater = new Updater<TClass, TId>(connection);
         }
 
-        /// <summary>
-        /// 删除数
-        /// </summary>
-        /// <param name="id"></param>
-        public void Delete(TId id)
-        {
-            DeleteAsync(id).Wait();
-        }
-
-        /// <summary>
-        /// 删除数据
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public async Task DeleteAsync(TId id)
-        {
-            //var entity = await DbSet.FindAsync(id);
-            //DbSet.Remove(entity);
-            await Task.CompletedTask;
-        }
+        #region [=====插入数据=====]
 
         /// <summary>
         /// 添加数据
@@ -98,49 +84,34 @@ namespace Egg.Data
             await Task.CompletedTask;
         }
 
+        #endregion
+
+        #region [=====删除数据=====]
+
         /// <summary>
-        /// 获取单行数据
+        /// 删除数据
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sql"></param>
-        /// <returns></returns>
-        public TClass GetRow(string sql)
+        /// <param name="id"></param>
+        public void Delete(TId id)
         {
-            return _connection.GetRow<TClass>(sql);
+            DeleteAsync(id).Wait();
         }
 
         /// <summary>
-        /// 获取多行数据
+        /// 删除数据
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sql"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public List<TClass> GetRows(string sql)
+        public async Task DeleteAsync(TId id)
         {
-            return _connection.GetRows<TClass>(sql);
+            //var entity = await DbSet.FindAsync(id);
+            //DbSet.Remove(entity);
+            await Task.CompletedTask;
         }
 
-        /// <summary>
-        /// 获取单行数据
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sql"></param>
-        /// <returns></returns>
-        public async Task<TClass> GetRowAsync(string sql)
-        {
-            return await _connection.GetRowAsync<TClass>(sql);
-        }
+        #endregion
 
-        /// <summary>
-        /// 获取多行数据
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sql"></param>
-        /// <returns></returns>
-        public Task<List<TClass>> GetRowsAsync(string sql)
-        {
-            return _connection.GetRowsAsync<TClass>(sql);
-        }
+        #region [=====更新数据=====]
 
         /// <summary>
         /// 获取更新器
@@ -199,14 +170,68 @@ namespace Egg.Data
             await Task.CompletedTask;
         }
 
+        #endregion
+
+        #region [=====查询数据=====]
+
+        // 获取查询语句字段
+        private string GetSelectColumns<T>()
+        {
+            StringBuilder sb = new StringBuilder();
+            // 获取所有字段
+            Type type = typeof(T);
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var property in properties)
+            {
+                if (sb.Length > 0) sb.Append(',');
+                sb.Append(_provider.GetNameString(property.GetColumnAttributeName()));
+            }
+            return sb.ToString();
+        }
+
         /// <summary>
         /// 获取单行数据
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="sql"></param>
         /// <returns></returns>
-        public TClass Get(TId id)
+        public TClass? GetRow(string sql)
+            => _connection.GetRow<TClass>(sql);
+
+        /// <summary>
+        /// 获取多行数据
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public List<TClass> GetRows(string sql)
+            => _connection.GetRows<TClass>(sql);
+
+        /// <summary>
+        /// 获取单行数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public async Task<TClass> GetRowAsync(string sql)
+            => await _connection.GetRowAsync<TClass>(sql);
+
+        /// <summary>
+        /// 获取多行数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public Task<List<TClass>> GetRowsAsync(string sql)
+            => _connection.GetRowsAsync<TClass>(sql);
+
+        // 获取根据Id获取单个实例的sql语句
+        private string GetEntityByIdSqlString(TId id)
         {
-            return GetAsync(id).Result;
+            // 获取数据
+            string fullTableName = _provider.GetFullTableName<TClass>();
+            string columnId = _provider.GetNameString(typeof(TClass).GetProperty(nameof(GuidKeyEntity.Id)).GetColumnAttributeName());
+            string columnIdValue = _provider.GetValueString(Convert.ToString(id));
+            string columns = GetSelectColumns<TClass>();
+            return $"SELECT {columns} FROM {fullTableName} WHERE {columnId} = {columnIdValue};";
         }
 
         /// <summary>
@@ -214,10 +239,17 @@ namespace Egg.Data
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        public TClass? Get(TId id)
+           => GetRow(GetEntityByIdSqlString(id));
+
+        /// <summary>
+        /// 获取单行数据
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TClass> GetAsync(TId id)
-        {
-            return await GetRowAsync("");
-            //return await DbSet.FindAsync(id);
-        }
+            => await GetRowAsync(GetEntityByIdSqlString(id));
+
+        #endregion
     }
 }

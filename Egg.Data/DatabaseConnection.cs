@@ -1,7 +1,10 @@
 ﻿using egg;
+using Egg.Data.Extensions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,7 +13,7 @@ namespace Egg.Data
     /// <summary>
     /// 数据库连接
     /// </summary>
-    public class DatabaseConnection : IDatabaseConnectionBase
+    public class DatabaseConnection : IDatabaseConnection
     {
         /// <summary>
         /// 数据库供应商
@@ -47,9 +50,7 @@ namespace Egg.Data
         /// 结束当前事务单元
         /// </summary>
         public void EndUnitOfWork()
-        {
-            this.UnitOfWork?.Dispose();
-        }
+            => this.UnitOfWork?.Dispose();
 
         /// <summary>
         /// 获取受支持的标准数据库供应商
@@ -96,15 +97,74 @@ namespace Egg.Data
         }
 
         /// <summary>
+        /// 判断是否存在结果
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public bool Any(string sql)
+            => this.DatabaseConnectionBase.Any(sql);
+
+        /// <summary>
+        /// 判断是否存在结果
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public async Task<bool> AnyAsync(string sql)
+            => await this.DatabaseConnectionBase.AnyAsync(sql);
+
+        /// <summary>
+        /// 获取值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public T GetValue<T>(string sql)
+            => this.DatabaseConnectionBase.GetValue<T>(sql);
+
+        /// <summary>
+        /// 获取值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public Task<T> GetValueAsync<T>(string sql)
+            => this.DatabaseConnectionBase.GetValueAsync<T>(sql);
+
+        /// <summary>
+        /// 获取多个值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public List<T> GetValues<T>(string sql)
+            => this.DatabaseConnectionBase.GetValues<T>(sql);
+
+        /// <summary>
+        /// 获取多个值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public Task<List<T>> GetValuesAsync<T>(string sql)
+            => this.DatabaseConnectionBase.GetValuesAsync<T>(sql);
+
+        /// <summary>
         /// 获取单行数据
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public T GetRow<T>(string sql)
-        {
-            return this.DatabaseConnectionBase.GetRow<T>(sql);
-        }
+        public T? GetRow<T>(string sql) where T : class
+            => this.DatabaseConnectionBase.GetRow<T>(sql);
+
+        /// <summary>
+        /// 获取单行数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public async Task<T?> GetRowAsync<T>(string sql) where T : class
+            => await this.DatabaseConnectionBase.GetRowAsync<T>(sql);
 
         /// <summary>
         /// 获取多行数据
@@ -112,60 +172,38 @@ namespace Egg.Data
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public List<T> GetRows<T>(string sql)
-        {
-            return this.DatabaseConnectionBase.GetRows<T>(sql);
-        }
+        public List<T> GetRows<T>(string sql) where T : class
+            => this.DatabaseConnectionBase.GetRows<T>(sql);
+
+
+        /// <summary>
+        /// 获取多行数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public Task<List<T>> GetRowsAsync<T>(string sql) where T : class
+            => this.DatabaseConnectionBase.GetRowsAsync<T>(sql);
 
         /// <summary>
         /// 连接数据库
         /// </summary>
         public void Open()
-        {
-            this.DatabaseConnectionBase.Open();
-        }
+            => this.DatabaseConnectionBase.Open();
 
         /// <summary>
         /// 断开数据库
         /// </summary>
         public void Close()
-        {
-            try
-            {
-                this.DatabaseConnectionBase.Close();
-            }
-            catch { }
-        }
+            => this.DatabaseConnectionBase.Close();
 
         /// <summary>
         /// 释放资源
         /// </summary>
         public void Dispose()
         {
-            this.Close();
+            try { this.Close(); } catch { }
             GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// 获取单行数据
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sql"></param>
-        /// <returns></returns>
-        public async Task<T> GetRowAsync<T>(string sql)
-        {
-            return await this.DatabaseConnectionBase.GetRowAsync<T>(sql);
-        }
-
-        /// <summary>
-        /// 获取多行数据
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sql"></param>
-        /// <returns></returns>
-        public Task<List<T>> GetRowsAsync<T>(string sql)
-        {
-            return this.DatabaseConnectionBase.GetRowsAsync<T>(sql);
         }
 
         /// <summary>
@@ -198,5 +236,50 @@ namespace Egg.Data
             DatabaseConnectionBase = Provider.GetDatabaseConnection(ConnectionString);
         }
 
+        /// <summary>
+        /// 确保数据库创建
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public async Task<bool> TableCreated<T>()
+        {
+            Type type = typeof(T);
+            // 处理架构
+            string? schemaName = type.GetSchemaName();
+            if (!schemaName.IsNullOrWhiteSpace())
+            {
+
+            }
+            // 创建表
+            string tableName = type.GetTableName();
+            // 判断表是否存在，不存在则执行表创建
+            if (!await AnyAsync(this.Provider.GetTableExistsSqlString<T>()))
+            {
+                // 建立工作单元
+                using (var uow = BeginUnitOfWork())
+                {
+                    // 执行表创建语句
+                    await ExecuteNonQueryAsync(this.Provider.GetTableCreateSqlString<T>());
+                    // 保存数据
+                    await uow.CompleteAsync();
+                }
+            }
+            // 建立工作单元
+            using (var uow = BeginUnitOfWork())
+            {
+                // 获取所有字段
+                var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                foreach (var property in properties)
+                {
+                    // 判断字段是否存在，不存在则添加
+                    if (!await AnyAsync(this.Provider.GetColumnExistsSqlString(tableName, property)))
+                        await ExecuteNonQueryAsync(Provider.GetColumnAddSqlString(tableName, property));
+                }
+                // 保存数据
+                await uow.CompleteAsync();
+            }
+            return true;
+        }
     }
 }
