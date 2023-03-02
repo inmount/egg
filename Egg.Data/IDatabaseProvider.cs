@@ -62,7 +62,7 @@ namespace Egg.Data
         /// 获取表字段判断语句
         /// </summary>
         /// <returns></returns>
-        string GetColumnExistsSqlString(string tableName, PropertyInfo property);
+        string GetColumnExistsSqlString<T>(PropertyInfo property);
 
         /// <summary>
         /// 获取列添加语句
@@ -70,7 +70,7 @@ namespace Egg.Data
         /// <param name="tableName"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        string GetColumnAddSqlString(string tableName, PropertyInfo column);
+        string GetColumnAddSqlString<T>(PropertyInfo column);
 
         /// <summary>
         /// 获取数据表创建语句

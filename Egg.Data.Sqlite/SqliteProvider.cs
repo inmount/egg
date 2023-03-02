@@ -100,12 +100,11 @@ namespace Egg.Data.Sqlite
         /// <summary>
         /// 获取列添加字符串
         /// </summary>
-        /// <param name="tableName"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        public string GetColumnAddSqlString(string tableName, PropertyInfo column)
+        public string GetColumnAddSqlString<T>(PropertyInfo column)
         {
-            return $"ALTER TABLE {GetNameString(tableName)} ADD {GetNameString(column.GetColumnName())} {column.GetColumnAttributeType()} {(column.IsNullable() ? "NULL" : "NOT NULL")};";
+            return $"ALTER TABLE {GetFullTableName<T>()} ADD {GetNameString(column.GetColumnName())} {column.GetColumnAttributeType()} {(column.IsNullable() ? "NULL" : "NOT NULL")};";
         }
 
         /// <summary>
@@ -124,8 +123,10 @@ namespace Egg.Data.Sqlite
         /// 获取确保数据库创建语句
         /// </summary>
         /// <returns></returns>
-        public string GetColumnExistsSqlString(string tableName, PropertyInfo property)
+        public string GetColumnExistsSqlString<T>(PropertyInfo property)
         {
+            Type type = typeof(T);
+            string tableName = type.Name;
             // 获取字段信息
             string columnName = property.GetColumnName();
             return $"SELECT [name] FROM [sqlite_master] WHERE [type]='table'" +

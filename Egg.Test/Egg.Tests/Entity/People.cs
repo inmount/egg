@@ -1,6 +1,8 @@
 ﻿using Egg.Data.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -21,6 +23,9 @@ namespace Egg.Tests.Entity
         /// 名称
         /// </summary>
         [Column("name")]
+        [StringLength(128)]
+        [Index]
+        [Description("名称")]
         public virtual string Name { get; set; }
 
         /// <summary>

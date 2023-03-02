@@ -1,6 +1,7 @@
 ﻿using Egg.Data.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -46,6 +47,43 @@ namespace Egg.Data.Extensions
         }
 
         /// <summary>
+        /// 是否含有Index特性
+        /// </summary>
+        /// <param name="pro"></param>
+        /// <returns></returns>
+        public static bool IsIndex(this PropertyInfo pro)
+        {
+            return pro.GetCustomAttributes<IndexAttribute>().Any();
+        }
+
+
+        /// <summary>
+        /// 是否含有Index特性并有唯一属性
+        /// </summary>
+        /// <param name="pro"></param>
+        /// <returns></returns>
+        public static bool IsUniqueIndex(this PropertyInfo pro)
+        {
+            var indexAttr = pro.GetCustomAttribute<IndexAttribute>();
+            if (indexAttr is null) return false;
+            return indexAttr.Unique;
+        }
+
+        /// <summary>
+        /// 获取索引名称
+        /// </summary>
+        /// <param name="pro"></param>
+        /// <returns></returns>
+        public static string GetIndexName<T>(this PropertyInfo pro)
+        {
+            var indexAttr = pro.GetCustomAttribute<IndexAttribute>();
+            if (!indexAttr.Name.IsNullOrWhiteSpace()) return indexAttr.Name;
+            string tableName = typeof(T).GetTableName();
+            string columnName = pro.GetColumnName();
+            return $"IDX_{tableName}_{columnName}";
+        }
+
+        /// <summary>
         /// 获取列属性名称
         /// </summary>
         /// <param name="pro"></param>
@@ -56,6 +94,18 @@ namespace Egg.Data.Extensions
             if (columnAttr is null) return pro.Name;
             if (columnAttr.Name.IsNullOrWhiteSpace()) return pro.Name;
             return columnAttr.Name ?? string.Empty;
+        }
+
+        /// <summary>
+        /// 获取列描述名称
+        /// </summary>
+        /// <param name="pro"></param>
+        /// <returns></returns>
+        public static string GetDescription(this PropertyInfo pro)
+        {
+            var descriptionAttr = pro.GetCustomAttribute<DescriptionAttribute>();
+            if (descriptionAttr is null) return string.Empty;
+            return descriptionAttr.Description;
         }
     }
 }

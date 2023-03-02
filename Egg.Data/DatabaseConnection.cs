@@ -280,8 +280,8 @@ namespace Egg.Data
                 foreach (var property in properties)
                 {
                     // 判断字段是否存在，不存在则添加
-                    if (!await AnyAsync(this.Provider.GetColumnExistsSqlString(tableName, property)))
-                        await ExecuteNonQueryAsync(Provider.GetColumnAddSqlString(tableName, property));
+                    if (!await AnyAsync(this.Provider.GetColumnExistsSqlString<T>(property)))
+                        await ExecuteNonQueryAsync(Provider.GetColumnAddSqlString<T>(property));
                 }
                 // 保存数据
                 await uow.CompleteAsync();

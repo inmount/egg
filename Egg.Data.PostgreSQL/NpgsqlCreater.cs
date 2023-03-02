@@ -15,9 +15,9 @@ using System.Xml.Linq;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using static Npgsql.Replication.PgOutput.Messages.RelationMessage;
-using Egg.EFCore.Sqlite;
 using Egg.EFCore.Dbsets;
 using Egg.Data.Entities;
+using Egg.Data.PostgreSQL.Extensions;
 
 namespace Egg.EFCore
 {

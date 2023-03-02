@@ -15,13 +15,10 @@ namespace Egg.Test.Console.Data
     {
         public static void Run()
         {
-            var info = new SqliteConnectionInfo()
-            {
-                Path = egg.IO.GetExecutionPath("data.db")
-            };
+            var info = SqliteConnectionInfo.Create(egg.IO.GetExecutionPath("data.db"));
             using (var conn = new DatabaseConnection(info))
             {
-                
+
                 var people2Repository = new Egg.Data.Repository<People2, string>(conn);
                 using (UnitOfWork uow = conn.BeginUnitOfWork())
                 {
@@ -39,7 +36,7 @@ namespace Egg.Test.Console.Data
                     System.Console.WriteLine(uow.GetSqlString());
                     //uow.Complete();
                 }
-            }   
+            }
         }
     }
 }
