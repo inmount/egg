@@ -10,7 +10,7 @@ namespace Egg.Data.Sqlite
     public class SqliteConnectionInfo : IDatabaseConnectionInfo
     {
         // 连接字符串
-        private readonly string? _connectionString;
+        private readonly string _connectionString;
 
         /// <summary>
         /// 获取数据库类型
@@ -23,24 +23,6 @@ namespace Egg.Data.Sqlite
         public string ProviderName => "Egg.Data.Sqlite.SqliteProvider";
 
         /// <summary>
-        /// 存储路径
-        /// </summary>
-        public string? Path { get; set; }
-
-        /// <summary>
-        /// 密码
-        /// </summary>
-        public string? Password { get; set; }
-
-        /// <summary>
-        /// PostgreSQL数据库连接信息
-        /// </summary>
-        public SqliteConnectionInfo()
-        {
-            _connectionString = null;
-        }
-
-        /// <summary>
         /// PostgreSQL数据库连接信息
         /// </summary>
         /// <param name="connectionString"></param>
@@ -50,24 +32,28 @@ namespace Egg.Data.Sqlite
         }
 
         /// <summary>
+        /// 创建PostgreSQL数据库连接信息
+        /// </summary>
+        /// <param name="path">路径</param>
+        /// <param name="password">密码</param>
+        /// <returns></returns>
+        /// <exception cref="DatabaseException"></exception>
+        public static SqliteConnectionInfo Create(string path, string? password = null)
+        {
+            // 动态拼接连接字符串
+            StringBuilder sb = new StringBuilder();
+            // 设置存储路径
+            if (path.IsNullOrWhiteSpace()) throw new DatabaseException($"缺少必要的存储路径配置");
+            sb.Append($"Data Source={path};");
+            if (!password.IsNullOrWhiteSpace())
+                sb.Append($"Password={password};");
+            return new SqliteConnectionInfo(sb.ToString());
+        }
+
+        /// <summary>
         /// 获取连接字符串
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public string ToConnectionString()
-        {
-            if (_connectionString is null)
-            {
-                // 动态拼接连接字符串
-                StringBuilder sb = new StringBuilder();
-                // 设置存储路径
-                if (this.Path.IsNullOrWhiteSpace()) throw new DatabaseException($"缺少必要的存储路径配置");
-                sb.Append($"Data Source={this.Path};");
-                if (!this.Password.IsNullOrWhiteSpace())
-                    sb.Append($"Password={this.Password};");
-                return sb.ToString();
-            }
-            return _connectionString;
-        }
+        public string ToConnectionString() => _connectionString;
     }
 }
