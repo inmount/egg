@@ -10,6 +10,34 @@ namespace Egg.Data.PostgreSQL
     /// </summary>
     public class NpgsqlProvider : IDatabaseProvider
     {
+        /// <summary>
+        /// 获取事务开始语句
+        /// </summary>
+        /// <returns></returns>
+        public string GetTransactionBeginString() => "BEGIN TRANSACTION;";
+
+        /// <summary>
+        /// 获取事务结束语句
+        /// </summary>
+        /// <returns></returns>
+        public string GetTransactionEndString() => "END TRANSACTION;";
+
+        /// <summary>
+        /// 获取名称定义字符串
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string GetNameString(string name)
+            => $"\"{name}\"";
+
+        /// <summary>
+        /// 获取值字符串
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public string GetValueString(string value)
+            => $"'{value.Replace("'", "''")}'";
+
         public string GetColumnAddSqlString(string tableName, PropertyInfo column)
         {
             throw new NotImplementedException();
@@ -20,10 +48,13 @@ namespace Egg.Data.PostgreSQL
             throw new NotImplementedException();
         }
 
-        public IDatabaseConnectionBase GetDatabaseConnection(string connectionString)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// 获取数据库基础连接
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <returns></returns>
+        public IDatabaseConnectionBase GetDatabaseConnection(string connectionString) 
+            => new NpgsqlConnectionBase(connectionString);
 
         public string GetFullTableName<T>()
         {
@@ -31,11 +62,6 @@ namespace Egg.Data.PostgreSQL
         }
 
         public string GetFuncString(string name, object[]? args)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetNameString(string name)
         {
             throw new NotImplementedException();
         }
@@ -50,19 +76,5 @@ namespace Egg.Data.PostgreSQL
             throw new NotImplementedException();
         }
 
-        public string GetTransactionBeginString()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetTransactionEndString()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetValueString(string value)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

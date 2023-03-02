@@ -36,19 +36,13 @@ namespace Egg.Data.Sqlite
         /// 获取事务开始语句
         /// </summary>
         /// <returns></returns>
-        public string GetTransactionBeginString()
-        {
-            return "BEGIN TRANSACTION;";
-        }
+        public string GetTransactionBeginString() => "BEGIN TRANSACTION;";
 
         /// <summary>
         /// 获取事务结束语句
         /// </summary>
         /// <returns></returns>
-        public string GetTransactionEndString()
-        {
-            return "END TRANSACTION;";
-        }
+        public string GetTransactionEndString() => "END TRANSACTION;";
 
         /// <summary>
         /// 获取函数定义字符串
