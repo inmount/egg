@@ -1,6 +1,9 @@
-﻿using Npgsql;
+﻿using Egg.Data.Entities;
+using Egg.Data.Extensions;
+using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +20,14 @@ namespace Egg.Data.PostgreSQL
         private readonly string _connectionString;
 
         /// <summary>
+        /// 获取数据库命令
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public DbCommand GetCommand(string sql)
+            => new NpgsqlCommand(sql, _dbc);
+
+        /// <summary>
         /// PostgreSQL基础连接
         /// </summary>
         /// <param name="connectionString"></param>
@@ -31,84 +42,106 @@ namespace Egg.Data.PostgreSQL
         /// </summary>
         public bool IsOpened { get; private set; }
 
-        public bool Any(string sql)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> AnyAsync(string sql)
-        {
-            throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// 关闭连接
+        /// </summary>
         public void Close()
         {
-            throw new NotImplementedException();
+            if (_dbc is null) return;
+            try { _dbc.Close(); } catch { };
+            this.IsOpened = false;
         }
 
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+        #region [=====脚本执行=====]
 
+        /// <summary>
+        /// 执行sql脚本
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
         public int ExecuteNonQuery(string sql)
         {
-            throw new NotImplementedException();
+            using (var sqlCommand = GetCommand(sql))
+                return sqlCommand.ExecuteNonQuery();
         }
 
-        public Task<int> ExecuteNonQueryAsync(string sql)
+        /// <summary>
+        /// 执行sql脚本
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public async Task<int> ExecuteNonQueryAsync(string sql)
         {
-            throw new NotImplementedException();
+            using (var sqlCommand = GetCommand(sql))
+                return await sqlCommand.ExecuteNonQueryAsync();
         }
 
-        public T? GetRow<T>(string sql) where T : class
+        #endregion
+
+        #region [=====读取数据=====]
+
+        /// <summary>
+        /// 读取数据
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public int Read(string sql, Func<DbDataReader, int> func)
         {
-            throw new NotImplementedException();
+            int res = 0;
+            using (DbCommand sqlCommand = GetCommand(sql))
+            {
+                using (DbDataReader reader = sqlCommand.ExecuteReader(System.Data.CommandBehavior.Default))
+                {
+                    res = func(reader);
+                    reader.Close();
+                }
+            }
+            return res;
         }
 
-        public Task<T?> GetRowAsync<T>(string sql) where T : class
+        /// <summary>
+        /// 读取数据
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public async Task<int> ReadAsync(string sql, Func<DbDataReader, int> func)
         {
-            throw new NotImplementedException();
+            int res = 0;
+            using (DbCommand sqlCommand = GetCommand(sql))
+            {
+                using (DbDataReader reader = await sqlCommand.ExecuteReaderAsync(System.Data.CommandBehavior.Default))
+                {
+                    res = func(reader);
+                    reader.Close();
+                }
+            }
+            return res;
         }
 
-        public List<T> GetRows<T>(string sql) where T : class
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
 
-        public Task<List<T>> GetRowsAsync<T>(string sql) where T : class
-        {
-            throw new NotImplementedException();
-        }
-
-        public T GetValue<T>(string sql)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<T> GetValueAsync<T>(string sql)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<T> GetValues<T>(string sql)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<T>> GetValuesAsync<T>(string sql)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Open(string connectionString)
-        {
-            throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// 连接数据库
+        /// </summary>
+        /// <exception cref="DatabaseException"></exception>
         public void Open()
         {
-            throw new NotImplementedException();
+            if (this.IsOpened) throw new DatabaseException($"数据库已存在连接");
+            if (_dbc != null) throw new DatabaseException($"数据库已存在连接");
+            _dbc = new NpgsqlConnection(_connectionString);
+            _dbc.Open();
+            this.IsOpened = true;
+        }
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        public void Dispose()
+        {
+            this.Close();
+            GC.SuppressFinalize(this);
         }
     }
 }

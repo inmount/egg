@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -49,9 +50,101 @@ namespace Egg.Data
 
         #endregion
 
-        #region [=====自动化=====]
+        #region [=====读取数据=====]
 
+        /// <summary>
+        /// 判断是否存在结果
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        bool Any(string sql);
 
+        /// <summary>
+        /// 判断是否存在结果
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        Task<bool> AnyAsync(string sql);
+
+        /// <summary>
+        /// 获取单个值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        T GetValue<T>(string sql);
+
+        /// <summary>
+        /// 获取单行数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        Task<T> GetValueAsync<T>(string sql);
+
+        /// <summary>
+        /// 获取多个值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        List<T> GetValues<T>(string sql);
+
+        /// <summary>
+        /// 获取列表
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        Task<List<T>> GetValuesAsync<T>(string sql);
+
+        /// <summary>
+        /// 获取单行数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        T? GetRow<T>(string sql) where T : class;
+
+        /// <summary>
+        /// 获取单行数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        Task<T?> GetRowAsync<T>(string sql) where T : class;
+
+        /// <summary>
+        /// 获取列表数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        List<T> GetRows<T>(string sql) where T : class;
+
+        /// <summary>
+        /// 获取列表数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        Task<List<T>> GetRowsAsync<T>(string sql) where T : class;
+
+        /// <summary>
+        /// 读取数据
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        int Read(string sql, Action<DbDataReader>? action = null);
+
+        /// <summary>
+        /// 读取数据
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        Task<int> ReadAsync(string sql, Action<DbDataReader>? action = null);
 
         #endregion
 

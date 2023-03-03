@@ -1,8 +1,10 @@
 ﻿using egg;
+using Egg.Data.Entities;
 using Egg.Data.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Common;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -107,7 +109,7 @@ namespace Egg.Data
         /// <param name="sql"></param>
         /// <returns></returns>
         public bool Any(string sql)
-            => this.DatabaseConnectionBase.Any(sql);
+            => Read(sql) > 0;
 
         /// <summary>
         /// 判断是否存在结果
@@ -115,7 +117,7 @@ namespace Egg.Data
         /// <param name="sql"></param>
         /// <returns></returns>
         public async Task<bool> AnyAsync(string sql)
-            => await this.DatabaseConnectionBase.AnyAsync(sql);
+            => await ReadAsync(sql) > 0;
 
         /// <summary>
         /// 获取值
@@ -124,7 +126,18 @@ namespace Egg.Data
         /// <param name="sql"></param>
         /// <returns></returns>
         public T GetValue<T>(string sql)
-            => this.DatabaseConnectionBase.GetValue<T>(sql);
+        {
+            T res = default(T);
+            bool found = false;
+            Read(sql, reader =>
+            {
+                if (found) return;
+                res = reader.ToValue<T>();
+                found = true;
+            });
+            if (res is null) throw new DatabaseException("获取结果失败");
+            return res;
+        }
 
         /// <summary>
         /// 获取值
@@ -132,8 +145,19 @@ namespace Egg.Data
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public Task<T> GetValueAsync<T>(string sql)
-            => this.DatabaseConnectionBase.GetValueAsync<T>(sql);
+        public async Task<T> GetValueAsync<T>(string sql)
+        {
+            T res = default(T);
+            bool found = false;
+            await ReadAsync(sql, reader =>
+             {
+                 if (found) return;
+                 res = reader.ToValue<T>();
+                 found = true;
+             });
+            if (res is null) throw new DatabaseException("获取结果失败");
+            return res;
+        }
 
         /// <summary>
         /// 获取多个值
@@ -142,7 +166,14 @@ namespace Egg.Data
         /// <param name="sql"></param>
         /// <returns></returns>
         public List<T> GetValues<T>(string sql)
-            => this.DatabaseConnectionBase.GetValues<T>(sql);
+        {
+            List<T> res = new List<T>();
+            Read(sql, reader =>
+            {
+                res.Add(reader.ToValue<T>());
+            });
+            return res;
+        }
 
         /// <summary>
         /// 获取多个值
@@ -150,8 +181,15 @@ namespace Egg.Data
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public Task<List<T>> GetValuesAsync<T>(string sql)
-            => this.DatabaseConnectionBase.GetValuesAsync<T>(sql);
+        public async Task<List<T>> GetValuesAsync<T>(string sql)
+        {
+            List<T> res = new List<T>();
+            await ReadAsync(sql, reader =>
+             {
+                 res.Add(reader.ToValue<T>());
+             });
+            return res;
+        }
 
         /// <summary>
         /// 获取单行数据
@@ -160,7 +198,18 @@ namespace Egg.Data
         /// <param name="sql"></param>
         /// <returns></returns>
         public T? GetRow<T>(string sql) where T : class
-            => this.DatabaseConnectionBase.GetRow<T>(sql);
+        {
+            var mapper = new EntityMapper<T>();
+            T? res = default(T);
+            bool found = false;
+            Read(sql, reader =>
+            {
+                if (found) return;
+                res = reader.ToEntity(mapper);
+                found = true;
+            });
+            return res;
+        }
 
         /// <summary>
         /// 获取单行数据
@@ -169,7 +218,18 @@ namespace Egg.Data
         /// <param name="sql"></param>
         /// <returns></returns>
         public async Task<T?> GetRowAsync<T>(string sql) where T : class
-            => await this.DatabaseConnectionBase.GetRowAsync<T>(sql);
+        {
+            var mapper = new EntityMapper<T>();
+            T? res = default(T);
+            bool found = false;
+            await ReadAsync(sql, reader =>
+             {
+                 if (found) return;
+                 res = reader.ToEntity(mapper);
+                 found = true;
+             });
+            return res;
+        }
 
         /// <summary>
         /// 获取多行数据
@@ -178,7 +238,15 @@ namespace Egg.Data
         /// <param name="sql"></param>
         /// <returns></returns>
         public List<T> GetRows<T>(string sql) where T : class
-            => this.DatabaseConnectionBase.GetRows<T>(sql);
+        {
+            var mapper = new EntityMapper<T>();
+            List<T> res = new List<T>();
+            Read(sql, reader =>
+            {
+                res.Add(reader.ToEntity(mapper));
+            });
+            return res;
+        }
 
 
         /// <summary>
@@ -187,8 +255,16 @@ namespace Egg.Data
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public Task<List<T>> GetRowsAsync<T>(string sql) where T : class
-            => this.DatabaseConnectionBase.GetRowsAsync<T>(sql);
+        public async Task<List<T>> GetRowsAsync<T>(string sql) where T : class
+        {
+            var mapper = new EntityMapper<T>();
+            List<T> res = new List<T>();
+            await ReadAsync(sql, reader =>
+             {
+                 res.Add(reader.ToEntity(mapper));
+             });
+            return res;
+        }
 
         /// <summary>
         /// 连接数据库
@@ -288,5 +364,67 @@ namespace Egg.Data
             }
             return true;
         }
+
+        /// <summary>
+        /// 获取数据库命令
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public DbCommand GetCommand(string sql)
+            => this.DatabaseConnectionBase.GetCommand(sql);
+
+        /// <summary>
+        /// 读取数据
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public int Read(string sql, Action<DbDataReader>? action = null)
+            => this.DatabaseConnectionBase.Read(sql, reader =>
+            {
+                int res = 0;
+                while (reader.Read())
+                {
+                    res++;
+                    if (action != null) action(reader);
+                }
+                return res;
+            });
+
+        /// <summary>
+        /// 读取数据
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public async Task<int> ReadAsync(string sql, Action<DbDataReader>? action = null)
+            => await this.DatabaseConnectionBase.ReadAsync(sql, reader =>
+            {
+                int res = 0;
+                while (reader.Read())
+                {
+                    res++;
+                    if (action != null) action(reader);
+                }
+                return res;
+            });
+
+        /// <summary>
+        /// 读取数据
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public int Read(string sql, Func<DbDataReader, int> func)
+            => this.DatabaseConnectionBase.Read(sql, func);
+
+        /// <summary>
+        /// 读取数据
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public Task<int> ReadAsync(string sql, Func<DbDataReader, int> func)
+            => this.DatabaseConnectionBase.ReadAsync(sql, func);
     }
 }
