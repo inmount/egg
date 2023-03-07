@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Egg.Data.PostgreSQL\Egg.Data.PostgreSQL.csproj" />
     <ProjectReference Include="..\..\Egg.Data.Sqlite\Egg.Data.Sqlite.csproj" />
     <ProjectReference Include="..\..\Egg.Data\Egg.Data.csproj" />
     <ProjectReference Include="..\..\Egg\Egg.csproj" />

@@ -179,5 +179,44 @@ namespace Egg.Data.Sqlite
             return sb.ToString();
         }
 
+        /// <summary>
+        /// 获取数据库检测脚本
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string GetDatabaseExistsSqlString(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 获取数据库新增脚本
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string GetDatabaseCreateSqlString(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 获取分库检测脚本
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string GetSchemaExistsSqlString(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 获取分库创建脚本
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string GetSchemaCreateSqlString(string name)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

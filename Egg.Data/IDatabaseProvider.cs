@@ -80,10 +80,34 @@ namespace Egg.Data
         string GetTableCreateSqlString<T>();
 
         /// <summary>
-        /// 获取数据库检测语句
+        /// 获取数据表检测语句
         /// </summary>
         /// <returns></returns>
         string GetTableExistsSqlString<T>();
+
+        /// <summary>
+        /// 获取数据库检测语句
+        /// </summary>
+        /// <returns></returns>
+        string GetDatabaseExistsSqlString(string name);
+
+        /// <summary>
+        /// 获取数据库创建语句
+        /// </summary>
+        /// <returns></returns>
+        string GetDatabaseCreateSqlString(string name);
+
+        /// <summary>
+        /// 获取分库检测语句
+        /// </summary>
+        /// <returns></returns>
+        string GetSchemaExistsSqlString(string name);
+
+        /// <summary>
+        /// 获取分库创建语句
+        /// </summary>
+        /// <returns></returns>
+        string GetSchemaCreateSqlString(string name);
 
         #endregion
     }

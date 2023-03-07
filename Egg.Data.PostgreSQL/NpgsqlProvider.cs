@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Egg.Data.PostgreSQL
 {
@@ -13,6 +14,11 @@ namespace Egg.Data.PostgreSQL
     /// </summary>
     public class NpgsqlProvider : IDatabaseProvider
     {
+        /// <summary>
+        /// PostgreSQL数据库语法供应器
+        /// </summary>
+        public NpgsqlProvider() { }
+
         /// <summary>
         /// 获取事务开始语句
         /// </summary>
@@ -186,5 +192,36 @@ namespace Egg.Data.PostgreSQL
             return $"select tablename from pg_tables where schemaname = '{schema}' and tablename = '{tableName}';";
         }
 
+        /// <summary>
+        /// 获取数据库检测脚本
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string GetDatabaseExistsSqlString(string name)
+            => $"SELECT pd.datname FROM pg_catalog.pg_database pd WHERE pd.datname = {GetValueString(name)};";
+
+        /// <summary>
+        /// 获取数据库新增脚本
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string GetDatabaseCreateSqlString(string name)
+            => $"CREATE DATABASE {GetNameString(name)};";
+
+        /// <summary>
+        /// 获取分库检测脚本
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string GetSchemaExistsSqlString(string name)
+            => $"SELECT pn.nspname FROM pg_catalog.pg_namespace pn WHERE pn.nspname = {GetValueString(name)};";
+
+        /// <summary>
+        /// 获取分库创建脚本
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string GetSchemaCreateSqlString(string name)
+            => $"CREATE SCHEMA {GetNameString(name)};";
     }
 }
