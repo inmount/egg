@@ -17,7 +17,7 @@ namespace Egg.Log.Loggers {
         public void Log(LogEntity entity)
         {
             Debug.Write($"*");
-            Debug.Write($"{egg.Time.Now.ToTimeString()}");
+            Debug.Write($"{egg.Time.Now.ToFullDateTimeString()}");
             Debug.Write($"*");
             Debug.Write($" [{entity.Level.ToString().ToUpper()}]");
             Debug.Write($" {entity.Event} {entity.Message}");
