@@ -122,7 +122,7 @@ namespace egg
         /// <summary>
         /// 根据名称查找类型
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">类型名称</param>
         /// <returns></returns>
         public static Type? FindType(string name)
         {
@@ -134,6 +134,25 @@ namespace egg
                     if (type.FullName == name) return type;
             }
             return null;
+        }
+
+        /// <summary>
+        /// 根据名称查找类型
+        /// </summary>
+        /// <param name="name">类型名称</param>
+        /// <param name="dllPath">类文件路径</param>
+        /// <returns></returns>
+        public static Type? FindType(string name, string dllPath)
+        {
+            // 先进行名称查找类型
+            Type? type = FindType(name);
+            // 未找到则先加载关联的dll文件，再重新查找
+            if (type is null)
+            {
+                System.Reflection.Assembly.LoadFrom(dllPath);
+                type = FindType(name);
+            }
+            return type;
         }
 
     }
