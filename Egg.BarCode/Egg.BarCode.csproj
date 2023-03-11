@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <Version>16.2.2303.13</Version>
+    <Version>16.2.2303.14</Version>
     <Authors>Egg Studio</Authors>
     <Description>一套用于生成条码的开发组件</Description>
     <PackageProjectUrl>https://github.com/inmount/egg</PackageProjectUrl>

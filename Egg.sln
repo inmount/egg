@@ -30,7 +30,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.Lark", "Egg.Lark\Egg.La
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.Data", "Egg.Data\Egg.Data.csproj", "{B06D0BE1-89BF-4057-B3F0-6BC3D540FFE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egg.Tests", "Egg.Test\Egg.Tests\Egg.Tests.csproj", "{C8346812-A323-4ECD-BB7F-1597816CBE95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.Tests", "Egg.Test\Egg.Tests\Egg.Tests.csproj", "{C8346812-A323-4ECD-BB7F-1597816CBE95}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.Config", "Egg.Config\Egg.Config.csproj", "{729F8CE3-4E69-49F0-B99C-A8D160D53E40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -82,6 +84,10 @@ Global
 		{C8346812-A323-4ECD-BB7F-1597816CBE95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8346812-A323-4ECD-BB7F-1597816CBE95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8346812-A323-4ECD-BB7F-1597816CBE95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{729F8CE3-4E69-49F0-B99C-A8D160D53E40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{729F8CE3-4E69-49F0-B99C-A8D160D53E40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{729F8CE3-4E69-49F0-B99C-A8D160D53E40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{729F8CE3-4E69-49F0-B99C-A8D160D53E40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
