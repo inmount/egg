@@ -64,5 +64,32 @@ namespace Egg
             }
         }
 
+        /// <summary>
+        /// 判断是否包含接口
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="typeInterface"></param>
+        /// <returns></returns>
+        public static bool HasInterface(this Type? type, Type typeInterface)
+        {
+            if (type is null) return false;
+            if (!typeInterface.IsInterface) throw new Exception($"'{typeInterface.Name}'不是一个有效的接口");
+            var ifs = type.GetInterfaces();
+            foreach (var ifc in ifs)
+            {
+                if (ifc.Equals(typeInterface)) return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 判断是否包含接口
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool HasInterface<T>(this Type? type)
+        {
+            return type.HasInterface(typeof(T));
+        }
     }
 }
