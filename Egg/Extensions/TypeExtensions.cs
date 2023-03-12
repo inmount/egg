@@ -65,6 +65,31 @@ namespace Egg
         }
 
         /// <summary>
+        /// 判断是否继承类
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="typeBase"></param>
+        /// <returns></returns>
+
+        public static bool IsBased(this Type? type, Type typeBase)
+        {
+            if (type is null) return false;
+            if (typeBase is null) return false;
+            if (type.Equals(typeBase)) return true;
+            if (type.BaseType is null) return false;
+            return type.BaseType.IsBased(typeBase);
+        }
+
+        /// <summary>
+        /// 判断是否继承类
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+
+        public static bool IsBased<T>(this Type? type)
+            => type.IsBased(typeof(T));
+
+        /// <summary>
         /// 判断是否包含接口
         /// </summary>
         /// <param name="type"></param>
@@ -88,8 +113,6 @@ namespace Egg
         /// <param name="type"></param>
         /// <returns></returns>
         public static bool HasInterface<T>(this Type? type)
-        {
-            return type.HasInterface(typeof(T));
-        }
+            => type.HasInterface(typeof(T));
     }
 }
