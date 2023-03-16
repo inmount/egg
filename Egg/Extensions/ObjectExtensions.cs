@@ -42,7 +42,7 @@ namespace Egg
         /// <returns></returns>
         public static T ToNotNull<T>(this object? obj)
         {
-            if (obj is null) throw new Exception("对象不允许为空");
+            if (obj is null) throw new NullException();
             return (T)obj;
         }
 
