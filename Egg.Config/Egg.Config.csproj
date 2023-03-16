@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>16.2.2303.14</Version>
+    <Version>16.2.2303.15</Version>
     <Authors>Egg Studio</Authors>
     <Description>Egg套件的配置文件开发组件</Description>
     <PackageProjectUrl>https://github.com/inmount/egg</PackageProjectUrl>
