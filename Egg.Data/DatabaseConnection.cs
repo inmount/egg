@@ -77,19 +77,21 @@ namespace Egg.Data
         public static IDatabaseProvider GetDatabaseProvider(DatabaseTypes type)
         {
             string providerName = string.Empty;
-
+            string providerDllPath = string.Empty;
             switch (type)
             {
                 case DatabaseTypes.PostgreSQL:
                     providerName = "Egg.Data.PostgreSQL.NpgsqlProvider";
+                    providerDllPath = "Egg.Data.PostgreSQL.dll";
                     break;
                 case DatabaseTypes.Sqlite:
                 case DatabaseTypes.Sqlite3:
                     providerName = "Egg.Data.Sqlite.SqliteProvider";
+                    providerDllPath = "Egg.Data.Sqlite.dll";
                     break;
                 default: throw new DatabaseException($"不支持的数据库类型\'{type.ToString()}\'");
             }
-            Type? providerType = egg.Assembly.FindType(providerName);
+            Type? providerType = egg.Assembly.FindType(providerName, egg.IO.GetExecutionPath(providerDllPath));
             if (providerType is null) throw new DatabaseException($"未找到供应商\'{providerName}\'");
             return (IDatabaseProvider)Activator.CreateInstance(providerType);
         }
