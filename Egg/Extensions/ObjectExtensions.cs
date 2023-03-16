@@ -39,11 +39,11 @@ namespace Egg
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
-        /// <param name="defaultObj"></param>
         /// <returns></returns>
-        public static T ToNotNull<T>(this object? obj, T defaultObj) where T : class
+        public static T ToNotNull<T>(this object? obj)
         {
-            return (T)(obj ?? (defaultObj));
+            if (obj is null) throw new Exception("对象不允许为空");
+            return (T)obj;
         }
 
         /// <summary>
@@ -51,11 +51,11 @@ namespace Egg
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
+        /// <param name="defaultObj"></param>
         /// <returns></returns>
-        public static T ToNotNull<T>(this object? obj) where T : new()
+        public static T ToNotNull<T>(this object? obj, T defaultObj) where T : class
         {
-            if (obj is null) return new T();
-            return (T)obj;
+            return (T)(obj ?? (defaultObj));
         }
 
         /// <summary>

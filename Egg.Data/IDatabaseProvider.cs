@@ -98,6 +98,12 @@ namespace Egg.Data
         string GetDatabaseCreateSqlString(string name);
 
         /// <summary>
+        /// 获取数据库查询语句
+        /// </summary>
+        /// <returns></returns>
+        string GetDatabasesQuerySqlString();
+
+        /// <summary>
         /// 获取分库检测语句
         /// </summary>
         /// <returns></returns>
@@ -108,6 +114,30 @@ namespace Egg.Data
         /// </summary>
         /// <returns></returns>
         string GetSchemaCreateSqlString(string name);
+
+        /// <summary>
+        /// 获取分库查询语句
+        /// </summary>
+        /// <returns></returns>
+        string GetSchemasQuerySqlString(string dbName, string userName);
+
+        /// <summary>
+        /// 获取表查询语句
+        /// </summary>
+        /// <returns></returns>
+        string GetTablesQuerySqlString(string dbName, string? schema = null);
+
+        /// <summary>
+        /// 获取表字段查询语句
+        /// </summary>
+        /// <returns></returns>
+        string GetColumnsQuerySqlString(string dbName, string tabName);
+
+        /// <summary>
+        /// 获取表字段查询语句
+        /// </summary>
+        /// <returns></returns>
+        string GetColumnsQuerySqlString(string dbName, string schema, string tabName);
 
         #endregion
     }

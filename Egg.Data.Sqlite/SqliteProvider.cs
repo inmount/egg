@@ -218,5 +218,64 @@ namespace Egg.Data.Sqlite
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public string GetDatabasesQuerySqlString()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public string GetSchemasQuerySqlString(string dbName, string userName)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <param name="schema"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public string GetTablesQuerySqlString(string dbName, string? schema = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <param name="tabName"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public string GetColumnsQuerySqlString(string dbName, string tabName)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <param name="schema"></param>
+        /// <param name="tabName"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public string GetColumnsQuerySqlString(string dbName, string schema, string tabName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

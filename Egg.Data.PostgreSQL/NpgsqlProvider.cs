@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Egg.Data.PostgreSQL
 {
@@ -223,5 +224,48 @@ namespace Egg.Data.PostgreSQL
         /// <returns></returns>
         public string GetSchemaCreateSqlString(string name)
             => $"CREATE SCHEMA {GetNameString(name)};";
+
+        /// <summary>
+        /// 获取数据库查询脚本
+        /// </summary>
+        /// <returns></returns>
+        public string GetDatabasesQuerySqlString()
+            => $"SELECT pd.datname FROM pg_catalog.pg_database pd;";
+
+        /// <summary>
+        /// 获取分库查询脚本
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <returns></returns>
+        public string GetSchemasQuerySqlString(string dbName, string userName)
+            => $"select s.schema_name from information_schema.schemata s WHERE s.schema_owner = {GetValueString(userName)} order by s.schema_name;";
+
+        /// <summary>
+        /// 获取表查询脚本
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <param name="schema"></param>
+        /// <returns></returns>
+        public string GetTablesQuerySqlString(string dbName, string? schema = null)
+            => $"select pt.tablename from pg_catalog.pg_tables pt where pt.schemaname = {GetValueString(schema ?? "public")} order by pt.tablename;";
+
+        /// <summary>
+        /// 获取表字段查询脚本
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <param name="tabName"></param>
+        /// <returns></returns>
+        public string GetColumnsQuerySqlString(string dbName, string tabName)
+            => $"select c.column_name from information_schema.columns c WHERE c.table_schema = 'public' and c.table_name = {GetValueString(tabName)} ORDER BY c.column_name;";
+
+        /// <summary>
+        /// 获取表字段查询脚本
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <param name="schema"></param>
+        /// <param name="tabName"></param>
+        /// <returns></returns>
+        public string GetColumnsQuerySqlString(string dbName, string schema, string tabName)
+            => $"select c.column_name from information_schema.columns c WHERE c.table_schema = {GetValueString(schema)} and c.table_name = {GetValueString(tabName)} ORDER BY c.column_name;";
     }
 }

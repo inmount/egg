@@ -148,5 +148,69 @@ namespace Egg.Data
 
         #endregion
 
+        #region [=====自动化=====]
+
+        /// <summary>
+        /// 获取所有数据库
+        /// </summary>
+        /// <returns></returns>
+        Task<List<string>> GetDatabasesAsync();
+
+        /// <summary>
+        /// 获取所有数据库
+        /// </summary>
+        /// <returns></returns>
+        Task<List<string>> GetSchemasAsync(string dbName);
+
+        /// <summary>
+        /// 获取所有表
+        /// </summary>
+        /// <returns></returns>
+        Task<List<string>> GetTablesAsync(string dbName, string? schema = null);
+
+        /// <summary>
+        /// 获取所有表字段
+        /// </summary>
+        /// <returns></returns>
+        Task<List<string>> GetColumnsAsync(string dbName, string tabName);
+
+        /// <summary>
+        /// 获取所有表
+        /// </summary>
+        /// <returns></returns>
+        Task<List<string>> GetColumnsAsync(string dbName, string schema, string tabName);
+
+        /// <summary>
+        /// 获取所有数据库
+        /// </summary>
+        /// <returns></returns>
+        List<string> GetDatabases();
+
+        /// <summary>
+        /// 获取所有数据库
+        /// </summary>
+        /// <returns></returns>
+        List<string> GetSchemas(string dbName);
+
+        /// <summary>
+        /// 获取所有表
+        /// </summary>
+        /// <returns></returns>
+        List<string> GetTables(string dbName, string? schema = null);
+
+        /// <summary>
+        /// 获取所有表字段
+        /// </summary>
+        /// <returns></returns>
+        List<string> GetColumns(string dbName, string tabName);
+
+        /// <summary>
+        /// 获取所有表字段
+        /// </summary>
+        /// <returns></returns>
+        List<string> GetColumns(string dbName, string schema, string tabName);
+
+        #endregion
+
     }
 }

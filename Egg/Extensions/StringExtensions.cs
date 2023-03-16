@@ -26,6 +26,17 @@ namespace Egg
         }
 
         /// <summary>
+        /// 获取不为空的字符串
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sz"></param>
+        /// <returns></returns>
+        public static string ToNotNull(this string? sz)
+        {
+            return sz ?? string.Empty;
+        }
+
+        /// <summary>
         /// 是否内容为空
         /// </summary>
         public static bool IsNullOrWhiteSpace(this string? sz)
