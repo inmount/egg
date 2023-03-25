@@ -9,6 +9,10 @@ namespace Egg.Lark
     /// </summary>
     public class ScriptEngine : IDisposable
     {
+        // 默认的最大执行次数
+        public const long MAX_EXECUTION_DEFAULT = 1000000;
+        private long _maxExecutionCount = MAX_EXECUTION_DEFAULT;
+        private long _executionCount = 0;
         // 是否独立内存
         private readonly bool _singleMemory;
         private readonly bool _singleFunction;
@@ -16,6 +20,22 @@ namespace Egg.Lark
         private Dictionary<string, Func<ScriptVariables, object?>> _funcs;
         // 入口函数
         private ScriptFunction _scriptFunction;
+
+        /// <summary>
+        /// 设置最大执行次数
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetMaxExecution(long value)
+            => _maxExecutionCount = value;
+
+        /// <summary>
+        /// 更新执行次数
+        /// </summary>
+        public void UpdateExecutionCount()
+        {
+            _executionCount++;
+            if (_executionCount > _maxExecutionCount) throw new ScriptException("超出最大执行次数限制");
+        }
 
         /// <summary>
         /// 内存管理器
@@ -175,7 +195,9 @@ namespace Egg.Lark
         /// <exception cref="ScriptException"></exception>
         public object? Execute(string name, ScriptVariables variables)
         {
-            if (!_funcs.ContainsKey(name)) 
+            // 更新执行次数
+            this.UpdateExecutionCount();
+            if (!_funcs.ContainsKey(name))
                 throw new ScriptException($"函数'{name}'尚未定义");
             return _funcs[name](variables);
         }
@@ -185,6 +207,8 @@ namespace Egg.Lark
         /// </summary>
         public object? Execute()
         {
+            // 初始化执行次数
+            _executionCount = 0;
             return _scriptFunction.Execute(this);
         }
 

@@ -22,6 +22,7 @@ namespace Egg.Test.Console.Lark
                 funcs.Reg<TestFuntion>();
                 using (Egg.Lark.ScriptEngine engine = new Egg.Lark.ScriptEngine(func, funcs))
                 {
+                    engine.SetMaxExecution(100000000);
                     engine.Memory["c"] = 3;
                     engine.Execute();
                     //System.Console.WriteLine($"[Lark] a = {engine.Memory["a"]}");

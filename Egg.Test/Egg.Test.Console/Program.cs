@@ -16,14 +16,13 @@ using System.Diagnostics;
 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
 // 初始化日志管理器
-egg.Logger
-    .Reg((string? message) =>
+egg.Logger.GetCurrentLogger()
+    .Use((string message) =>
     {
         Debug.WriteLine(message);
     })
-    .Reg(new FileLogger(egg.IO.GetExecutionPath("logs")))
-    .Use<ConsoleLogger>()
-    .Use<VsLogger>();
+    .Use(new FileLogger(egg.IO.GetExecutionPath("logs")))
+    .Use<ConsoleLogger>();
 
 Console.WriteLine(egg.Security.DESEncrypt("qwertyuiop", "12345678"));
 Console.WriteLine(egg.Security.DESDecrypt("1UnHSOMKjAjGkwR2Xgh11g==", "12345678"));
@@ -133,4 +132,4 @@ Test.Run();
 //context.SaveChanges();
 
 // 测试lark
-//Egg.Test.Console.Lark.Test.Run();
+Egg.Test.Console.Lark.Test.Run();

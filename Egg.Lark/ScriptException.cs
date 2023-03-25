@@ -12,14 +12,9 @@ namespace Egg.Lark
         /// <summary>
         /// 脚本异常
         /// </summary>
-        /// <param name="message">错误信息</param>
-        public ScriptException(string message) : base(message) { }
+        /// <param name="message">消息</param>
+        /// <param name="innerException">内联异常</param>
+        public ScriptException(string message, Exception? innerException = null) : base(message, innerException) { }
 
-        /// <summary>
-        /// 脚本异常
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="innerException"></param>
-        public ScriptException(string message, Exception innerException) : base(message, innerException) { }
-    }
+   }
 }

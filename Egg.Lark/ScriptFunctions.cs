@@ -24,16 +24,42 @@ namespace Egg.Lark
                     FuncInvoke(this.Engine, args[i]);
                 }
             });
+            // 依次执行
+            base.Reg("step", args =>
+            {
+                for (int i = 0; i < args.Count; i++)
+                {
+                    FuncInvoke(this.Engine, args[i]);
+                }
+            });
             // 计算
             base.Reg("!", args =>
             {
-                if (args.Count < 1) throw new ScriptException($"函数'!'缺少必要参数");
+                if (args.Count < 1) throw new ScriptException($"函数'calculate/!'缺少必要参数");
+                return GetValue(this.Engine, args[0]);
+            });
+            // 计算
+            base.Reg("calculate", args =>
+            {
+                if (args.Count < 1) throw new ScriptException($"函数'calculate/!'缺少必要参数");
                 return GetValue(this.Engine, args[0]);
             });
             // 字符串
             base.Reg("$", args =>
             {
-                if (args.Count < 1) throw new ScriptException($"函数'$'缺少必要参数");
+                if (args.Count < 1) throw new ScriptException($"函数'string/$'缺少必要参数");
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < args.Count; i++)
+                {
+                    var value = GetValue(this.Engine, args[i]);
+                    if (value != null) sb.Append(value);
+                }
+                return sb.ToString();
+            });
+            // 字符串
+            base.Reg("string", args =>
+            {
+                if (args.Count < 1) throw new ScriptException($"函数'string/$'缺少必要参数");
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < args.Count; i++)
                 {
