@@ -61,7 +61,7 @@ namespace Egg.VirtualDisk
         {
             if (this.DiskInfo != null) return;
             string path = this.StoragePath;
-            if (egg.IO.CheckFileExists(path))
+            if (egg.IO.FileExists(path))
             {
                 var f = this.FileStream = egg.IO.OpenFile(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
                 // 读取磁盘信息
@@ -609,7 +609,7 @@ namespace Egg.VirtualDisk
         /// <param name="filePath"></param>
         public void CopyFileIn(string path, string filePath)
         {
-            if (!egg.IO.CheckFileExists(filePath)) throw new VirtualDiskException($"文件'{filePath}'不存在.");
+            if (!egg.IO.FileExists(filePath)) throw new VirtualDiskException($"文件'{filePath}'不存在.");
             using (var f = egg.IO.OpenFile(filePath, FileMode.Open, FileAccess.Read))
             {
                 WriteFileIn(path, f);
