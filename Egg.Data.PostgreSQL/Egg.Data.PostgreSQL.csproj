@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
-    <Version>16.2.2303.15</Version>
+    <Version>16.2.2303.16</Version>
     <Authors>Egg Studio</Authors>
     <Description>一套服务于PostgreSql数据库的辅助开发组件</Description>
     <PackageIcon>logo.png</PackageIcon>
