@@ -28,7 +28,7 @@ namespace Egg.Log.Loggers
         /// 输出内容
         /// </summary>
         /// <param name="entity"></param>
-        public void Log(LogEntity entity)
+        public void Log(LogInfo entity)
         {
             string content = $"*{egg.Time.Now.ToFullDateTimeString()}* [{entity.Level.ToString().ToUpper()}] ({entity.Event}) {entity.Message}";
             var t = egg.Time.Now;

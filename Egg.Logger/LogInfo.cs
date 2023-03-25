@@ -7,7 +7,7 @@ namespace Egg.Log {
     /// <summary>
     /// 记录实体
     /// </summary>
-    public class LogEntity {
+    public class LogInfo {
 
         /// <summary>
         /// 级别

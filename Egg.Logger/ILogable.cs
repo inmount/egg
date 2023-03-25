@@ -13,7 +13,7 @@ namespace Egg.Log {
         /// 记录日志
         /// </summary>
         /// <param name="message"></param>
-        void Log(LogEntity entity);
+        void Log(LogInfo entity);
 
     }
 }

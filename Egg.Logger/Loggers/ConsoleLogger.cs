@@ -16,7 +16,7 @@ namespace Egg.Log.Loggers
         /// 输出内容
         /// </summary>
         /// <param name="entity"></param>
-        public void Log(LogEntity entity)
+        public void Log(LogInfo entity)
         {
             var color = Console.ForegroundColor;
             //Console.ForegroundColor = ConsoleColor.Blue;
