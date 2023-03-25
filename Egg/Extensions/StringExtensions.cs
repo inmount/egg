@@ -28,7 +28,6 @@ namespace Egg
         /// <summary>
         /// 获取不为空的字符串
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="sz"></param>
         /// <returns></returns>
         public static string ToNotNull(this string? sz)
