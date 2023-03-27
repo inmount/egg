@@ -203,7 +203,8 @@ namespace Egg.Lark
                         case ' ':
                             #region [=====空格=====]
                             if (isEscape) throw new Exception($"意外的字符'{chr}'。");
-                            if (inString) sb.Append(chr);
+                            if (inString) { sb.Append(chr); break; }
+                            if (sign > 1) { sb.Append(chr); break; }
                             #endregion
                             break;
                         case '"':
