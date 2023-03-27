@@ -34,6 +34,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.Tests", "Egg.Test\Egg.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Egg.Config", "Egg.Config\Egg.Config.csproj", "{729F8CE3-4E69-49F0-B99C-A8D160D53E40}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{3935998F-4303-440B-B278-6AB60B93A632}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egg.Lark.SimpleHost", "Demo\Egg.Lark.SimpleHost\Egg.Lark.SimpleHost.csproj", "{95879AF9-9DAE-442A-91CD-536F17B57546}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +92,10 @@ Global
 		{729F8CE3-4E69-49F0-B99C-A8D160D53E40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{729F8CE3-4E69-49F0-B99C-A8D160D53E40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{729F8CE3-4E69-49F0-B99C-A8D160D53E40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95879AF9-9DAE-442A-91CD-536F17B57546}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95879AF9-9DAE-442A-91CD-536F17B57546}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95879AF9-9DAE-442A-91CD-536F17B57546}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95879AF9-9DAE-442A-91CD-536F17B57546}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +103,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B288D716-81CC-4B18-8287-1CD4F906C532} = {1CC81882-1AFA-4220-9F53-0458792CBD2B}
 		{C8346812-A323-4ECD-BB7F-1597816CBE95} = {1CC81882-1AFA-4220-9F53-0458792CBD2B}
+		{95879AF9-9DAE-442A-91CD-536F17B57546} = {3935998F-4303-440B-B278-6AB60B93A632}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A2524C6B-4AC2-41B7-8579-9928B11813C6}
