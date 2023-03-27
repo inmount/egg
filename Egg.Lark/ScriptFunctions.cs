@@ -32,6 +32,16 @@ namespace Egg.Lark
                     FuncInvoke(this.Engine, args[i]);
                 }
             });
+            // 返回
+            base.Reg("return", args =>
+            {
+                if (args.Count < 1) throw new ScriptException($"函数'return'缺少必要参数");
+                for (int i = 0; i < args.Count - 1; i++)
+                {
+                    FuncInvoke(this.Engine, args[i]);
+                }
+                return GetValue(this.Engine, args[args.Count - 1]);
+            });
             // 计算
             base.Reg("!", args =>
             {
